@@ -1,28 +1,33 @@
- <!DOCTYPE html>
+  ```html
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GOTURU INTERACTIVE PORTAL</title>
-
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
     :root {
-      --bg-dark: #070a12;
-      --card-bg: #101625;
+      --bg-dark: #0b0f19;
+      --card-bg: #121826;
       --neon-cyan: #00f3ff;
       --neon-pink: #ff007f;
       --neon-green: #00ff66;
-      --neon-yellow: #ffbe0b;
+      --neon-purple: #9d4edd;
+      --neon-amber: #ffb703;
       --text-main: #f0f4f8;
       --text-muted: #8a99ad;
-      --border-color: #1c263b;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
     body {
@@ -30,37 +35,6 @@
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
-      padding-bottom: 50px;
-    }
-
-    /* CUSTOM TOAST NOTIFICATION */
-    #toast-container {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 10000;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .toast {
-      background: var(--card-bg);
-      border-left: 4px solid var(--neon-cyan);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 6px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
     }
 
     /* CIRCULAR LOADER */
@@ -70,7 +44,7 @@
       left: 0;
       width: 100%;
       height: 100vh;
-      background: #04060a;
+      background: #07090f;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -80,7 +54,7 @@
     }
 
     .brand-logo-anim {
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 800;
       letter-spacing: 3px;
       color: #fff;
@@ -90,13 +64,13 @@
 
     .circle-loader {
       position: relative;
-      width: 110px;
-      height: 110px;
+      width: 120px;
+      height: 120px;
     }
 
     .circle-loader svg {
-      width: 110px;
-      height: 110px;
+      width: 120px;
+      height: 120px;
       transform: rotate(-90deg);
     }
 
@@ -106,7 +80,9 @@
       stroke-linecap: round;
     }
 
-    .circle-bg { stroke: #162032; }
+    .circle-bg {
+      stroke: #1b2438;
+    }
 
     .circle-progress {
       stroke: var(--neon-cyan);
@@ -128,9 +104,10 @@
 
     /* HEADER */
     header {
-      background: var(--card-bg);
+      background: rgba(18, 24, 38, 0.95);
+      backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-      padding: 15px 30px;
+      padding: 12px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -140,514 +117,759 @@
     }
 
     .portal-logo {
-      font-size: 1.2rem;
-      font-weight: bold;
+      font-size: 1.25rem;
+      font-weight: 800;
       color: #fff;
       letter-spacing: 1px;
     }
 
-    .portal-logo span { color: var(--neon-cyan); }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .portal-logo span {
+      color: var(--neon-cyan);
     }
 
-    .btn-action {
-      background: rgba(0, 243, 255, 0.1);
-      border: 1px solid var(--neon-cyan);
+    .nav-btn-pink {
+      background: rgba(255, 0, 127, 0.15);
+      border: 1px solid var(--neon-pink);
       color: #fff;
-      padding: 7px 14px;
+      padding: 6px 14px;
       border-radius: 20px;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 0.82rem;
-      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
     }
 
-    .btn-action:hover {
-      background: var(--neon-cyan);
-      color: #000;
-      box-shadow: 0 0 10px var(--neon-cyan);
-    }
-
-    .btn-admin {
-      background: rgba(255, 0, 127, 0.15);
-      border-color: var(--neon-pink);
-    }
-
-    .btn-admin:hover {
+    .nav-btn-pink:hover {
       background: var(--neon-pink);
-      color: #fff;
       box-shadow: 0 0 12px var(--neon-pink);
     }
 
-    /* CONTAINER */
-    .container {
-      max-width: 1050px;
-      margin: 25px auto;
-      padding: 0 20px;
-    }
-
-    .welcome-banner {
-      background: var(--card-bg);
+    .nav-btn-cyan {
+      background: rgba(0, 243, 255, 0.15);
       border: 1px solid var(--neon-cyan);
-      border-radius: 12px;
-      padding: 20px 25px;
-      margin-bottom: 25px;
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
     }
 
-    /* DASHBOARD GRID */
+    .nav-btn-cyan:hover {
+      background: var(--neon-cyan);
+      color: #000;
+      box-shadow: 0 0 12px var(--neon-cyan);
+    }
+
+    /* DASHBOARD GRID - 5 CARDS */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 20px;
       margin-bottom: 30px;
     }
 
     .dash-box {
       background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
+      border: 1px solid #1f2b42;
+      border-radius: 14px;
       padding: 22px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .dash-box:hover {
       border-color: var(--neon-cyan);
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 243, 255, 0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 243, 255, 0.25);
+    }
+
+    .dash-box:active {
+      transform: scale(0.98);
+    }
+
+    .dash-box .icon-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 12px;
     }
 
     .dash-box h3 {
       font-size: 1.15rem;
-      color: var(--neon-cyan);
+      font-weight: 700;
+      color: #fff;
       margin-bottom: 8px;
     }
 
     .dash-box p {
       font-size: 0.85rem;
       color: var(--text-muted);
-      line-height: 1.4;
-      margin-bottom: 15px;
+      line-height: 1.45;
     }
 
     .dash-box .tap-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
       font-size: 0.8rem;
-      color: var(--neon-green);
-      font-weight: bold;
+      font-weight: 700;
     }
 
-    /* SECTION CARDS */
+    /* NOTIFICATION & FEED */
     .section-card {
       background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 22px;
-      margin-bottom: 25px;
+      border: 1px solid #1f2b42;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 30px;
     }
 
-    .section-card h3 {
-      font-size: 1.15rem;
-      color: var(--neon-cyan);
-      margin-bottom: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* MASTER QUIZ MODULE CARDS IN PORTAL */
-    .quiz-module-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .quiz-mod-card {
-      background: #090e1a;
-      border: 1px solid var(--border-color);
+    .notif-item {
+      background: #090d16;
+      border: 1px solid #1f2b42;
       border-radius: 10px;
       padding: 16px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
     }
 
-    .quiz-mod-card:hover {
-      border-color: var(--neon-yellow);
-      background: #121c33;
-      transform: scale(1.02);
-      box-shadow: 0 0 15px rgba(255, 190, 11, 0.2);
-    }
-
-    .quiz-mod-info h4 {
-      color: var(--neon-yellow);
-      font-size: 1rem;
-      margin-bottom: 4px;
-    }
-
-    .quiz-mod-info p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    /* QUIZ ARENA (PORTAL INTERNAL) */
-    #portal-quiz-arena {
-      display: none;
-      background: #0b1120;
-      border: 1px solid var(--neon-yellow);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 15px;
-    }
-
-    .quiz-top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .lang-btn {
-      background: rgba(255, 190, 11, 0.15);
-      border: 1px solid var(--neon-yellow);
-      color: var(--neon-yellow);
-      padding: 5px 12px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-
-    .q-card {
-      background: #111a2e;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 15px;
-    }
-
-    .q-en { font-size: 1.05rem; color: #fff; margin-bottom: 6px; }
-    .q-te { font-size: 0.98rem; color: var(--neon-yellow); }
-
-    .opt-grid {
-      display: grid;
-      gap: 10px;
-    }
-
-    .opt-btn {
-      background: #080d17;
-      border: 1px solid var(--border-color);
-      color: #fff;
-      padding: 12px 15px;
-      border-radius: 8px;
-      text-align: left;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .opt-btn:hover:not([disabled]) {
-      border-color: var(--neon-cyan);
-      background: #121c31;
-    }
-
-    .opt-btn.correct {
-      background: rgba(0, 255, 102, 0.2) !important;
-      border-color: var(--neon-green) !important;
-      color: var(--neon-green) !important;
-    }
-
-    .opt-btn.wrong {
-      background: rgba(255, 0, 127, 0.2) !important;
-      border-color: var(--neon-pink) !important;
-      color: var(--neon-pink) !important;
-    }
-
-    .exp-box {
-      background: #060911;
-      border-left: 4px solid var(--neon-cyan);
-      padding: 10px 14px;
-      border-radius: 6px;
-      margin-top: 15px;
-      display: none;
-      font-size: 0.85rem;
-    }
-
-    /* NOTIFICATIONS & ADMIN */
-    .notif-item {
-      background: #080c14;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-
-    .reactions-bar {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
+    .notif-item:hover {
+      border-color: rgba(0, 243, 255, 0.3);
     }
 
     .emoji-btn {
-      background: #141c2e;
-      border: 1px solid #253450;
+      background: #151d2e;
+      border: 1px solid #273754;
       color: #fff;
       padding: 4px 10px;
       border-radius: 15px;
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
+      transition: all 0.2s;
     }
 
-    /* MODAL POPUPS */
+    .emoji-btn:hover {
+      border-color: var(--neon-cyan);
+      background: #1e2a42;
+    }
+
+    /* MODALS */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100vh;
-      background: rgba(0,0,0,0.85);
+      background: rgba(5, 7, 13, 0.85);
+      backdrop-filter: blur(6px);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 900;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
     }
 
     .modal-card {
       background: var(--card-bg);
       border: 1px solid var(--neon-cyan);
-      border-radius: 12px;
-      padding: 22px;
-      width: 90%;
-      max-width: 440px;
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
       position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .close-modal {
       position: absolute;
-      top: 12px; right: 15px;
+      top: 14px;
+      right: 18px;
       color: var(--text-muted);
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       cursor: pointer;
+      transition: color 0.2s;
     }
 
-    input, textarea {
-      width: 100%;
-      background: #080c14;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
+    .close-modal:hover {
       color: #fff;
-      padding: 10px;
-      outline: none;
-      font-size: 0.88rem;
     }
 
-    .submit-btn {
-      background: var(--neon-cyan);
-      color: #000;
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 12px;
+    input, textarea, select {
       width: 100%;
+      background: #090d16;
+      border: 1px solid #273754;
+      border-radius: 8px;
+      color: #fff;
+      padding: 10px 12px;
+      outline: none;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--neon-cyan);
+    }
+
+    /* TOAST NOTIFICATION */
+    #toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: #121826;
+      border-left: 4px solid var(--neon-cyan);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 250px;
+      max-width: 350px;
+      animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .toast.success { border-left-color: var(--neon-green); }
+    .toast.error { border-left-color: var(--neon-pink); }
+    .toast.warning { border-left-color: #ffb703; }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-  <div id="toast-container"></div>
-
-  <!-- LOADER -->
+  <!-- CIRCULAR LOADER -->
   <div id="loader-overlay">
-    <div class="brand-logo-anim">GOTURU INTERACTIVE</div>
+    <div class="brand-logo-anim"><i class="fa-solid fa-cube text-cyan-400 mr-2"></i>GOTURU INTERACTIVE</div>
     <div class="circle-loader">
       <svg>
-        <circle class="circle-bg" cx="55" cy="55" r="48"></circle>
-        <circle class="circle-progress" id="progress-circle" cx="55" cy="55" r="48"></circle>
+        <circle class="circle-bg" cx="60" cy="60" r="54"></circle>
+        <circle class="circle-progress" id="progress-circle" cx="60" cy="60" r="54"></circle>
       </svg>
       <div class="loader-percentage" id="loader-text">0%</div>
     </div>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 15px;">Initializing Cyber Systems...</p>
   </div>
 
-  <!-- HEADER -->
+  <!-- HEADER NAVIGATION -->
   <header>
-    <div class="portal-logo">GOTURU <span>INTERACTIVE</span></div>
-    
-    <div class="header-actions">
+    <div class="portal-logo flex items-center gap-2">
+      <i class="fa-solid fa-bolt text-cyan-400"></i>
+      GOTURU <span>INTERACTIVE</span>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <!-- USER STATUS / AUTH BUTTON -->
       <div id="user-header-area">
-        <button class="btn-action" onclick="openUserModal()">👤 Login / Account</button>
+        <button class="nav-btn-cyan" onclick="openModal('modal-user-auth')">
+          <i class="fa-solid fa-user-check mr-1"></i> User Login / Sign Up
+        </button>
       </div>
+
+      <!-- ADMIN AUTH BUTTON -->
       <div id="admin-header-area">
-        <button class="btn-action btn-admin" onclick="openAdminAuth()">🔑 Admin Login</button>
+        <button class="nav-btn-pink" onclick="openModal('admin-auth-modal')">
+          <i class="fa-solid fa-key mr-1"></i> Admin Login
+        </button>
       </div>
     </div>
   </header>
 
   <!-- MAIN CONTAINER -->
-  <div class="container">
-    <div class="welcome-banner">
-      <h2>Welcome to <span style="color: var(--neon-cyan);">Goturu Interactive Portal</span>!</h2>
-      <p style="color: var(--text-muted); margin-top: 5px; font-size: 0.9rem;">Explore features, play internal Master Quiz, and give feedback to Admin.</p>
+  <div class="max-w-6xl mx-auto px-4 py-6">
+    <!-- WELCOME BANNER -->
+    <div class="bg-[#121826] border border-[#00f3ff]/30 rounded-2xl p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-white">
+          Welcome to <span style="color: var(--neon-cyan);">Goturu Interactive Portal</span>!
+        </h1>
+        <p style="color: var(--text-muted);" class="mt-1 text-sm md:text-base">
+          Direct web launcher for interactive games, community feedback, and Admin master controls.
+        </p>
+      </div>
+      <div id="active-user-badge" class="hidden bg-[#182338] border border-cyan-500/40 rounded-xl px-4 py-2 text-xs text-cyan-300 flex items-center gap-2">
+        <i class="fa-solid fa-circle-user text-lg text-cyan-400"></i>
+        <div>
+          <div class="font-bold text-white" id="badge-username">Logged User</div>
+          <div class="text-[10px] text-gray-400" id="badge-status">Member Active</div>
+        </div>
+      </div>
     </div>
 
-    <!-- DASHBOARD GRID -->
+    <!-- 5 DASHBOARD BOXES -->
+    <div class="text-lg font-bold text-gray-300 mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-shapes text-pink-500"></i> Portal Features & Modules
+    </div>
+
     <div class="dashboard-grid">
-      <div class="dash-box" onclick="openBioModal()">
-        <div>
-          <h3>🌐 GOTURU PORTAL</h3>
-          <p>View official launch date, live status, and portal info.</p>
+      <!-- BOX 1: PORTAL BIO DATA -->
+      <div class="dash-box" onclick="openModal('modal-bio')">
+        <div class="icon-badge bg-cyan-950 text-cyan-400 border border-cyan-500/30">
+          <i class="fa-solid fa-globe"></i>
         </div>
-        <span class="tap-hint">👉 View Bio Data</span>
+        <h3>GOTURU INTERACTIVE</h3>
+        <p>View official portal launch date, system specs, and bio data information.</p>
+        <span class="tap-hint" style="color: var(--neon-cyan);">
+          <i class="fa-solid fa-arrow-right"></i> Tap to View Bio Data
+        </span>
       </div>
 
-      <div class="dash-box" onclick="scrollToQuiz()">
-        <div>
-          <h3>🧠 MASTER QUIZ ENGINE</h3>
-          <p>Play 3 Interactive Quiz Modules (200 Qs each) directly in Portal!</p>
+      <!-- BOX 2: CYBER GAMES HUB WITH 2 URL LAUNCH TYPES -->
+      <div class="dash-box" onclick="openModal('modal-games-hub')">
+        <div class="icon-badge bg-emerald-950 text-emerald-400 border border-emerald-500/30">
+          <i class="fa-solid fa-gamepad"></i>
         </div>
-        <span class="tap-hint" style="color: var(--neon-yellow);">👉 Launch Master Quiz</span>
+        <h3>INTERACTIVE GAMES HUB</h3>
+        <p>Tap to play 2 types of direct URL web games or launch built-in cyber mini-games.</p>
+        <div class="flex flex-wrap gap-2 mt-3" onclick="event.stopPropagation()">
+          <button class="bg-emerald-500/20 hover:bg-emerald-500 border border-emerald-400 text-emerald-300 hover:text-black font-bold text-[11px] px-2.5 py-1 rounded-lg transition flex items-center gap-1" onclick="launchGameUrl(1)">
+            <i class="fa-solid fa-bolt"></i> Game 1 (Type-OS)
+          </button>
+          <button class="bg-purple-500/20 hover:bg-purple-500 border border-purple-400 text-purple-300 hover:text-white font-bold text-[11px] px-2.5 py-1 rounded-lg transition flex items-center gap-1" onclick="launchGameUrl(2)">
+            <i class="fa-solid fa-rocket"></i> Game 2 (Pac Arcade)
+          </button>
+        </div>
+        <span class="tap-hint" style="color: var(--neon-green);">
+          <i class="fa-solid fa-play"></i> Tap Card to Open Games Hub
+        </span>
       </div>
 
-      <div class="dash-box" onclick="openSuggestionModal()">
-        <div>
-          <h3>✍️ WRITE SUGGESTIONS</h3>
-          <p>Send comments directly to Admin.</p>
+      <!-- BOX 3: WRITE SUGGESTIONS -->
+      <div class="dash-box" onclick="openModal('modal-suggestion')">
+        <div class="icon-badge bg-pink-950 text-pink-400 border border-pink-500/30">
+          <i class="fa-solid fa-comment-dots"></i>
         </div>
-        <span class="tap-hint" style="color: var(--neon-pink);">👉 Write Feedback</span>
+        <h3>WRITE SUGGESTIONS</h3>
+        <p>Send comments, ideas, or feedback directly to the Admin Master Panel.</p>
+        <span class="tap-hint" style="color: var(--neon-pink);">
+          <i class="fa-solid fa-pen-to-square"></i> Tap to Write Comment
+        </span>
       </div>
 
-      <div class="dash-box" onclick="openUserModal()">
-        <div>
-          <h3>👤 USER ACCOUNT</h3>
-          <p>Login to save your active session in Portal.</p>
+      <!-- BOX 4: USER ACCOUNT & PROFILE -->
+      <div class="dash-box" onclick="handleProfileTap()">
+        <div class="icon-badge bg-purple-950 text-purple-400 border border-purple-500/30">
+          <i class="fa-solid fa-id-card"></i>
         </div>
-        <span class="tap-hint" style="color: var(--neon-green);">👉 User Profile</span>
-      </div>
-    </div>
-
-    <!-- MASTER QUIZ SECTION (INTEGRATED INSIDE PORTAL) -->
-    <div class="section-card" id="quiz-section" style="border-color: var(--neon-yellow);">
-      <h3>
-        <span style="color: var(--neon-yellow);">🧠 PORTAL MASTER QUIZ HUB</span>
-        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Bilingual (తెలుగు & EN)</span>
-      </h3>
-
-      <!-- MODULE SELECTION VIEW -->
-      <div id="portal-quiz-modules">
-        <p style="font-size: 0.88rem; color: #d1d9e6; margin-bottom: 12px;">Choose a module below to start playing inside the portal:</p>
-        
-        <div class="quiz-module-grid">
-          <div class="quiz-mod-card" onclick="startPortalQuiz(1)">
-            <div class="quiz-mod-info">
-              <h4>📘 Module 1: General Knowledge</h4>
-              <p>సాధారణ పరిజ్ఞానం (200 Questions)</p>
-            </div>
-            <span style="color: var(--neon-yellow); font-weight: bold;">START ➔</span>
-          </div>
-
-          <div class="quiz-mod-card" onclick="startPortalQuiz(2)">
-            <div class="quiz-mod-info">
-              <h4>🔬 Module 2: Science & Tech</h4>
-              <p>సైన్స్ & టెక్నాలజీ (200 Questions)</p>
-            </div>
-            <span style="color: var(--neon-yellow); font-weight: bold;">START ➔</span>
-          </div>
-
-          <div class="quiz-mod-card" onclick="startPortalQuiz(3)">
-            <div class="quiz-mod-info">
-              <h4>🏛️ Module 3: Indian History</h4>
-              <p>భారత చరిత్ర & రాజ్యాంగం (200 Questions)</p>
-            </div>
-            <span style="color: var(--neon-yellow); font-weight: bold;">START ➔</span>
-          </div>
-        </div>
+        <h3>USER PROFILE & ACCOUNT</h3>
+        <p>Create account, log in, manage display name, status bio, and view activity achievements.</p>
+        <span class="tap-hint" style="color: var(--neon-purple);">
+          <i class="fa-solid fa-user-gear"></i> Tap to Open Account
+        </span>
       </div>
 
-      <!-- LIVE QUIZ ARENA VIEW -->
-      <div id="portal-quiz-arena">
-        <div class="quiz-top-bar">
-          <div>
-            <strong id="active-mod-title" style="color: var(--neon-yellow);">Module</strong>
-            <span id="q-counter" style="color: var(--text-muted); font-size: 0.8rem; margin-left: 10px;">Q: 1/200</span>
-          </div>
-          <button class="lang-btn" onclick="toggleQuizLang()" id="lang-btn">Mode: Both (తెలుగు + EN)</button>
+      <!-- BOX 5: ANNOUNCEMENTS & EVENTS -->
+      <div class="dash-box" onclick="scrollToSection('notifications-section')">
+        <div class="icon-badge bg-amber-950 text-amber-400 border border-amber-500/30">
+          <i class="fa-solid fa-bullhorn"></i>
         </div>
-
-        <div class="q-card">
-          <div class="q-en" id="q-text-en">Loading...</div>
-          <div class="q-te" id="q-text-te">లోడ్ అవుతోంది...</div>
-        </div>
-
-        <div class="opt-grid" id="opt-container"></div>
-
-        <div class="exp-box" id="exp-container">
-          <strong>💡 Explanation / వివరణ:</strong>
-          <p id="exp-en" style="color: #cbd5e1; margin-top: 3px;"></p>
-          <p id="exp-te" style="color: var(--neon-yellow); margin-top: 3px;"></p>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; margin-top: 15px;">
-          <button class="submit-btn" style="width: auto; background: transparent; border: 1px solid var(--border-color); color: #fff;" onclick="exitQuizArena()">🛑 Exit Quiz</button>
-          <button class="submit-btn" id="next-q-btn" style="width: auto; background: var(--neon-yellow); color: #000; display: none;" onclick="nextQuizQuestion()">Next Question ➔</button>
-        </div>
+        <h3>COMMUNITY BOARD</h3>
+        <p>Check recent portal announcements, community updates, and add reactions.</p>
+        <span class="tap-hint text-amber-400">
+          <i class="fa-solid fa-list-check"></i> Tap to View Updates
+        </span>
       </div>
     </div>
 
-    <!-- NOTIFICATIONS SECTION -->
-    <div class="section-card" id="notifications-section">
-      <h3>📢 Portal Feed</h3>
+    <!-- NOTIFICATION & ANNOUNCEMENTS SECTION -->
+    <div id="notifications-section" class="section-card">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-cyan-400 flex items-center gap-2">
+          <i class="fa-solid fa-bell"></i> 📢 Portal Announcements & Feed
+        </h3>
+        <button id="admin-add-notif-btn" class="hidden bg-cyan-400 hover:bg-cyan-300 text-black font-bold text-xs px-3 py-1.5 rounded-lg transition" onclick="openAddNotifModal()">
+          <i class="fa-solid fa-plus mr-1"></i> Post Announcement
+        </button>
+      </div>
       <div id="notifications-list"></div>
     </div>
-  </div>
 
-  <!-- MODALS -->
-  <div class="modal-overlay" id="user-auth-modal">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('user-auth-modal')">&times;</span>
-      <h3 style="color: var(--neon-cyan); margin-bottom: 12px;">👤 User Account</h3>
-      <input type="text" id="user-login-name" placeholder="Enter Name">
-      <button class="submit-btn" onclick="saveUserSession()">Save User Profile</button>
+    <!-- SECRET ADMIN EXCLUSIVE PANEL -->
+    <div id="admin-panel" class="hidden border border-pink-500/50 bg-[#181124] rounded-2xl p-6 mb-8">
+      <div class="flex justify-between items-center border-b border-pink-500/30 pb-4 mb-4">
+        <h3 class="text-xl font-bold text-pink-400 flex items-center gap-2">
+          <i class="fa-solid fa-user-shield"></i> 🔑 Secret Admin Master Portal
+        </h3>
+        <button class="bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg" onclick="logoutAdmin()">
+          <i class="fa-solid fa-right-from-bracket mr-1"></i> Admin Logout
+        </button>
+      </div>
+
+      <!-- ADMIN STATS GRID -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-[#241836] border border-[#3d275a] p-4 rounded-xl text-center">
+          <h4 id="stat-total-suggestions" class="text-3xl font-extrabold text-pink-400">0</h4>
+          <p class="text-xs text-gray-400 mt-1">Total Suggestions Received</p>
+        </div>
+        <div class="bg-[#241836] border border-[#3d275a] p-4 rounded-xl text-center">
+          <h4 id="stat-total-users" class="text-3xl font-extrabold text-cyan-400">0</h4>
+          <p class="text-xs text-gray-400 mt-1">Registered Portal Users</p>
+        </div>
+        <div class="bg-[#241836] border border-[#3d275a] p-4 rounded-xl text-center">
+          <h4 id="stat-total-notifs" class="text-3xl font-extrabold text-emerald-400">0</h4>
+          <p class="text-xs text-gray-400 mt-1">Active Notifications</p>
+        </div>
+      </div>
+
+      <!-- SUGGESTIONS TABLE -->
+      <h4 class="text-cyan-400 font-bold text-sm mb-3">💬 Received User Feedback & Suggestions</h4>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-[#241836] text-pink-300">
+              <th class="p-3 border border-[#3d275a]">User / Name</th>
+              <th class="p-3 border border-[#3d275a]">Suggestion Comment</th>
+              <th class="p-3 border border-[#3d275a]">Timestamp</th>
+              <th class="p-3 border border-[#3d275a]">Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-suggestions-rows" class="divide-y divide-[#2e2240] text-gray-200"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
+  <!-- MODALS SECTION -->
+
+  <!-- 1. GAMES HUB MODAL (WITH 2 DIFFERENT DIRECT GAME URL TYPES) -->
+  <div class="modal-overlay" id="modal-games-hub">
+    <div class="modal-card max-w-lg">
+      <span class="close-modal" onclick="closeModal('modal-games-hub')">&times;</span>
+      <h3 class="text-xl font-bold text-emerald-400 mb-1 flex items-center gap-2">
+        <i class="fa-solid fa-gamepad"></i> Interactive Games Launch Hub
+      </h3>
+      <p class="text-xs text-gray-400 mb-4">Tap any game button to directly open web URLs or play built-in mini games.</p>
+
+      <div class="space-y-3">
+        <!-- GAME URL TYPE 1: TYPE-OS-TIME -->
+        <div class="bg-[#090d16] border border-cyan-500/40 rounded-xl p-3.5 flex justify-between items-center gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="bg-cyan-500/20 text-cyan-300 font-bold text-[10px] px-2 py-0.5 rounded border border-cyan-500/40">GAME TYPE 1</span>
+              <h4 class="font-bold text-white text-sm">⌨️ Type-OS-Time (Speed Typer Web)</h4>
+            </div>
+            <p class="text-xs text-gray-400 mt-1">Full speed typing web application. Tap to launch direct URL.</p>
+            <div class="text-[10px] text-cyan-400/80 font-mono mt-0.5">https://type-os-time.vercel.app/</div>
+          </div>
+          <button class="bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs px-3.5 py-2 rounded-lg transition whitespace-nowrap shadow-[0_0_10px_rgba(0,243,255,0.3)]" onclick="launchGameUrl(1)">
+            <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Open Web
+          </button>
+        </div>
+
+        <!-- GAME URL TYPE 2: PACMAN LIVE ARCADE -->
+        <div class="bg-[#090d16] border border-purple-500/40 rounded-xl p-3.5 flex justify-between items-center gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="bg-purple-500/20 text-purple-300 font-bold text-[10px] px-2 py-0.5 rounded border border-purple-500/40">GAME TYPE 2</span>
+              <h4 class="font-bold text-white text-sm">🕹️ Retro Cyber Arcade (Pacman Live)</h4>
+            </div>
+            <p class="text-xs text-gray-400 mt-1">Direct retro arcade web game. Tap to launch direct URL.</p>
+            <div class="text-[10px] text-purple-400/80 font-mono mt-0.5">https://pacman.live/</div>
+          </div>
+          <button class="bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs px-3.5 py-2 rounded-lg transition whitespace-nowrap shadow-[0_0_10px_rgba(157,78,221,0.3)]" onclick="launchGameUrl(2)">
+            <i class="fa-solid fa-gamepad mr-1"></i> Open Web
+          </button>
+        </div>
+
+        <!-- BUILT-IN MINI GAME 1 -->
+        <div class="bg-[#090d16] border border-emerald-500/30 rounded-xl p-3 flex justify-between items-center">
+          <div>
+            <h4 class="font-bold text-white text-sm">⚡ Built-in Cyber Typer Mini</h4>
+            <p class="text-xs text-gray-400">Play quick typing challenge inside portal.</p>
+          </div>
+          <button class="bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-bold px-3 py-1.5 rounded-lg transition" onclick="launchTyperGame()">
+            Play Inside
+          </button>
+        </div>
+
+        <!-- BUILT-IN MINI GAME 2 -->
+        <div class="bg-[#090d16] border border-amber-500/30 rounded-xl p-3 flex justify-between items-center">
+          <div>
+            <h4 class="font-bold text-white text-sm">🧠 Memory Matrix Mini</h4>
+            <p class="text-xs text-gray-400">Test pattern recollection speed.</p>
+          </div>
+          <button class="bg-amber-400 hover:bg-amber-300 text-black text-xs font-bold px-3 py-1.5 rounded-lg transition" onclick="launchMemoryGame()">
+            Play Inside
+          </button>
+        </div>
+      </div>
+
+      <!-- IN-MODAL PLAYABLE GAME CANVAS/CONTAINER -->
+      <div id="mini-game-arena" class="hidden mt-4 pt-4 border-t border-gray-800"></div>
+    </div>
+  </div>
+
+  <!-- 2. ADMIN AUTH MODAL -->
+  <div class="modal-overlay" id="admin-auth-modal">
+    <div class="modal-card">
+      <span class="close-modal" onclick="closeModal('admin-auth-modal')">&times;</span>
+      <h3 class="text-xl font-bold text-pink-400 mb-2 flex items-center gap-2">
+        <i class="fa-solid fa-lock"></i> Admin Portal Login
+      </h3>
+      <p class="text-xs text-gray-400 mb-4">Credentials: ID: <code class="text-pink-300">admin</code> | Key: <code class="text-pink-300">admin123</code></p>
+      
+      <form onsubmit="loginAdmin(event)" class="space-y-3">
+        <div>
+          <label class="text-xs text-gray-400">Admin ID</label>
+          <input type="text" id="admin-id" placeholder="Enter Admin ID" required class="mt-1">
+        </div>
+        <div>
+          <label class="text-xs text-gray-400">Secret Key</label>
+          <input type="password" id="admin-key" placeholder="Enter Secret Key" required class="mt-1">
+        </div>
+        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2.5 rounded-lg mt-2 transition">
+          Unlock Master Admin Panel
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. USER AUTH & PROFILE MODAL -->
+  <div class="modal-overlay" id="modal-user-auth">
+    <div class="modal-card">
+      <span class="close-modal" onclick="closeModal('modal-user-auth')">&times;</span>
+      
+      <!-- LOGGED OUT VIEW -->
+      <div id="user-auth-form-view">
+        <div class="flex border-b border-gray-700 mb-4">
+          <button id="tab-login" class="flex-1 pb-2 text-sm font-bold text-cyan-400 border-b-2 border-cyan-400" onclick="switchAuthTab('login')">Login</button>
+          <button id="tab-signup" class="flex-1 pb-2 text-sm font-bold text-gray-400 border-b-2 border-transparent" onclick="switchAuthTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="form-user-login" onsubmit="handleUserLogin(event)" class="space-y-3">
+          <div>
+            <label class="text-xs text-gray-400">Username</label>
+            <input type="text" id="login-username" placeholder="Enter your username" required class="mt-1">
+          </div>
+          <div>
+            <label class="text-xs text-gray-400">Password</label>
+            <input type="password" id="login-password" placeholder="Enter password" required class="mt-1">
+          </div>
+          <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2.5 rounded-lg mt-2 transition">
+            Login to Account
+          </button>
+        </form>
+
+        <!-- SIGNUP FORM -->
+        <form id="form-user-signup" onsubmit="handleUserSignup(event)" class="space-y-3 hidden">
+          <div>
+            <label class="text-xs text-gray-400">Choose Username</label>
+            <input type="text" id="signup-username" placeholder="Unique username" required class="mt-1">
+          </div>
+          <div>
+            <label class="text-xs text-gray-400">Display Name</label>
+            <input type="text" id="signup-fullname" placeholder="e.g. Goturu Resident" required class="mt-1">
+          </div>
+          <div>
+            <label class="text-xs text-gray-400">Password</label>
+            <input type="password" id="signup-password" placeholder="Choose a secure password" required class="mt-1">
+          </div>
+          <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-2.5 rounded-lg mt-2 transition">
+            Create Account
+          </button>
+        </form>
+      </div>
+
+      <!-- LOGGED IN PROFILE VIEW -->
+      <div id="user-profile-view" class="hidden">
+        <h3 class="text-xl font-bold text-purple-400 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-id-badge"></i> User Account Profile
+        </h3>
+        <div class="bg-[#090d16] border border-gray-800 rounded-xl p-4 mb-4">
+          <div class="text-lg font-bold text-white" id="profile-display-name">Guest User</div>
+          <div class="text-xs text-cyan-400 mb-2" id="profile-handle">@username</div>
+          <div class="text-xs text-gray-400" id="profile-bio">Portal Community Member</div>
+        </div>
+
+        <form onsubmit="updateProfileBio(event)" class="space-y-3 mb-4">
+          <div>
+            <label class="text-xs text-gray-400">Update Status / Bio</label>
+            <input type="text" id="profile-bio-input" placeholder="What's on your mind?" class="mt-1">
+          </div>
+          <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 rounded-lg text-xs transition">
+            Save Profile Bio
+          </button>
+        </form>
+
+        <button class="w-full border border-pink-500/50 text-pink-400 hover:bg-pink-950 font-bold py-2 rounded-lg text-xs transition" onclick="logoutUser()">
+          <i class="fa-solid fa-sign-out-alt mr-1"></i> Log Out Account
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. BIO DATA MODAL -->
   <div class="modal-overlay" id="modal-bio">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-bio')">&times;</span>
-      <h3 style="color: var(--neon-cyan);">GOTURU PORTAL BIO</h3>
-      <p style="margin-top: 10px; font-size: 0.88rem; color: var(--text-muted);">Status: Live Active Portal<br>Integrated Master Quiz: 3 Modules Enabled</p>
+      <h3 class="text-xl font-bold text-cyan-400 mb-3 flex items-center gap-2">
+        <i class="fa-solid fa-circle-info"></i> GOTURU INTERACTIVE PORTAL
+      </h3>
+      <div class="space-y-2 text-sm text-gray-300 leading-relaxed">
+        <p>📌 <strong>Status:</strong> Live Cyber Portal Active</p>
+        <p>📅 <strong>Portal Launch:</strong> Started on 22/Sep/2026</p>
+        <p>⚡ <strong>System Architecture:</strong> Direct Client & Admin Interactive Hub</p>
+        <p>🛡️ <strong>Security:</strong> Custom Auth & Secure Feedback Pipeline</p>
+      </div>
     </div>
   </div>
 
+  <!-- 5. SUGGESTION MODAL -->
   <div class="modal-overlay" id="modal-suggestion">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-suggestion')">&times;</span>
-      <h3 style="color: var(--neon-pink);">Send Feedback</h3>
-      <textarea id="suggestion-text" placeholder="Type your suggestion..."></textarea>
-      <button class="submit-btn" style="background: var(--neon-pink); color: #fff;" onclick="submitSuggestion()">Submit</button>
+      <h3 class="text-xl font-bold text-pink-400 mb-1 flex items-center gap-2">
+        <i class="fa-solid fa-paper-plane"></i> Write Your Suggestion
+      </h3>
+      <p class="text-xs text-gray-400 mb-3">Send feedback or comments directly to Admin.</p>
+
+      <div class="space-y-3">
+        <input type="text" id="sugg-name" placeholder="Your Name (Optional)">
+        <textarea id="suggestion-text" placeholder="Type your detailed suggestion or feedback here..." rows="4"></textarea>
+        <button class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2.5 rounded-lg transition" onclick="submitSuggestion()">
+          Send Suggestion
+        </button>
+      </div>
     </div>
   </div>
 
+  <!-- 6. NOTIFICATION POST/EDIT MODAL -->
+  <div class="modal-overlay" id="modal-notif">
+    <div class="modal-card">
+      <span class="close-modal" onclick="closeModal('modal-notif')">&times;</span>
+      <h3 id="notif-modal-heading" class="text-xl font-bold text-cyan-400 mb-3">Post Announcement</h3>
+      <input type="hidden" id="edit-notif-id">
+      <div class="space-y-3">
+        <input type="text" id="notif-title-input" placeholder="Announcement Title">
+        <textarea id="notif-content-input" placeholder="Announcement Body Text..." rows="3"></textarea>
+        <button class="w-full bg-cyan-400 hover:bg-cyan-300 text-black font-bold py-2.5 rounded-lg transition" onclick="saveNotification()">
+          Publish Announcement
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. CONFIRMATION DIALOG MODAL -->
+  <div class="modal-overlay" id="modal-confirm">
+    <div class="modal-card max-w-sm text-center">
+      <h3 id="confirm-title" class="text-lg font-bold text-white mb-2">Are you sure?</h3>
+      <p id="confirm-msg" class="text-xs text-gray-400 mb-4">This action cannot be undone.</p>
+      <div class="flex gap-2 justify-center">
+        <button id="confirm-yes-btn" class="bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs px-4 py-2 rounded-lg">Yes, Proceed</button>
+        <button onclick="closeModal('modal-confirm')" class="bg-gray-700 hover:bg-gray-600 text-white font-bold text-xs px-4 py-2 rounded-lg">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container"></div>
+
   <script>
-    // TOAST NOTIFICATION
-    function showToast(msg) {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerHTML = `<span>⚡</span> <span>${msg}</span>`;
-      container.appendChild(toast);
-      setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+    
+    // GAME URL DEFINITIONS (2 DIFFERENT TYPES)
+    const GAME_URL_1 = "https://type-os-time.vercel.app/";
+    const GAME_URL_2 = "https://pacman.live/";
+
+    // DIRECT GAME LAUNCH FUNCTION
+    function launchGameUrl(type) {
+      let targetUrl = GAME_URL_1;
+      let gameName = "Type-OS-Time";
+
+      if (type === 2) {
+        targetUrl = GAME_URL_2;
+        gameName = "Pacman Live Arcade";
+      }
+
+      showToast(`Opening ${gameName}... Launching Web URL!`, 'success');
+      
+      // Open game URL in new browser window/tab directly
+      setTimeout(() => {
+        window.open(targetUrl, '_blank');
+      }, 300);
     }
 
-    // LOADER
+    // TOAST SYSTEM (Replaces alert)
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      let icon = 'fa-info-circle';
+      if (type === 'success') icon = 'fa-circle-check text-green-400';
+      if (type === 'error') icon = 'fa-circle-exclamation text-pink-500';
+      
+      toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span class="text-xs font-semibold">${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    let pendingConfirmAction = null;
+    function showConfirmModal(title, msg, onConfirm) {
+      document.getElementById('confirm-title').textContent = title;
+      document.getElementById('confirm-msg').textContent = msg;
+      pendingConfirmAction = onConfirm;
+      openModal('modal-confirm');
+    }
+
+    document.getElementById('confirm-yes-btn').addEventListener('click', () => {
+      if (pendingConfirmAction) pendingConfirmAction();
+      closeModal('modal-confirm');
+    });
+
+    // STORAGE HELPERS
+    function getStoredData(key) {
+      try {
+        return JSON.parse(localStorage.getItem(key)) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setStoredData(key, data) {
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+      } catch (e) {}
+    }
+
+    // INITIAL SEED DATA
+    if (getStoredData('goturu_notifications').length === 0) {
+      setStoredData('goturu_notifications', [{
+        id: 101,
+        title: "Welcome to Goturu Interactive Portal!",
+        content: "Portal official system activated! Check out 2 direct URL web games, community feedback, and user accounts.",
+        date: "22/09/2026",
+        reactions: { '👍': 12, '❤️': 15, '🔥': 9, '😊': 8 }
+      }]);
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       let percent = 0;
       const circle = document.getElementById('progress-circle');
@@ -656,173 +878,447 @@
 
       const interval = setInterval(() => {
         percent += 5;
-        circle.style.strokeDashoffset = 339.29 - (percent / 100) * 339.29;
+        const offset = 339.29 - (percent / 100) * 339.29;
+        circle.style.strokeDashoffset = offset;
         text.textContent = `${percent}%`;
+
         if (percent >= 100) {
           clearInterval(interval);
-          setTimeout(() => { overlay.style.opacity = '0'; overlay.style.visibility = 'hidden'; }, 200);
+          setTimeout(() => {
+            overlay.style.opacity = '0';
+            overlay.style.visibility = 'hidden';
+            checkAdminSession();
+            checkUserSession();
+          }, 200);
         }
-      }, 20);
+      }, 15);
     });
 
-    // -------------------------------------------------------------
-    // INTEGRATED MASTER QUIZ LOGIC (INSIDE PORTAL)
-    // -------------------------------------------------------------
-    let currentModuleQs = [];
-    let currentQIdx = 0;
-    let quizLangMode = "both";
-    let optionSelected = false;
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById('form-user-login');
+      const signupForm = document.getElementById('form-user-signup');
+      const tabLogin = document.getElementById('tab-login');
+      const tabSignup = document.getElementById('tab-signup');
 
-    function getModuleData(modId) {
-      const list = [];
-      for (let i = 1; i <= 200; i++) {
-        if (modId === 1) {
-          list.push({
-            en: `[GK Q${i}] What is the capital of India?`,
-            te: `[GK Q${i}] భారతదేశ రాజధాని ఏది?`,
-            opts_en: ["New Delhi", "Mumbai", "Kolkata", "Chennai"],
-            opts_te: ["న్యూ ఢిల్లీ", "ముంబై", "కోల్కతా", "చెన్నై"],
-            ans: 0,
-            exp_en: "New Delhi is the official capital.", exp_te: "న్యూ ఢిల్లీ భారతదేశ అధికారిక రాజధాని."
-          });
-        } else if (modId === 2) {
-          list.push({
-            en: `[Science Q${i}] What is the chemical symbol for Water?`,
-            te: `[Science Q${i}] నీటి రసాయన సాంకేతిక రూపం ఏమిటి?`,
-            opts_en: ["H2O", "CO2", "NaCl", "O2"],
-            opts_te: ["H2O", "CO2", "NaCl", "O2"],
-            ans: 0,
-            exp_en: "Water formula is H2O.", exp_te: "నీటి ఫార్ములా H2O."
-          });
-        } else {
-          list.push({
-            en: `[History Q${i}] In which year did India get independence?`,
-            te: `[History Q${i}] భారతదేశానికి ఏ సంవత్సరంలో స్వాతంత్రం వచ్చింది?`,
-            opts_en: ["1947", "1950", "1942", "1935"],
-            opts_te: ["1947", "1950", "1942", "1935"],
-            ans: 0,
-            exp_en: "India gained freedom in 1947.", exp_te: "1947 ఆగస్టు 15న స్వాతంత్రం వచ్చింది."
-          });
-        }
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        signupForm.classList.add('hidden');
+        tabLogin.className = "flex-1 pb-2 text-sm font-bold text-cyan-400 border-b-2 border-cyan-400";
+        tabSignup.className = "flex-1 pb-2 text-sm font-bold text-gray-400 border-b-2 border-transparent";
+      } else {
+        loginForm.classList.add('hidden');
+        signupForm.classList.remove('hidden');
+        tabSignup.className = "flex-1 pb-2 text-sm font-bold text-purple-400 border-b-2 border-purple-400";
+        tabLogin.className = "flex-1 pb-2 text-sm font-bold text-gray-400 border-b-2 border-transparent";
       }
-      // Shuffle Array so no order repeats
-      return list.sort(() => Math.random() - 0.5);
     }
 
-    function startPortalQuiz(modId) {
-      currentModuleQs = getModuleData(modId);
-      currentQIdx = 0;
+    function handleUserSignup(e) {
+      e.preventDefault();
+      const username = document.getElementById('signup-username').value.trim().toLowerCase();
+      const fullname = document.getElementById('signup-fullname').value.trim();
+      const password = document.getElementById('signup-password').value;
 
-      const titles = { 1: "📘 General Knowledge", 2: "🔬 Science & Tech", 3: "🏛️ Indian History" };
-      document.getElementById('active-mod-title').textContent = titles[modId];
+      let users = getStoredData('goturu_users');
+      if (users.some(u => u.username === username)) {
+        showToast('Username already taken! Try another.', 'error');
+        return;
+      }
 
-      document.getElementById('portal-quiz-modules').style.display = 'none';
-      document.getElementById('portal-quiz-arena').style.display = 'block';
+      const newUser = { username, fullname, password, bio: 'Portal Resident' };
+      users.push(newUser);
+      setStoredData('goturu_users', users);
 
-      renderPortalQuestion();
+      sessionStorage.setItem('goturu_active_user', JSON.stringify(newUser));
+      checkUserSession();
+      closeModal('modal-user-auth');
+      showToast('Account created successfully! Welcome ' + fullname, 'success');
+      loadAdminPanelData();
     }
 
-    function renderPortalQuestion() {
-      optionSelected = false;
-      document.getElementById('next-q-btn').style.display = 'none';
-      document.getElementById('exp-container').style.display = 'none';
+    function handleUserLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('login-username').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value;
 
-      const q = currentModuleQs[currentQIdx];
-      document.getElementById('q-counter').textContent = `Q: ${currentQIdx + 1}/200`;
+      let users = getStoredData('goturu_users');
+      const user = users.find(u => u.username === username && u.password === password);
 
-      document.getElementById('q-text-en').textContent = `${currentQIdx + 1}. ${q.en}`;
-      document.getElementById('q-text-te').textContent = q.te;
+      if (user) {
+        sessionStorage.setItem('goturu_active_user', JSON.stringify(user));
+        checkUserSession();
+        closeModal('modal-user-auth');
+        showToast('Welcome back, ' + user.fullname + '!', 'success');
+      } else {
+        showToast('Invalid username or password!', 'error');
+      }
+    }
 
-      const container = document.getElementById('opt-container');
-      container.innerHTML = '';
+    function checkUserSession() {
+      const activeUserStr = sessionStorage.getItem('goturu_active_user');
+      const badge = document.getElementById('active-user-badge');
+      const authHeaderArea = document.getElementById('user-header-area');
 
-      q.opts_en.forEach((optEn, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'opt-btn';
-        btn.onclick = () => handleOptClick(idx);
+      if (activeUserStr) {
+        const user = JSON.parse(activeUserStr);
+        document.getElementById('badge-username').textContent = user.fullname;
+        document.getElementById('badge-status').textContent = '@' + user.username;
+        badge.classList.remove('hidden');
 
-        const optTe = q.opts_te[idx];
-        if (quizLangMode === 'en') {
-          btn.innerHTML = `<span><strong>${String.fromCharCode(65 + idx)}.</strong> ${optEn}</span>`;
-        } else if (quizLangMode === 'te') {
-          btn.innerHTML = `<span><strong>${String.fromCharCode(65 + idx)}.</strong> ${optTe}</span>`;
-        } else {
-          btn.innerHTML = `
-            <span><strong>${String.fromCharCode(65 + idx)}.</strong> ${optEn}</span>
-            <span style="font-size:0.8rem; color: var(--neon-yellow);">${optTe}</span>
+        authHeaderArea.innerHTML = `
+          <button class="nav-btn-cyan" onclick="openModal('modal-user-auth')">
+            <i class="fa-solid fa-user-gear mr-1"></i> ${user.fullname}
+          </button>
+        `;
+
+        document.getElementById('user-auth-form-view').classList.add('hidden');
+        document.getElementById('user-profile-view').classList.remove('hidden');
+        document.getElementById('profile-display-name').textContent = user.fullname;
+        document.getElementById('profile-handle').textContent = '@' + user.username;
+        document.getElementById('profile-bio').textContent = user.bio || 'Portal Member';
+        document.getElementById('profile-bio-input').value = user.bio || '';
+      } else {
+        badge.classList.add('hidden');
+        authHeaderArea.innerHTML = `
+          <button class="nav-btn-cyan" onclick="openModal('modal-user-auth')">
+            <i class="fa-solid fa-user-check mr-1"></i> User Login / Sign Up
+          </button>
+        `;
+        document.getElementById('user-auth-form-view').classList.remove('hidden');
+        document.getElementById('user-profile-view').classList.add('hidden');
+      }
+    }
+
+    function updateProfileBio(e) {
+      e.preventDefault();
+      const bioText = document.getElementById('profile-bio-input').value.trim();
+      const activeUserStr = sessionStorage.getItem('goturu_active_user');
+      if (!activeUserStr) return;
+
+      let activeUser = JSON.parse(activeUserStr);
+      activeUser.bio = bioText;
+      sessionStorage.setItem('goturu_active_user', JSON.stringify(activeUser));
+
+      let users = getStoredData('goturu_users');
+      const idx = users.findIndex(u => u.username === activeUser.username);
+      if (idx !== -1) {
+        users[idx].bio = bioText;
+        setStoredData('goturu_users', users);
+      }
+
+      checkUserSession();
+      showToast('Profile status updated!', 'success');
+    }
+
+    function logoutUser() {
+      sessionStorage.removeItem('goturu_active_user');
+      checkUserSession();
+      closeModal('modal-user-auth');
+      showToast('Logged out of account.', 'info');
+    }
+
+    function handleProfileTap() {
+      openModal('modal-user-auth');
+    }
+
+    function loginAdmin(e) {
+      e.preventDefault();
+      const id = document.getElementById('admin-id').value.trim();
+      const key = document.getElementById('admin-key').value;
+
+      if (id === 'admin' && key === 'admin123') {
+        sessionStorage.setItem('goturu_admin_logged', 'true');
+        closeModal('admin-auth-modal');
+        document.getElementById('admin-id').value = '';
+        document.getElementById('admin-key').value = '';
+        checkAdminSession();
+        showToast('Admin Portal Unlocked!', 'success');
+      } else {
+        showToast('Access Denied: Invalid Admin ID or Secret Key!', 'error');
+      }
+    }
+
+    function checkAdminSession() {
+      const isAdminLogged = sessionStorage.getItem('goturu_admin_logged') === 'true';
+
+      if (isAdminLogged) {
+        document.getElementById('admin-header-area').style.display = 'none';
+        document.getElementById('admin-panel').classList.remove('hidden');
+        document.getElementById('admin-add-notif-btn').classList.remove('hidden');
+        loadAdminPanelData();
+      } else {
+        document.getElementById('admin-header-area').style.display = 'block';
+        document.getElementById('admin-panel').classList.add('hidden');
+        document.getElementById('admin-add-notif-btn').classList.add('hidden');
+      }
+      renderNotifications();
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('goturu_admin_logged');
+      checkAdminSession();
+      showToast('Admin logged out.', 'info');
+    }
+
+    function loadAdminPanelData() {
+      const suggestions = getStoredData('goturu_suggestions');
+      const users = getStoredData('goturu_users');
+      const notifs = getStoredData('goturu_notifications');
+
+      document.getElementById('stat-total-suggestions').textContent = suggestions.length;
+      document.getElementById('stat-total-users').textContent = users.length;
+      document.getElementById('stat-total-notifs').textContent = notifs.length;
+
+      const suggTbody = document.getElementById('admin-suggestions-rows');
+      suggTbody.innerHTML = '';
+
+      if (suggestions.length === 0) {
+        suggTbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-500">No user suggestions received yet.</td></tr>';
+      } else {
+        suggestions.slice().reverse().forEach((s, idx) => {
+          suggTbody.innerHTML += `
+            <tr>
+              <td class="p-3 border border-[#3d275a] font-bold text-pink-300">${s.user}</td>
+              <td class="p-3 border border-[#3d275a]">${s.comment}</td>
+              <td class="p-3 border border-[#3d275a] text-gray-400">${s.time}</td>
+              <td class="p-3 border border-[#3d275a]">
+                <button class="bg-red-600 hover:bg-red-500 text-white font-bold px-2 py-1 rounded text-[10px]" onclick="deleteSuggestion(${s.id || idx})">Delete</button>
+              </td>
+            </tr>
           `;
-        }
-        container.appendChild(btn);
+        });
+      }
+    }
+
+    function deleteSuggestion(id) {
+      showConfirmModal('Delete Suggestion?', 'Are you sure you want to remove this feedback item?', () => {
+        let suggestions = getStoredData('goturu_suggestions');
+        suggestions = suggestions.filter((s, idx) => (s.id ? s.id !== id : idx !== id));
+        setStoredData('goturu_suggestions', suggestions);
+        loadAdminPanelData();
+        showToast('Suggestion removed.', 'info');
       });
     }
 
-    function handleOptClick(idx) {
-      if (optionSelected) return;
-      optionSelected = true;
-
-      const q = currentModuleQs[currentQIdx];
-      const btns = document.querySelectorAll('.opt-btn');
-
-      btns.forEach(b => b.setAttribute('disabled', 'true'));
-
-      if (idx === q.ans) {
-        btns[idx].classList.add('correct');
-      } else {
-        btns[idx].classList.add('wrong');
-        btns[q.ans].classList.add('correct');
-      }
-
-      document.getElementById('exp-en').textContent = q.exp_en;
-      document.getElementById('exp-te').textContent = q.exp_te;
-      document.getElementById('exp-container').style.display = 'block';
-
-      document.getElementById('next-q-btn').style.display = 'inline-block';
-    }
-
-    function nextQuizQuestion() {
-      currentQIdx++;
-      if (currentQIdx < currentModuleQs.length) {
-        renderPortalQuestion();
-      } else {
-        showToast('Module Completed!');
-        exitQuizArena();
-      }
-    }
-
-    function toggleQuizLang() {
-      if (quizLangMode === 'both') {
-        quizLangMode = 'te';
-        document.getElementById('lang-btn').textContent = 'Mode: తెలుగు';
-      } else if (quizLangMode === 'te') {
-        quizLangMode = 'en';
-        document.getElementById('lang-btn').textContent = 'Mode: English';
-      } else {
-        quizLangMode = 'both';
-        document.getElementById('lang-btn').textContent = 'Mode: Both (తెలుగు + EN)';
-      }
-      renderPortalQuestion();
-    }
-
-    function exitQuizArena() {
-      document.getElementById('portal-quiz-arena').style.display = 'none';
-      document.getElementById('portal-quiz-modules').style.display = 'block';
-    }
-
-    // GENERAL PORTAL CONTROLS
-    function scrollToQuiz() { document.getElementById('quiz-section').scrollIntoView({ behavior: 'smooth' }); }
-    function openBioModal() { document.getElementById('modal-bio').style.display = 'flex'; }
-    function openUserModal() { document.getElementById('user-auth-modal').style.display = 'flex'; }
-    function openSuggestionModal() { document.getElementById('modal-suggestion').style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function saveUserSession() {
-      const name = document.getElementById('user-login-name').value.trim();
-      if (name) showToast(`Welcome ${name}! Session active.`);
-      closeModal('user-auth-modal');
-    }
     function submitSuggestion() {
-      showToast('Suggestion submitted!');
+      const activeUserStr = sessionStorage.getItem('goturu_active_user');
+      let defaultName = 'Visitor Guest';
+      if (activeUserStr) {
+        defaultName = JSON.parse(activeUserStr).fullname;
+      }
+
+      const name = document.getElementById('sugg-name').value.trim() || defaultName;
+      const text = document.getElementById('suggestion-text').value.trim();
+
+      if (!text) {
+        showToast('Please enter your suggestion before submitting!', 'warning');
+        return;
+      }
+
+      let suggestions = getStoredData('goturu_suggestions');
+      suggestions.push({
+        id: Date.now(),
+        user: name,
+        comment: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " (" + new Date().toLocaleDateString() + ")"
+      });
+
+      setStoredData('goturu_suggestions', suggestions);
+
+      document.getElementById('sugg-name').value = '';
+      document.getElementById('suggestion-text').value = '';
       closeModal('modal-suggestion');
+
+      showToast('Meeru pampina suggestion direct ga Admin portal ku cherindhi! Thank you.', 'success');
+
+      if (sessionStorage.getItem('goturu_admin_logged') === 'true') {
+        loadAdminPanelData();
+      }
+    }
+
+    function renderNotifications() {
+      const notifs = getStoredData('goturu_notifications');
+      const container = document.getElementById('notifications-list');
+      const isAdmin = sessionStorage.getItem('goturu_admin_logged') === 'true';
+
+      container.innerHTML = '';
+
+      if (notifs.length === 0) {
+        container.innerHTML = '<p class="text-xs text-gray-500">No active announcements posted.</p>';
+        return;
+      }
+
+      notifs.forEach(n => {
+        const div = document.createElement('div');
+        div.className = 'notif-item';
+
+        let adminBtns = isAdmin ? `
+          <div class="flex gap-2 mt-3 pt-2 border-t border-gray-800">
+            <button class="bg-amber-500 hover:bg-amber-400 text-black font-bold text-[10px] px-2.5 py-1 rounded" onclick="editNotif(${n.id})">Edit</button>
+            <button class="bg-pink-600 hover:bg-pink-500 text-white font-bold text-[10px] px-2.5 py-1 rounded" onclick="deleteNotif(${n.id})">Delete</button>
+          </div>
+        ` : '';
+
+        const reactions = n.reactions || { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 };
+
+        div.innerHTML = `
+          <div class="font-bold text-white text-base">${n.title}</div>
+          <div class="text-[11px] text-gray-500 mb-2">${n.date}</div>
+          <div class="text-sm text-gray-300 leading-relaxed">${n.content}</div>
+          <div class="flex gap-2 items-center mt-3">
+            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '👍')">👍 ${reactions['👍'] || 0}</button>
+            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '❤️')">❤️ ${reactions['❤️'] || 0}</button>
+            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '🔥')">🔥 ${reactions['🔥'] || 0}</button>
+            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '😊')">😊 ${reactions['😊'] || 0}</button>
+          </div>
+          ${adminBtns}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function reactEmoji(id, emoji) {
+      let notifs = getStoredData('goturu_notifications');
+      const item = notifs.find(n => n.id === id);
+      if (item) {
+        if (!item.reactions) item.reactions = {};
+        item.reactions[emoji] = (item.reactions[emoji] || 0) + 1;
+        setStoredData('goturu_notifications', notifs);
+        renderNotifications();
+      }
+    }
+
+    function saveNotification() {
+      const editId = document.getElementById('edit-notif-id').value;
+      const title = document.getElementById('notif-title-input').value.trim();
+      const content = document.getElementById('notif-content-input').value.trim();
+
+      if (!title || !content) {
+        showToast('Please fill out both title and content!', 'warning');
+        return;
+      }
+
+      let notifs = getStoredData('goturu_notifications');
+
+      if (editId) {
+        const item = notifs.find(n => n.id == editId);
+        if (item) {
+          item.title = title;
+          item.content = content;
+        }
+      } else {
+        notifs.push({
+          id: Date.now(),
+          title, content,
+          date: new Date().toLocaleDateString(),
+          reactions: { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 }
+        });
+      }
+
+      setStoredData('goturu_notifications', notifs);
+      closeModal('modal-notif');
+      renderNotifications();
+      showToast('Announcement published successfully!', 'success');
+    }
+
+    function editNotif(id) {
+      let notifs = getStoredData('goturu_notifications');
+      const item = notifs.find(n => n.id === id);
+      if (item) {
+        document.getElementById('edit-notif-id').value = item.id;
+        document.getElementById('notif-title-input').value = item.title;
+        document.getElementById('notif-content-input').value = item.content;
+        document.getElementById('notif-modal-heading').textContent = 'Edit Announcement';
+        openModal('modal-notif');
+      }
+    }
+
+    function deleteNotif(id) {
+      showConfirmModal('Delete Announcement?', 'Are you sure you want to delete this notification?', () => {
+        let notifs = getStoredData('goturu_notifications');
+        notifs = notifs.filter(n => n.id !== id);
+        setStoredData('goturu_notifications', notifs);
+        renderNotifications();
+        showToast('Announcement deleted.', 'info');
+      });
+    }
+
+    function launchTyperGame() {
+      const arena = document.getElementById('mini-game-arena');
+      arena.classList.remove('hidden');
+      arena.innerHTML = `
+        <div class="bg-[#0b0f19] p-4 rounded-xl border border-emerald-500/40 text-center">
+          <h4 class="font-bold text-emerald-400 text-sm mb-2">⌨️ Cyber Speed Typer</h4>
+          <p id="typer-quote" class="text-sm font-mono text-cyan-300 bg-[#121826] p-2 rounded mb-3">goturu interactive portal 2026</p>
+          <input type="text" id="typer-input" placeholder="Type quote above..." class="text-center font-mono text-sm mb-2" oninput="checkTyperInput()">
+          <div id="typer-score" class="text-xs text-gray-400">Type accurately to complete!</div>
+        </div>
+      `;
+    }
+
+    function checkTyperInput() {
+      const quote = document.getElementById('typer-quote').textContent.trim();
+      const val = document.getElementById('typer-input').value.trim();
+      const score = document.getElementById('typer-score');
+
+      if (val === quote) {
+        score.innerHTML = `<span class="text-emerald-400 font-bold">🎉 Excellent! Perfect Speed Typing!</span>`;
+      } else {
+        score.textContent = `Matching characters: ${val.length} / ${quote.length}`;
+      }
+    }
+
+    function launchMemoryGame() {
+      const arena = document.getElementById('mini-game-arena');
+      arena.classList.remove('hidden');
+      let target = Math.floor(Math.random() * 9);
+      arena.innerHTML = `
+        <div class="bg-[#0b0f19] p-4 rounded-xl border border-cyan-500/40 text-center">
+          <h4 class="font-bold text-cyan-400 text-sm mb-2">🧠 Memory Matrix</h4>
+          <p class="text-xs text-gray-400 mb-3">Tap the highlighted Cyber Tile!</p>
+          <div id="grid-matrix" class="grid grid-cols-3 gap-2 w-48 mx-auto mb-2">
+            ${[0,1,2,3,4,5,6,7,8].map(i => `
+              <div id="tile-${i}" class="h-12 rounded-lg bg-[#121826] border border-gray-700 flex items-center justify-center cursor-pointer transition ${i===target?'bg-cyan-500 shadow-[0_0_10px_#00f3ff]':''}" onclick="checkTile(${i}, ${target})">
+                <i class="fa-solid fa-cube text-xs ${i===target?'text-black':'text-gray-600'}"></i>
+              </div>
+            `).join('')}
+          </div>
+          <div id="matrix-status" class="text-xs text-gray-400">Find target tile!</div>
+        </div>
+      `;
+    }
+
+    function checkTile(chosen, target) {
+      const status = document.getElementById('matrix-status');
+      if (chosen === target) {
+        status.innerHTML = `<span class="text-cyan-400 font-bold">⚡ Success! Matrix Synchronized!</span>`;
+      } else {
+        status.innerHTML = `<span class="text-pink-400">Try again! Look closely.</span>`;
+      }
+    }
+
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('active');
+    }
+
+    function openAddNotifModal() {
+      document.getElementById('edit-notif-id').value = '';
+      document.getElementById('notif-title-input').value = '';
+      document.getElementById('notif-content-input').value = '';
+      document.getElementById('notif-modal-heading').textContent = 'Post Announcement';
+      openModal('modal-notif');
+    }
+
+    function scrollToSection(id) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 </body>
 </html>
+```
