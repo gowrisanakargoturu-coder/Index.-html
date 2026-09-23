@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GOTURU INTERACTIVE PORTAL</title>
 
-  <!-- FontAwesome Icons for UI enhancement -->
+  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
@@ -46,7 +46,8 @@
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      pointer-events: none; /* Screen block avvakunda protection */
     }
 
     .brand-logo-anim {
@@ -98,7 +99,7 @@
       color: var(--neon-cyan);
     }
 
-    /* 2. HEADER & ADMIN CORNER */
+    /* 2. HEADER & NAVIGATION */
     header {
       background: var(--card-bg);
       border-bottom: 1px solid rgba(0, 243, 255, 0.2);
@@ -170,7 +171,6 @@
       margin-bottom: 25px;
     }
 
-    /* DASHBOARD GRID (AUTOFIT UP TO 5 BOXES) */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -195,7 +195,6 @@
       box-shadow: 0 8px 25px rgba(0, 243, 255, 0.2);
     }
 
-    /* SPECIAL GLOW FOR 5TH MASTER QUIZ BOX */
     .dash-box-highlight {
       border-color: rgba(255, 0, 127, 0.5);
       background: linear-gradient(145deg, #121826, #1a1028);
@@ -337,7 +336,7 @@
       font-weight: bold;
     }
 
-    /* SECRET ADMIN PANEL */
+    /* ADMIN PANEL */
     #admin-panel {
       display: none;
       border: 1px solid var(--neon-pink);
@@ -359,11 +358,6 @@
     .stats-card h4 {
       font-size: 2rem;
       color: var(--neon-pink);
-    }
-
-    .stats-card p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
     }
 
     .user-table {
@@ -442,7 +436,7 @@
 </head>
 <body>
 
-  <!-- CIRCULAR LOADER -->
+  <!-- CIRCULAR LOADER WITH AUTOMATIC SAFEEXIT -->
   <div id="loader-overlay">
     <div class="brand-logo-anim">GOTURU INTERACTIVE</div>
     <div class="circle-loader">
@@ -458,12 +452,10 @@
   <header>
     <div class="portal-logo">GOTURU <span>INTERACTIVE</span></div>
     
-    <!-- ADMIN LOGIN BUTTON ONLY -->
     <div id="admin-header-btn">
       <button class="admin-nav-btn" onclick="openAdminAuth()">🔑 Admin Login</button>
     </div>
 
-    <!-- DISPLAY WHEN ADMIN LOGGED IN -->
     <div id="admin-logged-area" style="display: none; align-items: center;">
       <span style="color: var(--neon-pink); font-weight: bold; font-size: 0.9rem;">👑 Admin Active</span>
       <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
@@ -527,7 +519,7 @@
       <div id="notifications-list"></div>
     </div>
 
-    <!-- SECRET ADMIN EXCLUSIVE PANEL -->
+    <!-- SECRET ADMIN PANEL -->
     <div id="admin-panel">
       <h3 style="color: var(--neon-pink); margin-bottom: 15px;">🔑 Secret Admin Master Portal</h3>
       
@@ -550,7 +542,7 @@
     </div>
   </div>
 
-  <!-- ADMIN AUTH MODAL -->
+  <!-- MODALS -->
   <div class="modal-overlay" id="admin-auth-modal">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('admin-auth-modal')">&times;</span>
@@ -569,7 +561,6 @@
     </div>
   </div>
 
-  <!-- BIO DATA MODAL -->
   <div class="modal-overlay" id="modal-bio">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-bio')">&times;</span>
@@ -582,21 +573,17 @@
     </div>
   </div>
 
-  <!-- SUGGESTION MODAL -->
   <div class="modal-overlay" id="modal-suggestion">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-suggestion')">&times;</span>
       <h3 style="color: var(--neon-pink); margin-bottom: 8px;">Write Your Suggestion</h3>
       <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Send your feedback directly to Admin.</p>
-      
       <input type="text" id="sugg-name" placeholder="Your Name (Optional)" style="width: 100%; background: #090d16; border: 1px solid #273754; color: #fff; padding: 8px; border-radius: 6px; margin-bottom: 10px;">
       <textarea id="suggestion-text" placeholder="Type your suggestion or feedback here..."></textarea>
-      
       <button class="submit-btn" style="background: var(--neon-pink); color: #fff;" onclick="submitSuggestion()">Send Suggestion</button>
     </div>
   </div>
 
-  <!-- NOTIFICATION EDIT MODAL -->
   <div class="modal-overlay" id="modal-notif">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-notif')">&times;</span>
@@ -610,37 +597,20 @@
     </div>
   </div>
 
-  <!-- SCRIPT ENGINE -->
+  <!-- SAFE JAVASCRIPT ENGINE -->
   <script>
-    // GAME LINKS DIRECT OPENERS
+    // DIRECT GAME LINKS
     const MASTER_QUIZ_URL = "https://master-quize-three.vercel.app/";
     const TYPING_GAME_URL = "https://type-os-time.vercel.app/";
 
-    function openMasterQuiz() {
-      window.open(MASTER_QUIZ_URL, '_blank');
-    }
+    function openMasterQuiz() { window.open(MASTER_QUIZ_URL, '_blank'); }
+    function openGame() { window.open(TYPING_GAME_URL, '_blank'); }
+    function openBioModal() { document.getElementById('modal-bio').style.display = 'flex'; }
+    function openSuggestionModal() { document.getElementById('modal-suggestion').style.display = 'flex'; }
+    function openStatusInfo() { alert("Goturu Interactive Portal Status: ALL SYSTEMS OPERATIONAL ⚡"); }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-    function openGame() {
-      window.open(TYPING_GAME_URL, '_blank');
-    }
-
-    function openBioModal() {
-      document.getElementById('modal-bio').style.display = 'flex';
-    }
-
-    function openSuggestionModal() {
-      document.getElementById('modal-suggestion').style.display = 'flex';
-    }
-
-    function openStatusInfo() {
-      alert("Goturu Interactive Portal Status: ALL SYSTEMS OPERATIONAL ⚡");
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-    }
-
-    // STORAGE HELPER FUNCTIONS
+    // SAFE STORAGE HELPERS
     function getStoredData(key) {
       try {
         return JSON.parse(localStorage.getItem(key)) || [];
@@ -655,48 +625,63 @@
       } catch (e) {}
     }
 
-    // DEFAULT INITIAL NOTIFICATIONS
-    if (getStoredData('goturu_notifications').length === 0) {
-      setStoredData('goturu_notifications', [{
-        id: 1,
-        title: "Welcome to Goturu Interactive Portal!",
-        content: "Portal official system activated! Check out Type-OS-Time Speed Typing, Master Quiz 200, and leave your suggestions.",
-        date: "22/09/2026",
-        reactions: { '👍': 5, '❤️': 8, '🔥': 4, '😊': 6 }
-      }]);
-    }
-
-    // 1. LOADER ANIMATION
-    window.addEventListener('DOMContentLoaded', () => {
+    // LOADER ANIMATION WITH EMERGENCY TIMEOUT
+    function runPortalLoader() {
       let percent = 0;
       const circle = document.getElementById('progress-circle');
       const text = document.getElementById('loader-text');
       const overlay = document.getElementById('loader-overlay');
 
       const interval = setInterval(() => {
-        percent += 4;
-        const offset = 339.29 - (percent / 100) * 339.29;
-        circle.style.strokeDashoffset = offset;
-        text.textContent = `${percent}%`;
+        percent += 10;
+        if (circle) {
+          const offset = 339.29 - (percent / 100) * 339.29;
+          circle.style.strokeDashoffset = offset;
+        }
+        if (text) text.textContent = percent + '%';
 
         if (percent >= 100) {
           clearInterval(interval);
-          setTimeout(() => {
-            overlay.style.opacity = '0';
-            overlay.style.visibility = 'hidden';
-            checkAdminSession();
-          }, 200);
+          hideLoader();
         }
-      }, 20);
-    });
+      }, 25);
 
-    // 2. CHECK ADMIN SESSION
+      function hideLoader() {
+        if (overlay) {
+          overlay.style.opacity = '0';
+          overlay.style.visibility = 'hidden';
+          overlay.style.display = 'none'; // Absolutely remove from screen
+        }
+        checkAdminSession();
+      }
+
+      // Safety Fallback: Hide loader automatically after 1 sec no matter what
+      setTimeout(hideLoader, 1000);
+    }
+
+    // INIT DEFAULTS & NOTIFICATIONS
+    function initDefaultData() {
+      if (getStoredData('goturu_notifications').length === 0) {
+        setStoredData('goturu_notifications', [{
+          id: 1,
+          title: "Welcome to Goturu Interactive Portal!",
+          content: "Portal official system activated! Check out Type-OS-Time Speed Typing, Master Quiz 200, and leave your suggestions.",
+          date: "22/09/2026",
+          reactions: { '👍': 5, '❤️': 8, '🔥': 4, '😊': 6 }
+        }]);
+      }
+    }
+
     function checkAdminSession() {
-      const isAdminLogged = sessionStorage.getItem('goturu_admin_logged') === 'true';
+      let isAdminLogged = false;
+      try {
+        isAdminLogged = sessionStorage.getItem('goturu_admin_logged') === 'true';
+      } catch(e){}
 
       if (isAdminLogged) {
         document.getElementById('admin-header-btn').style.display = 'none';
         document.getElementById('admin-logged-area').style.display = 'flex';
         document.getElementById('admin-panel').style.display = 'block';
         document.getElementById('admin-add-notif-btn').style.display = 'inline-block';
-        loadAdmi
+        loadAdminPanelData();
+      } else 
