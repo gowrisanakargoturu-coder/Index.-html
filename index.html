@@ -1,9 +1,14 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GOTURU INTERACTIVE PORTAL</title>
+
+  <!-- FIREBASE SDK (Realtime Multi-Device Sync) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
   <style>
     :root {
       --bg-dark: #0b0f19;
@@ -94,7 +99,7 @@
       color: var(--neon-cyan);
     }
 
-    /* 2. HEADER & TOP RIGHT PROFILE */
+    /* 2. HEADER & PROFILE */
     header {
       background: var(--card-bg);
       border-bottom: 1px solid rgba(0, 243, 255, 0.2);
@@ -285,7 +290,7 @@
       margin-bottom: 25px;
     }
 
-    /* 3 DASHBOARD BOXES GRID */
+    /* 3 DASHBOARD BOXES */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -300,8 +305,6 @@
       padding: 25px;
       cursor: pointer;
       transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
     }
 
     .dash-box:hover {
@@ -376,7 +379,6 @@
       line-height: 1.4;
     }
 
-    /* Emoji Reactions */
     .reactions-bar {
       display: flex;
       gap: 10px;
@@ -391,7 +393,6 @@
       border-radius: 15px;
       cursor: pointer;
       font-size: 0.85rem;
-      transition: all 0.2s;
     }
 
     .emoji-btn:hover {
@@ -510,8 +511,6 @@
       cursor: pointer;
     }
 
-    .close-modal:hover { color: var(--neon-pink); }
-
     textarea {
       width: 100%;
       height: 100px;
@@ -524,14 +523,11 @@
       resize: none;
       margin-top: 10px;
     }
-
-    textarea:focus { border-color: var(--neon-cyan); }
-
   </style>
 </head>
 <body>
 
-  <!-- CIRCULAR LOADING SCREEN -->
+  <!-- CIRCULAR LOADER -->
   <div id="loader-overlay">
     <div class="brand-logo-anim">GOTURU INTERACTIVE</div>
     <div class="circle-loader">
@@ -563,7 +559,7 @@
     </div>
   </header>
 
-  <!-- AUTHENTICATION MODAL -->
+  <!-- AUTH MODAL -->
   <div id="auth-overlay" style="display: none;">
     <div class="auth-card">
       <div class="auth-tabs">
@@ -585,7 +581,7 @@
         <button type="submit" class="submit-btn">Login</button>
       </form>
 
-      <!-- User Sign Up (NO EMAIL REQUIRED) -->
+      <!-- User Sign Up -->
       <form id="form-signup" class="auth-form" onsubmit="signupUser(event)">
         <div>
           <label>Full Name</label>
@@ -617,30 +613,27 @@
     </div>
   </div>
 
-  <!-- DASHBOARD MAIN -->
+  <!-- MAIN DASHBOARD -->
   <div class="container">
     <div class="welcome-banner">
       <h2>Welcome, <span id="dash-user" style="color: var(--neon-cyan);">Guest</span>!</h2>
-      <p style="color: var(--text-muted); margin-top: 5px;">Goturu Interactive Portal system active and ready.</p>
+      <p style="color: var(--text-muted); margin-top: 5px;">Goturu Interactive Portal Live System.</p>
     </div>
 
-    <!-- 3 INTERACTIVE BOXES -->
+    <!-- 3 DASHBOARD BOXES -->
     <div class="dashboard-grid">
-      <!-- BOX 1: GOTURU INTERACTIVE -->
       <div class="dash-box" onclick="openBioModal()">
         <h3>🌐 GOTURU INTERACTIVE</h3>
         <p>Tap to view official portal launch date and bio data information.</p>
         <span class="tap-hint">👉 Tap to View Bio Data</span>
       </div>
 
-      <!-- BOX 2: INTERACTIVE GAMES -->
       <div class="dash-box" onclick="openGame()">
         <h3>🎮 INTERACTIVE GAMES</h3>
         <p>Play speed-typing interactive game directly on Type-OS-Time.</p>
         <span class="tap-hint" style="color: var(--neon-cyan);">👉 Tap to Start Game</span>
       </div>
 
-      <!-- BOX 3: WRITE YOUR SUGGESTIONS -->
       <div class="dash-box" onclick="openSuggestionModal()">
         <h3>✍️ WRITE YOUR SUGGESTIONS</h3>
         <p>Send your feedback or suggestions directly to Admin. Kept private.</p>
@@ -651,7 +644,7 @@
     <!-- NOTIFICATION SECTION -->
     <div class="section-card">
       <h3>
-        <span>📢 Special Notifications</span>
+        <span>📢 Live Notifications</span>
         <button id="admin-add-notif-btn" class="submit-btn" style="padding: 4px 10px; font-size: 0.8rem; display: none;" onclick="openAddNotifModal()">+ Add New</button>
       </h3>
       <div id="notifications-list"></div>
@@ -659,12 +652,12 @@
 
     <!-- SECRET ADMIN EXCLUSIVE PANEL -->
     <div id="admin-panel">
-      <h3 style="color: var(--neon-pink); margin-bottom: 10px;">🔑 Secret Admin Master Control Panel</h3>
+      <h3 style="color: var(--neon-pink); margin-bottom: 10px;">🔑 Secret Admin Live Master Control</h3>
       
       <div class="stats-grid">
         <div class="stat-card">
           <h4 id="stat-active-users">0</h4>
-          <p>Active Registered Users</p>
+          <p>Total Registered Users</p>
         </div>
         <div class="stat-card">
           <h4 id="stat-total-suggestions">0</h4>
@@ -672,8 +665,7 @@
         </div>
       </div>
 
-      <!-- SUGGESTIONS LIST (ADMIN ONLY) -->
-      <h4 style="color: var(--neon-cyan); margin: 15px 0 10px 0;">💬 User Suggestions Feed (Private Admin View)</h4>
+      <h4 style="color: var(--neon-cyan); margin: 15px 0 10px 0;">💬 Private Suggestions Live Feed</h4>
       <table class="user-table">
         <thead>
           <tr>
@@ -685,7 +677,6 @@
         <tbody id="admin-suggestions-rows"></tbody>
       </table>
 
-      <!-- REGISTERED USERS DIRECTORY -->
       <h4 style="color: var(--neon-cyan); margin: 20px 0 10px 0;">👥 Registered Active Users Directory</h4>
       <table class="user-table">
         <thead>
@@ -700,32 +691,29 @@
     </div>
   </div>
 
-  <!-- MODAL 1: GOTURU INTERACTIVE BIO DATA -->
+  <!-- MODALS -->
   <div class="modal-overlay" id="modal-bio">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-bio')">&times;</span>
       <h3 style="color: var(--neon-cyan); margin-bottom: 12px;">GOTURU INTERACTIVE</h3>
       <div style="font-size: 0.9rem; line-height: 1.6; color: #d1d9e6;">
-        <p>📌 <strong>Status:</strong> Official Portal Active</p>
+        <p>📌 <strong>Status:</strong> Live Portal Active</p>
         <p>📅 <strong>Portal Launch:</strong> Started on 22/Sep/2026</p>
-        <p>⚡ <strong>Tech Stack:</strong> Neon Interactive Dashboard UI</p>
-        <p>🔒 <strong>Security:</strong> Encrypted Sessions & Secret Admin Privileges</p>
+        <p>⚡ <strong>Database:</strong> Firebase Realtime Sync Enabled</p>
       </div>
     </div>
   </div>
 
-  <!-- MODAL 2: SUGGESTION COMMENT FORM -->
   <div class="modal-overlay" id="modal-suggestion">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-suggestion')">&times;</span>
       <h3 style="color: var(--neon-pink); margin-bottom: 8px;">Write Your Suggestion</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted);">Your suggestion goes directly to the Secret Admin panel only.</p>
-      <textarea id="suggestion-text" placeholder="Type your suggestion or feedback here..."></textarea>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">Sent directly to Admin's phone in real-time.</p>
+      <textarea id="suggestion-text" placeholder="Type your suggestion here..."></textarea>
       <button class="submit-btn" style="background: var(--neon-pink); color: #fff; width: 100%;" onclick="submitSuggestion()">Send Suggestion</button>
     </div>
   </div>
 
-  <!-- MODAL 3: ADMIN NOTIFICATION CREATE / EDIT -->
   <div class="modal-overlay" id="modal-notif">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-notif')">&times;</span>
@@ -740,21 +728,22 @@
   </div>
 
   <script>
-    // INITIALIZE STORAGE DATA
-    if (!localStorage.getItem('goturu_notifications')) {
-      const defaultNotifs = [
-        {
-          id: 1,
-          title: "Welcome to Goturu Interactive Portal!",
-          content: "Portal official system activated! Check out interactive games and leave your suggestions.",
-          date: "22/09/2026",
-          reactions: { '👍': 3, '❤️': 5, '🔥': 2, '😊': 4 }
-        }
-      ];
-      localStorage.setItem('goturu_notifications', JSON.stringify(defaultNotifs));
-    }
+    // FIREBASE INITIALIZATION
+    // Mee Firebase Console nunci poyina details ikada Paste cheyandi
+    const firebaseConfig = {
+      apiKey: "PASTE_YOUR_API_KEY_HERE",
+      authDomain: "PASTE_YOUR_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://PASTE_YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+      projectId: "PASTE_YOUR_PROJECT_ID",
+      storageBucket: "PASTE_YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "PASTE_YOUR_APP_ID"
+    };
 
-    // 1. CIRCULAR LOADER
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 1. LOADER
     window.addEventListener('DOMContentLoaded', () => {
       let percent = 0;
       const circle = document.getElementById('progress-circle');
@@ -778,7 +767,7 @@
       }, 25);
     });
 
-    // 2. CHECK ACTIVE SESSION
+    // 2. CHECK SESSION
     function checkSession() {
       const activeUser = JSON.parse(sessionStorage.getItem('goturu_active_user'));
       if (activeUser) {
@@ -786,10 +775,10 @@
       } else {
         document.getElementById('auth-overlay').style.display = 'flex';
       }
-      renderNotifications();
+      listenLiveNotifications();
     }
 
-    // 3. TAB SWITCHING
+    // 3. TABS
     function switchTab(tabType) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
@@ -806,46 +795,49 @@
       }
     }
 
-    // 4. USER SIGNUP (NO EMAIL)
+    // 4. SIGNUP TO FIREBASE
     function signupUser(e) {
       e.preventDefault();
       const name = document.getElementById('signup-name').value;
-      const username = document.getElementById('signup-user').value.trim();
+      const username = document.getElementById('signup-user').value.trim().toLowerCase();
       const pass = document.getElementById('signup-pass').value;
 
-      let users = JSON.parse(localStorage.getItem('users_list')) || [];
-      if(users.some(u => u.username === username)) {
-        alert('Username already taken!');
-        return;
-      }
-
-      users.push({ name, username, pass });
-      localStorage.setItem('users_list', JSON.stringify(users));
-
-      alert('Account created successfully! Please login.');
-      switchTab('login');
+      db.ref('users/' + username).once('value', snapshot => {
+        if (snapshot.exists()) {
+          alert('Username already taken! Try another.');
+        } else {
+          db.ref('users/' + username).set({ name, username, pass }, err => {
+            if (!err) {
+              alert('Account created successfully across all devices! Please login.');
+              switchTab('login');
+            } else {
+              alert('Error creating account: ' + err.message);
+            }
+          });
+        }
+      });
     }
 
-    // 5. USER LOGIN
+    // 5. LOGIN FROM FIREBASE
     function loginUser(e) {
       e.preventDefault();
-      const u = document.getElementById('login-user').value.trim();
+      const u = document.getElementById('login-user').value.trim().toLowerCase();
       const p = document.getElementById('login-pass').value;
 
-      let users = JSON.parse(localStorage.getItem('users_list')) || [];
-      const found = users.find(user => user.username === u && user.pass === p);
-
-      if (found) {
-        const userObj = { name: found.name, username: found.username, isAdmin: false };
-        sessionStorage.setItem('goturu_active_user', JSON.stringify(userObj));
-        setUserState(userObj);
-        document.getElementById('auth-overlay').style.display = 'none';
-      } else {
-        alert('Invalid Username or Password!');
-      }
+      db.ref('users/' + u).once('value', snapshot => {
+        const userData = snapshot.val();
+        if (userData && userData.pass === p) {
+          const userObj = { name: userData.name, username: userData.username, isAdmin: false };
+          sessionStorage.setItem('goturu_active_user', JSON.stringify(userObj));
+          setUserState(userObj);
+          document.getElementById('auth-overlay').style.display = 'none';
+        } else {
+          alert('Invalid Username or Password!');
+        }
+      });
     }
 
-    // 6. SECRET ADMIN LOGIN (admin / admin123)
+    // 6. ADMIN LOGIN
     function loginAdmin(e) {
       e.preventDefault();
       const id = document.getElementById('admin-id').value.trim();
@@ -857,11 +849,11 @@
         setUserState(adminObj);
         document.getElementById('auth-overlay').style.display = 'none';
       } else {
-        alert('Access Denied: Invalid Master Credentials!');
+        alert('Access Denied: Invalid Admin Key!');
       }
     }
 
-    // 7. SET LOGGED IN STATE
+    // 7. SET USER STATE
     function setUserState(user) {
       document.getElementById('profile-area').style.display = 'block';
       document.getElementById('header-username').textContent = user.username;
@@ -870,157 +862,98 @@
       document.getElementById('dropdown-role').textContent = user.isAdmin ? 'Role: Secret Admin' : 'Role: Member';
       document.getElementById('dash-user').textContent = user.name;
 
-      const adminPanel = document.getElementById('admin-panel');
-      const addNotifBtn = document.getElementById('admin-add-notif-btn');
-
       if (user.isAdmin) {
-        adminPanel.style.display = 'block';
-        addNotifBtn.style.display = 'inline-block';
-        loadAdminPanelData();
+        document.getElementById('admin-panel').style.display = 'block';
+        document.getElementById('admin-add-notif-btn').style.display = 'inline-block';
+        listenLiveAdminData();
       } else {
-        adminPanel.style.display = 'none';
-        addNotifBtn.style.display = 'none';
-      }
-      renderNotifications();
-    }
-
-    // 8. BOX 1 & BOX 2 & BOX 3 FUNCTIONS
-    function openBioModal() {
-      document.getElementById('modal-bio').style.display = 'flex';
-    }
-
-    function openGame() {
-      window.open('https://type-os-time.vercel.app/', '_blank');
-    }
-
-    function openSuggestionModal() {
-      document.getElementById('modal-suggestion').style.display = 'flex';
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-    }
-
-    // SUBMIT SUGGESTION (SAVED FOR ADMIN ONLY)
-    function submitSuggestion() {
-      const text = document.getElementById('suggestion-text').value.trim();
-      if (!text) {
-        alert('Please write a suggestion before sending!');
-        return;
-      }
-
-      const activeUser = JSON.parse(sessionStorage.getItem('goturu_active_user'));
-      let suggestions = JSON.parse(localStorage.getItem('goturu_suggestions')) || [];
-
-      suggestions.push({
-        user: activeUser ? activeUser.name : 'Anonymous',
-        username: activeUser ? activeUser.username : 'guest',
-        comment: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-
-      localStorage.setItem('goturu_suggestions', JSON.stringify(suggestions));
-      document.getElementById('suggestion-text').value = '';
-      closeModal('modal-suggestion');
-      alert('Your suggestion has been sent to Admin privately!');
-
-      if (activeUser && activeUser.isAdmin) {
-        loadAdminPanelData();
+        document.getElementById('admin-panel').style.display = 'none';
+        document.getElementById('admin-add-notif-btn').style.display = 'none';
       }
     }
 
-    // 9. ADMIN PANEL DATA RENDER
-    function loadAdminPanelData() {
-      const users = JSON.parse(localStorage.getItem('users_list')) || [];
-      const suggestions = JSON.parse(localStorage.getItem('goturu_suggestions')) || [];
+    // 8. REALTIME ADMIN LISTENER (Live Suggestions & Active Users)
+    function listenLiveAdminData() {
+      // Live Users Sync
+      db.ref('users').on('value', snapshot => {
+        const usersObj = snapshot.val() || {};
+        const usersArr = Object.values(usersObj);
+        document.getElementById('stat-active-users').textContent = usersArr.length;
 
-      document.getElementById('stat-active-users').textContent = users.length;
-      document.getElementById('stat-total-suggestions').textContent = suggestions.length;
-
-      // Render Suggestions
-      const suggTbody = document.getElementById('admin-suggestions-rows');
-      suggTbody.innerHTML = '';
-      if(suggestions.length === 0) {
-        suggTbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">No suggestions received yet.</td></tr>';
-      } else {
-        suggestions.slice().reverse().forEach(s => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `<td><strong>${s.user}</strong> (@${s.username})</td><td>${s.comment}</td><td>${s.time}</td>`;
-          suggTbody.appendChild(tr);
+        const userTbody = document.getElementById('admin-user-rows');
+        userTbody.innerHTML = '';
+        usersArr.forEach((u, i) => {
+          userTbody.innerHTML += `<tr><td>${i+1}</td><td>${u.name}</td><td>@${u.username}</td></tr>`;
         });
-      }
+      });
 
-      // Render Registered Users
-      const userTbody = document.getElementById('admin-user-rows');
-      userTbody.innerHTML = '';
-      users.forEach((u, i) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${i+1}</td><td>${u.name}</td><td>${u.username}</td>`;
-        userTbody.appendChild(tr);
+      // Live Suggestions Sync
+      db.ref('suggestions').on('value', snapshot => {
+        const suggObj = snapshot.val() || {};
+        const suggArr = Object.values(suggObj);
+        document.getElementById('stat-total-suggestions').textContent = suggArr.length;
+
+        const suggTbody = document.getElementById('admin-suggestions-rows');
+        suggTbody.innerHTML = '';
+        if (suggArr.length === 0) {
+          suggTbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No suggestions yet.</td></tr>';
+        } else {
+          suggArr.reverse().forEach(s => {
+            suggTbody.innerHTML += `<tr><td><strong>${s.user}</strong> (@${s.username})</td><td>${s.comment}</td><td>${s.time}</td></tr>`;
+          });
+        }
       });
     }
 
-    // 10. NOTIFICATION SYSTEM (USER REACT & ADMIN EDIT/DELETE)
-    function renderNotifications() {
-      const notifs = JSON.parse(localStorage.getItem('goturu_notifications')) || [];
-      const container = document.getElementById('notifications-list');
-      const activeUser = JSON.parse(sessionStorage.getItem('goturu_active_user'));
-      const isAdmin = activeUser && activeUser.isAdmin;
+    // 9. REALTIME NOTIFICATIONS & EMOJIS
+    function listenLiveNotifications() {
+      db.ref('notifications').on('value', snapshot => {
+        const notifsObj = snapshot.val() || {};
+        const container = document.getElementById('notifications-list');
+        const activeUser = JSON.parse(sessionStorage.getItem('goturu_active_user'));
+        const isAdmin = activeUser && activeUser.isAdmin;
 
-      container.innerHTML = '';
+        container.innerHTML = '';
+        const keys = Object.keys(notifsObj);
 
-      if (notifs.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted); font-size:0.9rem;">No active notifications right now.</p>';
-        return;
-      }
-
-      notifs.forEach(n => {
-        const div = document.createElement('div');
-        div.className = 'notif-item';
-
-        let adminButtonsHtml = '';
-        if (isAdmin) {
-          adminButtonsHtml = `
-            <div class="admin-controls-btn">
-              <button class="btn-edit" onclick="editNotif(${n.id})">Edit</button>
-              <button class="btn-delete" onclick="deleteNotif(${n.id})">Delete</button>
-            </div>
-          `;
+        if (keys.length === 0) {
+          container.innerHTML = '<p style="color:var(--text-muted);">No notifications yet.</p>';
+          return;
         }
 
-        div.innerHTML = `
-          <div class="notif-title">${n.title}</div>
-          <div class="notif-date">${n.date}</div>
-          <div class="notif-content">${n.content}</div>
-          <div class="reactions-bar">
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '👍')">👍 ${n.reactions['👍'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '❤️')">❤️ ${n.reactions['❤️'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '🔥')">🔥 ${n.reactions['🔥'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '😊')">😊 ${n.reactions['😊'] || 0}</button>
-          </div>
-          ${adminButtonsHtml}
-        `;
-        container.appendChild(div);
+        keys.forEach(key => {
+          const n = notifsObj[key];
+          const div = document.createElement('div');
+          div.className = 'notif-item';
+
+          let adminBtns = isAdmin ? `
+            <div class="admin-controls-btn">
+              <button class="btn-edit" onclick="editNotif('${key}', '${n.title}', '${n.content}')">Edit</button>
+              <button class="btn-delete" onclick="deleteNotif('${key}')">Delete</button>
+            </div>
+          ` : '';
+
+          const reactions = n.reactions || { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 };
+
+          div.innerHTML = `
+            <div class="notif-title">${n.title}</div>
+            <div class="notif-date">${n.date}</div>
+            <div class="notif-content">${n.content}</div>
+            <div class="reactions-bar">
+              <button class="emoji-btn" onclick="reactEmoji('${key}', '👍')">👍 ${reactions['👍'] || 0}</button>
+              <button class="emoji-btn" onclick="reactEmoji('${key}', '❤️')">❤️ ${reactions['❤️'] || 0}</button>
+              <button class="emoji-btn" onclick="reactEmoji('${key}', '🔥')">🔥 ${reactions['🔥'] || 0}</button>
+              <button class="emoji-btn" onclick="reactEmoji('${key}', '😊')">😊 ${reactions['😊'] || 0}</button>
+            </div>
+            ${adminBtns}
+          `;
+          container.appendChild(div);
+        });
       });
     }
 
-    function reactEmoji(notifId, emoji) {
-      let notifs = JSON.parse(localStorage.getItem('goturu_notifications')) || [];
-      const notif = notifs.find(n => n.id === notifId);
-      if (notif) {
-        if (!notif.reactions[emoji]) notif.reactions[emoji] = 0;
-        notif.reactions[emoji] += 1;
-        localStorage.setItem('goturu_notifications', JSON.stringify(notifs));
-        renderNotifications();
-      }
-    }
-
-    function openAddNotifModal() {
-      document.getElementById('edit-notif-id').value = '';
-      document.getElementById('notif-title-input').value = '';
-      document.getElementById('notif-content-input').value = '';
-      document.getElementById('notif-modal-heading').textContent = 'Post New Notification';
-      document.getElementById('modal-notif').style.display = 'flex';
+    function reactEmoji(notifKey, emoji) {
+      db.ref(`notifications/${notifKey}/reactions/${emoji}`).transaction(count => (count || 0) + 1);
     }
 
     function saveNotification() {
@@ -1028,65 +961,64 @@
       const title = document.getElementById('notif-title-input').value.trim();
       const content = document.getElementById('notif-content-input').value.trim();
 
-      if (!title || !content) {
-        alert('Please fill both Title and Content!');
-        return;
-      }
-
-      let notifs = JSON.parse(localStorage.getItem('goturu_notifications')) || [];
+      if (!title || !content) return alert('Fill all fields!');
 
       if (editId) {
-        // Edit Existing
-        const item = notifs.find(n => n.id == editId);
-        if (item) {
-          item.title = title;
-          item.content = content;
-        }
+        db.ref('notifications/' + editId).update({ title, content });
       } else {
-        // Create New
-        notifs.push({
-          id: Date.now(),
-          title: title,
-          content: content,
+        db.ref('notifications').push({
+          title, content,
           date: new Date().toLocaleDateString(),
           reactions: { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 }
         });
       }
-
-      localStorage.setItem('goturu_notifications', JSON.stringify(notifs));
       closeModal('modal-notif');
-      renderNotifications();
     }
 
-    function editNotif(id) {
-      let notifs = JSON.parse(localStorage.getItem('goturu_notifications')) || [];
-      const item = notifs.find(n => n.id === id);
-      if (item) {
-        document.getElementById('edit-notif-id').value = item.id;
-        document.getElementById('notif-title-input').value = item.title;
-        document.getElementById('notif-content-input').value = item.content;
-        document.getElementById('notif-modal-heading').textContent = 'Edit Notification';
-        document.getElementById('modal-notif').style.display = 'flex';
-      }
+    function editNotif(key, title, content) {
+      document.getElementById('edit-notif-id').value = key;
+      document.getElementById('notif-title-input').value = title;
+      document.getElementById('notif-content-input').value = content;
+      document.getElementById('modal-notif').style.display = 'flex';
     }
 
-    function deleteNotif(id) {
-      if (confirm('Are you sure you want to delete this notification?')) {
-        let notifs = JSON.parse(localStorage.getItem('goturu_notifications')) || [];
-        notifs = notifs.filter(n => n.id !== id);
-        localStorage.setItem('goturu_notifications', JSON.stringify(notifs));
-        renderNotifications();
-      }
+    function deleteNotif(key) {
+      if (confirm('Delete notification?')) db.ref('notifications/' + key).remove();
     }
 
-    function toggleMenu() {
-      document.getElementById('dropdown').classList.toggle('active');
+    // 10. SUBMIT SUGGESTION
+    function submitSuggestion() {
+      const text = document.getElementById('suggestion-text').value.trim();
+      if (!text) return alert('Write something!');
+
+      const activeUser = JSON.parse(sessionStorage.getItem('goturu_active_user'));
+
+      db.ref('suggestions').push({
+        user: activeUser ? activeUser.name : 'Guest',
+        username: activeUser ? activeUser.username : 'guest',
+        comment: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }, err => {
+        if (!err) {
+          document.getElementById('suggestion-text').value = '';
+          closeModal('modal-suggestion');
+          alert('Suggestion sent to Admin in Real-Time!');
+        }
+      });
     }
 
-    function logout() {
-      sessionStorage.removeItem('goturu_active_user');
-      location.reload();
+    function openBioModal() { document.getElementById('modal-bio').style.display = 'flex'; }
+    function openGame() { window.open('https://type-os-time.vercel.app/', '_blank'); }
+    function openSuggestionModal() { document.getElementById('modal-suggestion').style.display = 'flex'; }
+    function openAddNotifModal() { 
+      document.getElementById('edit-notif-id').value = '';
+      document.getElementById('notif-title-input').value = '';
+      document.getElementById('notif-content-input').value = '';
+      document.getElementById('modal-notif').style.display = 'flex'; 
     }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function toggleMenu() { document.getElementById('dropdown').classList.toggle('active'); }
+    function logout() { sessionStorage.removeItem('goturu_active_user'); location.reload(); }
   </script>
 </body>
 </html>
