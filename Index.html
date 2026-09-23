@@ -1,228 +1,445 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOTURU WEB APPLICATION</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOTURU WEB APPLICATION</title>
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --card-bg: #121826;
+      --neon-cyan: #00f3ff;
+      --neon-pink: #ff007f;
+      --neon-green: #00ff66;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* LOADING SCREEN ANIMATION */
+    #loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: #07090f;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .brand-logo-anim {
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 3px;
+      color: #fff;
+      margin-bottom: 25px;
+      text-shadow: 0 0 12px var(--neon-cyan);
+    }
+
+    .circle-loader {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+
+    .circle-loader svg {
+      width: 120px;
+      height: 120px;
+      transform: rotate(-90deg);
+    }
+
+    .circle-loader circle {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+    }
+
+    .circle-bg {
+      stroke: #1b2438;
+    }
+
+    .circle-progress {
+      stroke: var(--neon-cyan);
+      stroke-dasharray: 339.29;
+      stroke-dashoffset: 339.29;
+      transition: stroke-dashoffset 0.1s linear;
+    }
+
+    .loader-percentage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--neon-cyan);
+    }
+
+    /* HEADER & PROFILE */
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .portal-logo {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--neon-cyan);
+    }
+
+    .profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #182033;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--neon-cyan);
+      cursor: pointer;
+    }
+
+    .avatar-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--neon-cyan);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .profile-dropdown {
+      position: absolute;
+      right: 30px;
+      top: 60px;
+      background: var(--card-bg);
+      border: 1px solid var(--neon-cyan);
+      border-radius: 8px;
+      padding: 15px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    .profile-dropdown.active {
+      display: flex;
+    }
+
+    .logout-btn {
+      background: transparent;
+      border: 1px solid var(--neon-pink);
+      color: var(--neon-pink);
+      padding: 6px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* AUTH MODAL */
+    #auth-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(7, 9, 15, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 800;
+    }
+
+    .auth-card {
+      background: var(--card-bg);
+      border: 1px solid var(--neon-cyan);
+      border-radius: 12px;
+      width: 340px;
+      padding: 25px;
+    }
+
+    .auth-tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .tab-btn.active {
+      color: var(--neon-cyan);
+      border-bottom: 2px solid var(--neon-cyan);
+    }
+
+    .auth-form {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .auth-form.active {
+      display: flex;
+    }
+
+    .auth-form input {
+      background: #090d16;
+      border: 1px solid #273754;
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: #fff;
+    }
+
+    .submit-btn {
+      background: var(--neon-cyan);
+      color: #000;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* DASHBOARD CONTENT */
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid #1f2b42;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    #admin-panel {
+      display: none;
+      border-color: var(--neon-pink);
+    }
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+<body>
 
-    <!-- Header Navigation -->
-    <header class="bg-slate-800 p-4 flex justify-between items-center px-6 border-b border-slate-700">
-        <h1 class="text-xl font-bold text-cyan-400">GOTURU WEB</h1>
-        <div id="user-nav" class="hidden flex items-center space-x-4">
-            <span id="nav-username" class="text-sm font-semibold text-slate-200"></span>
-            <button onclick="logout()" class="bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
-    </header>
+  <!-- CIRCULAR LOADING SCREEN -->
+  <div id="loader-overlay">
+    <div class="brand-logo-anim">GOTURU INTERACTIVE</div>
+    <div class="circle-loader">
+      <svg>
+        <circle class="circle-bg" cx="60" cy="60" r="54"></circle>
+        <circle class="circle-progress" id="progress-circle" cx="60" cy="60" r="54"></circle>
+      </svg>
+      <div class="loader-percentage" id="loader-text">0%</div>
+    </div>
+  </div>
 
-    <!-- Main Container -->
-    <main class="container mx-auto p-4 max-w-lg my-auto">
+  <!-- HEADER -->
+  <header>
+    <div class="portal-logo">GOTURU PORTAL</div>
+    <div class="profile-corner" id="profile-area" style="display: none;">
+      <div class="profile-btn" onclick="toggleMenu()">
+        <div class="avatar-icon" id="user-avatar">U</div>
+        <span id="header-username">User</span>
+      </div>
+      <div class="profile-dropdown" id="dropdown">
+        <div id="dropdown-name">User Name</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
 
-        <!-- 1. LOGIN SCREEN -->
-        <div id="login-card" class="bg-slate-800 p-6 rounded-2xl shadow-xl space-y-4 border border-slate-700">
-            <h2 class="text-2xl font-bold text-center text-cyan-400">Sign In</h2>
-            <form onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="text-xs text-slate-400">Username</label>
-                    <input type="text" id="login-username-input" required placeholder="Enter username" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm focus:outline-none focus:border-cyan-500">
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400">Password</label>
-                    <input type="password" id="login-password-input" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm focus:outline-none focus:border-cyan-500">
-                </div>
-                <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 rounded-lg text-sm">
-                    Login
-                </button>
-            </form>
-            <div class="text-center pt-2 border-t border-slate-700">
-                <p class="text-xs text-slate-400">Account ledha? <a href="#" onclick="showSignUp()" class="text-cyan-400 underline">Sign Up</a></p>
-            </div>
-        </div>
+  <!-- AUTH FORM (NO EMAIL SIGNUP) -->
+  <div id="auth-overlay" style="display: none;">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+        <button class="tab-btn" onclick="switchTab('admin')">Admin</button>
+      </div>
 
-        <!-- 2. SIGN UP SCREEN -->
-        <div id="signup-card" class="hidden bg-slate-800 p-6 rounded-2xl shadow-xl space-y-4 border border-slate-700">
-            <h2 class="text-2xl font-bold text-center text-green-400">Create Account</h2>
-            <form onsubmit="handleSignUp(event)" class="space-y-4">
-                <div>
-                    <label class="text-xs text-slate-400">Full Name</label>
-                    <input type="text" id="signup-name-input" required placeholder="Full name" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm focus:outline-none focus:border-green-500">
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400">Username</label>
-                    <input type="text" id="signup-username-input" required placeholder="Choose username" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm focus:outline-none focus:border-green-500">
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400">Password</label>
-                    <input type="password" id="signup-password-input" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm focus:outline-none focus:border-green-500">
-                </div>
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 rounded-lg text-sm">
-                    Create Account
-                </button>
-            </form>
-            <div class="text-center pt-2 border-t border-slate-700">
-                <p class="text-xs text-slate-400">Already account undhi? <a href="#" onclick="showLogin()" class="text-green-400 underline">Login</a></p>
-            </div>
-        </div>
+      <form id="form-login" class="auth-form active" onsubmit="loginUser(event)">
+        <input type="text" id="login-user" placeholder="Username" required>
+        <input type="password" id="login-pass" placeholder="Password" required>
+        <button type="submit" class="submit-btn">Login</button>
+      </form>
 
-        <!-- 3. MAIN DASHBOARD SCREEN -->
-        <div id="home-card" class="hidden space-y-6">
-            <div class="bg-slate-800 p-6 rounded-2xl text-center space-y-3 border border-slate-700">
-                <h2 class="text-2xl font-bold">Welcome, <span id="welcome-username" class="text-cyan-400"></span>! 👋</h2>
-                <p class="text-xs text-slate-400">Meeru website lo persistent ga login ayyi unnaru. Browser refresh chesina leda closing chesi malli vachina logout avvadhu.</p>
-            </div>
+      <form id="form-signup" class="auth-form" onsubmit="signupUser(event)">
+        <input type="text" id="signup-name" placeholder="Full Name" required>
+        <input type="text" id="signup-user" placeholder="Choose Username" required>
+        <input type="password" id="signup-pass" placeholder="Password" required>
+        <button type="submit" class="submit-btn">Create Account</button>
+      </form>
 
-            <!-- Web Game Frame -->
-            <div class="bg-slate-800 p-4 rounded-2xl space-y-3 border border-slate-700">
-                <h3 class="text-sm font-bold text-purple-400 flex items-center space-x-2">
-                    <i class="fas fa-gamepad"></i> <span>Type OS Time Web Game</span>
-                </h3>
-                <div class="h-64 rounded-xl overflow-hidden border border-slate-700">
-                    <iframe src="https://type-os-time.vercel.app/" class="w-full h-full border-0"></iframe>
-                </div>
-            </div>
+      <form id="form-admin" class="auth-form" onsubmit="loginAdmin(event)">
+        <input type="text" id="admin-id" placeholder="Admin Secret ID" required>
+        <input type="password" id="admin-key" placeholder="Secret Key" required>
+        <button type="submit" class="submit-btn" style="background: var(--neon-pink); color:#fff;">Admin Access</button>
+      </form>
+    </div>
+  </div>
 
-            <!-- Admin Badge -->
-            <div id="admin-box" class="hidden bg-slate-800 border border-cyan-500/50 p-4 rounded-2xl space-y-2">
-                <h3 class="text-sm font-bold text-cyan-400">Admin Authorized</h3>
-                <p class="text-xs text-slate-300">Logged in as System Admin: <strong>GOWRISANKAR GOTURU</strong></p>
-            </div>
-        </div>
+  <!-- DASHBOARD -->
+  <div class="container">
+    <div class="card">
+      <h2>Welcome, <span id="dash-user" style="color: var(--neon-cyan);">Guest</span>!</h2>
+      <p>Goturu Interactive Web Portal system active.</p>
+    </div>
 
-    </main>
+    <div class="card" id="admin-panel">
+      <h3 style="color: var(--neon-pink);">Secret Admin Dashboard</h3>
+      <p>Strict single admin profile access granted.</p>
+    </div>
+  </div>
 
-    <!-- Footer -->
-    <footer class="bg-slate-800 p-4 text-center text-xs text-slate-500 border-t border-slate-700">
-        © 2026 GOTURU WEB. All rights reserved.
-    </footer>
+  <script>
+    // LOADING ANIMATION SCRIPT
+    window.addEventListener('DOMContentLoaded', () => {
+      let percent = 0;
+      const circle = document.getElementById('progress-circle');
+      const text = document.getElementById('loader-text');
+      const overlay = document.getElementById('loader-overlay');
 
-    <!-- JavaScript Logic -->
-    <script>
-        function initAdmin() {
-            var usersList = JSON.parse(localStorage.getItem('users')) || [];
-            var adminExists = false;
+      const interval = setInterval(() => {
+        percent += 2;
+        const offset = 339.29 - (percent / 100) * 339.29;
+        circle.style.strokeDashoffset = offset;
+        text.textContent = `${percent}%`;
 
-            for (var i = 0; i < usersList.length; i++) {
-                if (usersList[i].username === 'admin') {
-                    adminExists = true;
-                    break;
-                }
-            }
-
-            if (!adminExists) {
-                usersList.push({
-                    name: 'GOWRISANKAR GOTURU',
-                    username: 'admin',
-                    password: 'gowri@7799563932',
-                    role: 'admin'
-                });
-                localStorage.setItem('users', JSON.stringify(usersList));
-            }
-        }
-
-        function checkSession() {
-            var activeUser = JSON.parse(localStorage.getItem('activeUser'));
-            
-            if (activeUser) {
-                document.getElementById('login-card').classList.add('hidden');
-                document.getElementById('signup-card').classList.add('hidden');
-                document.getElementById('home-card').classList.remove('hidden');
-                document.getElementById('user-nav').classList.remove('hidden');
-
-                document.getElementById('nav-username').textContent = activeUser.name;
-                document.getElementById('welcome-username').textContent = activeUser.name;
-
-                if (activeUser.role === 'admin') {
-                    document.getElementById('admin-box').classList.remove('hidden');
-                } else {
-                    document.getElementById('admin-box').classList.add('hidden');
-                }
-            } else {
-                showLogin();
-            }
-        }
-
-        function handleLogin(event) {
-            event.preventDefault();
-            var usernameVal = document.getElementById('login-username-input').value.trim();
-            var passwordVal = document.getElementById('login-password-input').value.trim();
-
-            var usersList = JSON.parse(localStorage.getItem('users')) || [];
-            var foundUser = null;
-
-            for (var i = 0; i < usersList.length; i++) {
-                if (usersList[i].username.toLowerCase() === usernameVal.toLowerCase() && usersList[i].password === passwordVal) {
-                    foundUser = usersList[i];
-                    break;
-                }
-            }
-
-            if (foundUser !== null) {
-                localStorage.setItem('activeUser', JSON.stringify(foundUser));
-                checkSession();
-            } else {
-                alert('Invalid Username or Password!');
-            }
-        }
-
-        function handleSignUp(event) {
-            event.preventDefault();
-            var nameVal = document.getElementById('signup-name-input').value.trim();
-            var usernameVal = document.getElementById('signup-username-input').value.trim();
-            var passwordVal = document.getElementById('signup-password-input').value.trim();
-
-            var usersList = JSON.parse(localStorage.getItem('users')) || [];
-            var isTaken = false;
-
-            for (var i = 0; i < usersList.length; i++) {
-                if (usersList[i].username.toLowerCase() === usernameVal.toLowerCase()) {
-                    isTaken = true;
-                    break;
-                }
-            }
-
-            if (isTaken) {
-                alert('Username already taken!');
-            } else {
-                var newUser = {
-                    name: nameVal,
-                    username: usernameVal,
-                    password: passwordVal,
-                    role: 'user'
-                };
-                usersList.push(newUser);
-                localStorage.setItem('users', JSON.stringify(usersList));
-                localStorage.setItem('activeUser', JSON.stringify(newUser));
-                checkSession();
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('activeUser');
-            document.getElementById('user-nav').classList.add('hidden');
-            showLogin();
-        }
-
-        function showLogin() {
-            document.getElementById('login-card').classList.remove('hidden');
-            document.getElementById('signup-card').classList.add('hidden');
-            document.getElementById('home-card').classList.add('hidden');
-        }
-
-        function showSignUp() {
-            document.getElementById('login-card').classList.add('hidden');
-            document.getElementById('signup-card').classList.remove('hidden');
-            document.getElementById('home-card').classList.add('hidden');
-        }
-
-        window.onload = function() {
-            initAdmin();
+        if (percent >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            overlay.style.opacity = '0';
+            overlay.style.visibility = 'hidden';
             checkSession();
-        };
-    </script>
+          }, 300);
+        }
+      }, 25);
+    });
+
+    function checkSession() {
+      const user = JSON.parse(sessionStorage.getItem('goturu_active_user'));
+      if (user) {
+        setUserState(user);
+      } else {
+        document.getElementById('auth-overlay').style.display = 'flex';
+      }
+    }
+
+    function switchTab(type) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+
+      if (type === 'login') {
+        event.target.classList.add('active');
+        document.getElementById('form-login').classList.add('active');
+      } else if (type === 'signup') {
+        event.target.classList.add('active');
+        document.getElementById('form-signup').classList.add('active');
+      } else {
+        event.target.classList.add('active');
+        document.getElementById('form-admin').classList.add('active');
+      }
+    }
+
+    function signupUser(e) {
+      e.preventDefault();
+      const name = document.getElementById('signup-name').value;
+      const username = document.getElementById('signup-user').value;
+      const pass = document.getElementById('signup-pass').value;
+
+      let users = JSON.parse(localStorage.getItem('users_list')) || [];
+      users.push({ name, username, pass });
+      localStorage.setItem('users_list', JSON.stringify(users));
+
+      alert('Account created! Please login.');
+      switchTab('login');
+    }
+
+    function loginUser(e) {
+      e.preventDefault();
+      const u = document.getElementById('login-user').value;
+      const p = document.getElementById('login-pass').value;
+
+      let users = JSON.parse(localStorage.getItem('users_list')) || [];
+      const found = users.find(user => user.username === u && user.pass === p);
+
+      if (found) {
+        const userObj = { name: found.name, username: found.username, isAdmin: false };
+        sessionStorage.setItem('goturu_active_user', JSON.stringify(userObj));
+        setUserState(userObj);
+        document.getElementById('auth-overlay').style.display = 'none';
+      } else {
+        alert('Invalid Username or Password!');
+      }
+    }
+
+    function loginAdmin(e) {
+      e.preventDefault();
+      const id = document.getElementById('admin-id').value;
+      const key = document.getElementById('admin-key').value;
+
+      if (id === 'admin' && key === 'admin123') {
+        const adminObj = { name: 'Goturu Admin', username: 'admin', isAdmin: true };
+        sessionStorage.setItem('goturu_active_user', JSON.stringify(adminObj));
+        setUserState(adminObj);
+        document.getElementById('auth-overlay').style.display = 'none';
+      } else {
+        alert('Access Denied!');
+      }
+    }
+
+    function setUserState(user) {
+      document.getElementById('profile-area').style.display = 'flex';
+      document.getElementById('header-username').textContent = user.username;
+      document.getElementById('user-avatar').textContent = user.name.charAt(0);
+      document.getElementById('dropdown-name').textContent = user.name;
+      document.getElementById('dash-user').textContent = user.name;
+
+      if (user.isAdmin) {
+        document.getElementById('admin-panel').style.display = 'block';
+      } else {
+        document.getElementById('admin-panel').style.display = 'none';
+      }
+    }
+
+    function toggleMenu() {
+      document.getElementById('dropdown').classList.toggle('active');
+    }
+
+    function logout() {
+      sessionStorage.removeItem('goturu_active_user');
+      location.reload();
+    }
+  </script>
 </body>
 </html>
