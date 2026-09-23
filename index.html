@@ -33,7 +33,7 @@
       overflow-x: hidden;
     }
 
-    /* 1. CIRCULAR LOADER */
+    /* 1. CIRCULAR LOADER - PURE CSS AUTO HIDE (NO STUCK GUARANTEE) */
     #loader-overlay {
       position: fixed;
       top: 0;
@@ -46,8 +46,15 @@
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
-      pointer-events: none; /* Screen block avvakunda protection */
+      pointer-events: none;
+      /* Pure CSS Animation: 1 second lo automatic ga maayam aipothundhi */
+      animation: autoHideLoader 0.4s ease 1s forwards;
+    }
+
+    @keyframes autoHideLoader {
+      0% { opacity: 1; visibility: visible; }
+      99% { opacity: 0; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; display: none; }
     }
 
     .brand-logo-anim {
@@ -84,9 +91,14 @@
     .circle-progress {
       stroke: var(--neon-cyan);
       stroke-dasharray: 339.29;
-      stroke-dashoffset: 339.29;
-      transition: stroke-dashoffset 0.1s linear;
+      stroke-dashoffset: 0;
+      animation: loadProgress 1s linear forwards;
       filter: drop-shadow(0 0 6px var(--neon-cyan));
+    }
+
+    @keyframes loadProgress {
+      0% { stroke-dashoffset: 339.29; }
+      100% { stroke-dashoffset: 0; }
     }
 
     .loader-percentage {
@@ -436,15 +448,15 @@
 </head>
 <body>
 
-  <!-- CIRCULAR LOADER WITH AUTOMATIC SAFEEXIT -->
+  <!-- LOADER OVERLAY (AUTO-HIDES VIA CSS IN 1 SECOND) -->
   <div id="loader-overlay">
     <div class="brand-logo-anim">GOTURU INTERACTIVE</div>
     <div class="circle-loader">
       <svg>
         <circle class="circle-bg" cx="60" cy="60" r="54"></circle>
-        <circle class="circle-progress" id="progress-circle" cx="60" cy="60" r="54"></circle>
+        <circle class="circle-progress" cx="60" cy="60" r="54"></circle>
       </svg>
-      <div class="loader-percentage" id="loader-text">0%</div>
+      <div class="loader-percentage">100%</div>
     </div>
   </div>
 
@@ -597,9 +609,8 @@
     </div>
   </div>
 
-  <!-- SAFE JAVASCRIPT ENGINE -->
+  <!-- JAVASCRIPT ENGINE -->
   <script>
-    // DIRECT GAME LINKS
     const MASTER_QUIZ_URL = "https://master-quize-three.vercel.app/";
     const TYPING_GAME_URL = "https://type-os-time.vercel.app/";
 
@@ -610,57 +621,15 @@
     function openStatusInfo() { alert("Goturu Interactive Portal Status: ALL SYSTEMS OPERATIONAL ⚡"); }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-    // SAFE STORAGE HELPERS
     function getStoredData(key) {
-      try {
-        return JSON.parse(localStorage.getItem(key)) || [];
-      } catch (e) {
-        return [];
-      }
+      try { return JSON.parse(localStorage.getItem(key)) || []; } catch (e) { return []; }
     }
 
     function setStoredData(key, data) {
-      try {
-        localStorage.setItem(key, JSON.stringify(data));
-      } catch (e) {}
+      try { localStorage.setItem(key, JSON.stringify(data)); } catch (e) {}
     }
 
-    // LOADER ANIMATION WITH EMERGENCY TIMEOUT
-    function runPortalLoader() {
-      let percent = 0;
-      const circle = document.getElementById('progress-circle');
-      const text = document.getElementById('loader-text');
-      const overlay = document.getElementById('loader-overlay');
-
-      const interval = setInterval(() => {
-        percent += 10;
-        if (circle) {
-          const offset = 339.29 - (percent / 100) * 339.29;
-          circle.style.strokeDashoffset = offset;
-        }
-        if (text) text.textContent = percent + '%';
-
-        if (percent >= 100) {
-          clearInterval(interval);
-          hideLoader();
-        }
-      }, 25);
-
-      function hideLoader() {
-        if (overlay) {
-          overlay.style.opacity = '0';
-          overlay.style.visibility = 'hidden';
-          overlay.style.display = 'none'; // Absolutely remove from screen
-        }
-        checkAdminSession();
-      }
-
-      // Safety Fallback: Hide loader automatically after 1 sec no matter what
-      setTimeout(hideLoader, 1000);
-    }
-
-    // INIT DEFAULTS & NOTIFICATIONS
-    function initDefaultData() {
+    function initPortal() {
       if (getStoredData('goturu_notifications').length === 0) {
         setStoredData('goturu_notifications', [{
           id: 1,
@@ -670,13 +639,12 @@
           reactions: { '👍': 5, '❤️': 8, '🔥': 4, '😊': 6 }
         }]);
       }
+      checkAdminSession();
     }
 
     function checkAdminSession() {
       let isAdminLogged = false;
-      try {
-        isAdminLogged = sessionStorage.getItem('goturu_admin_logged') === 'true';
-      } catch(e){}
+      try { isAdminLogged = sessionStorage.getItem('goturu_admin_logged') === 'true'; } catch(e){}
 
       if (isAdminLogged) {
         document.getElementById('admin-header-btn').style.display = 'none';
@@ -684,4 +652,23 @@
         document.getElementById('admin-panel').style.display = 'block';
         document.getElementById('admin-add-notif-btn').style.display = 'inline-block';
         loadAdminPanelData();
-      } else 
+      } else {
+        document.getElementById('admin-header-btn').style.display = 'block';
+        document.getElementById('admin-logged-area').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'none';
+        document.getElementById('admin-add-notif-btn').style.display = 'none';
+      }
+      renderNotifications();
+    }
+
+    function openAdminAuth() { document.getElementById('admin-auth-modal').style.display = 'flex'; }
+
+    function loginAdmin(e) {
+      e.preventDefault();
+      const id = document.getElementById('admin-id').value.trim();
+      const key = document.getElementById('admin-key').value;
+
+      if (id === 'admin' && key === 'admin123') {
+        try { sessionStorage.setItem('goturu_admin_logged', 'true'); } catch(e){}
+        closeModal('admin-auth-modal');
+        document.getEl
