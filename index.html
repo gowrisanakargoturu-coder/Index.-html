@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -95,7 +95,7 @@
       color: var(--neon-cyan);
     }
 
-    /* 2. HEADER & PROFILE */
+    /* 2. HEADER & ADMIN CORNER */
     header {
       background: var(--card-bg);
       border-bottom: 1px solid rgba(0, 243, 255, 0.2);
@@ -119,62 +119,32 @@
       color: var(--neon-cyan);
     }
 
-    .profile-corner {
-      position: relative;
-    }
-
-    .profile-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #182033;
-      padding: 6px 14px;
+    .admin-nav-btn {
+      background: rgba(255, 0, 127, 0.15);
+      border: 1px solid var(--neon-pink);
+      color: #fff;
+      padding: 8px 16px;
       border-radius: 20px;
-      border: 1px solid var(--neon-cyan);
       cursor: pointer;
-    }
-
-    .avatar-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--neon-cyan);
-      color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-weight: bold;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
     }
 
-    .profile-dropdown {
-      position: absolute;
-      right: 0;
-      top: 50px;
-      width: 200px;
-      background: var(--card-bg);
-      border: 1px solid var(--neon-cyan);
-      border-radius: 10px;
-      padding: 15px;
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 200;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-    }
-
-    .profile-dropdown.active {
-      display: flex;
+    .admin-nav-btn:hover {
+      background: var(--neon-pink);
+      box-shadow: 0 0 12px var(--neon-pink);
     }
 
     .logout-btn {
       background: transparent;
       border: 1px solid var(--neon-pink);
       color: var(--neon-pink);
-      padding: 6px;
+      padding: 5px 12px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      text-align: center;
+      margin-left: 10px;
     }
 
     .logout-btn:hover {
@@ -182,96 +152,7 @@
       color: #fff;
     }
 
-    /* 3. AUTHENTICATION MODAL */
-    #auth-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background: rgba(7, 9, 15, 0.95);
-      backdrop-filter: blur(5px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 800;
-    }
-
-    .auth-card {
-      background: var(--card-bg);
-      border: 1px solid var(--neon-cyan);
-      border-radius: 12px;
-      width: 350px;
-      padding: 25px;
-      box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-    }
-
-    .auth-tabs {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #233047;
-    }
-
-    .tab-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      padding: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .tab-btn.active {
-      color: var(--neon-cyan);
-      border-bottom: 2px solid var(--neon-cyan);
-    }
-
-    .auth-form {
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .auth-form.active {
-      display: flex;
-    }
-
-    .auth-form label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .auth-form input {
-      background: #090d16;
-      border: 1px solid #273754;
-      padding: 10px;
-      border-radius: 6px;
-      color: #fff;
-      outline: none;
-    }
-
-    .auth-form input:focus {
-      border-color: var(--neon-cyan);
-    }
-
-    .submit-btn {
-      background: var(--neon-cyan);
-      color: #000;
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .admin-submit-btn {
-      background: var(--neon-pink);
-      color: #fff;
-    }
-
-    /* 4. DASHBOARD CONTAINER */
+    /* 3. DASHBOARD CONTAINER */
     .container {
       max-width: 1000px;
       margin: 30px auto;
@@ -434,27 +315,21 @@
       margin-bottom: 30px;
     }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin: 15px 0 25px 0;
-    }
-
-    .stat-card {
+    .stats-card {
       background: #241836;
       border: 1px solid #3d275a;
       padding: 15px;
       border-radius: 8px;
       text-align: center;
+      margin-bottom: 20px;
     }
 
-    .stat-card h4 {
-      font-size: 1.8rem;
+    .stats-card h4 {
+      font-size: 2rem;
       color: var(--neon-pink);
     }
 
-    .stat-card p {
+    .stats-card p {
       font-size: 0.85rem;
       color: var(--text-muted);
     }
@@ -467,7 +342,7 @@
 
     .user-table th, .user-table td {
       border: 1px solid #2e2240;
-      padding: 8px 12px;
+      padding: 10px 12px;
       text-align: left;
       font-size: 0.85rem;
     }
@@ -494,7 +369,7 @@
       border-radius: 12px;
       padding: 25px;
       width: 90%;
-      max-width: 450px;
+      max-width: 420px;
       position: relative;
     }
 
@@ -517,7 +392,19 @@
       padding: 10px;
       outline: none;
       resize: none;
+      margin-top: 5px;
+    }
+
+    .submit-btn {
+      background: var(--neon-cyan);
+      color: #000;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
       margin-top: 10px;
+      width: 100%;
     }
   </style>
 </head>
@@ -539,81 +426,23 @@
   <header>
     <div class="portal-logo">GOTURU <span>INTERACTIVE</span></div>
     
-    <div class="profile-corner" id="profile-area" style="display: none;">
-      <div class="profile-btn" onclick="toggleMenu()">
-        <div class="avatar-icon" id="user-avatar">U</div>
-        <span id="header-username">User</span>
-      </div>
+    <!-- ADMIN LOGIN BUTTON ONLY -->
+    <div id="admin-header-btn">
+      <button class="admin-nav-btn" onclick="openAdminAuth()">🔑 Admin Login</button>
+    </div>
 
-      <div class="profile-dropdown" id="dropdown">
-        <div>
-          <div id="dropdown-fullname" style="font-weight: bold; color: #fff;">Name</div>
-          <div id="dropdown-role" style="font-size: 0.8rem; color: var(--neon-green);">Role: Member</div>
-        </div>
-        <button class="logout-btn" onclick="logout()">Logout</button>
-      </div>
+    <!-- DISPLAY WHEN ADMIN LOGGED IN -->
+    <div id="admin-logged-area" style="display: none; align-items: center;">
+      <span style="color: var(--neon-pink); font-weight: bold; font-size: 0.9rem;">👑 Admin Active</span>
+      <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
     </div>
   </header>
-
-  <!-- AUTH MODAL -->
-  <div id="auth-overlay">
-    <div class="auth-card">
-      <div class="auth-tabs">
-        <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">User Login</button>
-        <button class="tab-btn" id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
-        <button class="tab-btn" id="tab-admin" onclick="switchTab('admin')">Admin Secret</button>
-      </div>
-
-      <!-- User Login -->
-      <form id="form-login" class="auth-form active" onsubmit="loginUser(event)">
-        <div>
-          <label>Username</label>
-          <input type="text" id="login-user" placeholder="Enter username" required>
-        </div>
-        <div>
-          <label>Password</label>
-          <input type="password" id="login-pass" placeholder="Enter password" required>
-        </div>
-        <button type="submit" class="submit-btn">Login</button>
-      </form>
-
-      <!-- User Sign Up -->
-      <form id="form-signup" class="auth-form" onsubmit="signupUser(event)">
-        <div>
-          <label>Full Name</label>
-          <input type="text" id="signup-name" placeholder="Enter full name" required>
-        </div>
-        <div>
-          <label>Username</label>
-          <input type="text" id="signup-user" placeholder="Choose username" required>
-        </div>
-        <div>
-          <label>Password</label>
-          <input type="password" id="signup-pass" placeholder="Create password" required>
-        </div>
-        <button type="submit" class="submit-btn">Create Account</button>
-      </form>
-
-      <!-- Admin Login -->
-      <form id="form-admin" class="auth-form" onsubmit="loginAdmin(event)">
-        <div>
-          <label>Admin ID</label>
-          <input type="text" id="admin-id" placeholder="Secret Admin ID" required>
-        </div>
-        <div>
-          <label>Secret Key</label>
-          <input type="password" id="admin-key" placeholder="Master Key" required>
-        </div>
-        <button type="submit" class="submit-btn admin-submit-btn">Admin Login</button>
-      </form>
-    </div>
-  </div>
 
   <!-- MAIN DASHBOARD -->
   <div class="container">
     <div class="welcome-banner">
-      <h2>Welcome, <span id="dash-user" style="color: var(--neon-cyan);">Guest</span>!</h2>
-      <p style="color: var(--text-muted); margin-top: 5px;">Goturu Interactive Portal Live System.</p>
+      <h2>Welcome to <span style="color: var(--neon-cyan);">Goturu Interactive Portal</span>!</h2>
+      <p style="color: var(--text-muted); margin-top: 5px;">Explore features, interactive games, and share your suggestions directly with Admin.</p>
     </div>
 
     <!-- 3 DASHBOARD BOXES -->
@@ -632,7 +461,7 @@
 
       <div class="dash-box" onclick="openSuggestionModal()">
         <h3>✍️ WRITE YOUR SUGGESTIONS</h3>
-        <p>Send your feedback or suggestions directly to Admin. Kept private.</p>
+        <p>Send your feedback or comment directly to Admin. No login needed!</p>
         <span class="tap-hint" style="color: var(--neon-pink);">👉 Tap to Write Comment</span>
       </div>
     </div>
@@ -641,53 +470,54 @@
     <div class="section-card">
       <h3>
         <span>📢 Notifications</span>
-        <button id="admin-add-notif-btn" class="submit-btn" style="padding: 4px 10px; font-size: 0.8rem; display: none;" onclick="openAddNotifModal()">+ Add New</button>
+        <button id="admin-add-notif-btn" class="submit-btn" style="padding: 4px 10px; font-size: 0.8rem; width: auto; display: none;" onclick="openAddNotifModal()">+ Add New</button>
       </h3>
       <div id="notifications-list"></div>
     </div>
 
     <!-- SECRET ADMIN EXCLUSIVE PANEL -->
     <div id="admin-panel">
-      <h3 style="color: var(--neon-pink); margin-bottom: 10px;">🔑 Secret Admin Master Control Panel</h3>
+      <h3 style="color: var(--neon-pink); margin-bottom: 15px;">🔑 Secret Admin Master Portal</h3>
       
-      <div class="stats-grid">
-        <div class="stat-card">
-          <h4 id="stat-active-users">0</h4>
-          <p>Total Registered Users</p>
-        </div>
-        <div class="stat-card">
-          <h4 id="stat-total-suggestions">0</h4>
-          <p>Total Suggestions Received</p>
-        </div>
+      <div class="stats-card">
+        <h4 id="stat-total-suggestions">0</h4>
+        <p>Total User Suggestions Received</p>
       </div>
 
-      <h4 style="color: var(--neon-cyan); margin: 15px 0 10px 0;">💬 Private User Suggestions Feed</h4>
+      <h4 style="color: var(--neon-cyan); margin: 15px 0 10px 0;">💬 Received User Comments & Suggestions</h4>
       <table class="user-table">
         <thead>
           <tr>
-            <th>User</th>
+            <th>User / Name</th>
             <th>Suggestion Comment</th>
             <th>Time</th>
           </tr>
         </thead>
         <tbody id="admin-suggestions-rows"></tbody>
       </table>
-
-      <h4 style="color: var(--neon-cyan); margin: 20px 0 10px 0;">👥 Registered Active Users Directory</h4>
-      <table class="user-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Username</th>
-          </tr>
-        </thead>
-        <tbody id="admin-user-rows"></tbody>
-      </table>
     </div>
   </div>
 
-  <!-- MODALS -->
+  <!-- ADMIN AUTH MODAL -->
+  <div class="modal-overlay" id="admin-auth-modal">
+    <div class="modal-card">
+      <span class="close-modal" onclick="closeModal('admin-auth-modal')">&times;</span>
+      <h3 style="color: var(--neon-pink); margin-bottom: 15px;">🔑 Admin Portal Access</h3>
+      <form onsubmit="loginAdmin(event)">
+        <div style="margin-bottom: 10px;">
+          <label style="font-size: 0.8rem; color: var(--text-muted);">Admin ID</label>
+          <input type="text" id="admin-id" placeholder="Enter Admin ID" required style="width: 100%; background: #090d16; border: 1px solid #273754; padding: 10px; border-radius: 6px; color: #fff; margin-top: 4px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+          <label style="font-size: 0.8rem; color: var(--text-muted);">Secret Key</label>
+          <input type="password" id="admin-key" placeholder="Enter Secret Key" required style="width: 100%; background: #090d16; border: 1px solid #273754; padding: 10px; border-radius: 6px; color: #fff; margin-top: 4px;">
+        </div>
+        <button type="submit" class="submit-btn" style="background: var(--neon-pink); color: #fff;">Login to Admin Panel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- BIO DATA MODAL -->
   <div class="modal-overlay" id="modal-bio">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-bio')">&times;</span>
@@ -695,21 +525,26 @@
       <div style="font-size: 0.9rem; line-height: 1.6; color: #d1d9e6;">
         <p>📌 <strong>Status:</strong> Live Portal Active</p>
         <p>📅 <strong>Portal Launch:</strong> Started on 22/Sep/2026</p>
-        <p>⚡ <strong>System:</strong> Secure Interactive Dashboard</p>
+        <p>⚡ <strong>System:</strong> Direct Interactive Dashboard</p>
       </div>
     </div>
   </div>
 
+  <!-- SUGGESTION MODAL -->
   <div class="modal-overlay" id="modal-suggestion">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-suggestion')">&times;</span>
       <h3 style="color: var(--neon-pink); margin-bottom: 8px;">Write Your Suggestion</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted);">Sent directly to Admin's panel privately.</p>
-      <textarea id="suggestion-text" placeholder="Type your suggestion here..."></textarea>
-      <button class="submit-btn" style="background: var(--neon-pink); color: #fff; width: 100%;" onclick="submitSuggestion()">Send Suggestion</button>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Send your feedback directly to Admin.</p>
+      
+      <input type="text" id="sugg-name" placeholder="Your Name (Optional)" style="width: 100%; background: #090d16; border: 1px solid #273754; color: #fff; padding: 8px; border-radius: 6px; margin-bottom: 10px;">
+      <textarea id="suggestion-text" placeholder="Type your suggestion or feedback here..."></textarea>
+      
+      <button class="submit-btn" style="background: var(--neon-pink); color: #fff;" onclick="submitSuggestion()">Send Suggestion</button>
     </div>
   </div>
 
+  <!-- NOTIFICATION EDIT MODAL -->
   <div class="modal-overlay" id="modal-notif">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-notif')">&times;</span>
@@ -724,7 +559,7 @@
   </div>
 
   <script>
-    // INITIALIZE STORAGE SAFELY
+    // STORAGE HELPER FUNCTIONS
     function getStoredData(key) {
       try {
         return JSON.parse(localStorage.getItem(key)) || [];
@@ -739,7 +574,7 @@
       } catch (e) {}
     }
 
-    // Default notifications setup
+    // DEFAULT INITIAL NOTIFICATIONS
     if (getStoredData('goturu_notifications').length === 0) {
       setStoredData('goturu_notifications', [{
         id: 1,
@@ -750,7 +585,7 @@
       }]);
     }
 
-    // 1. LOADER
+    // 1. LOADER ANIMATION
     window.addEventListener('DOMContentLoaded', () => {
       let percent = 0;
       const circle = document.getElementById('progress-circle');
@@ -768,162 +603,109 @@
           setTimeout(() => {
             overlay.style.opacity = '0';
             overlay.style.visibility = 'hidden';
-            checkSession();
+            checkAdminSession();
           }, 200);
         }
       }, 20);
     });
 
-    // 2. CHECK SESSION
-    function checkSession() {
-      let activeUser = null;
-      try {
-        activeUser = JSON.parse(sessionStorage.getItem('goturu_active_user'));
-      } catch (e) {}
+    // 2. CHECK ADMIN SESSION
+    function checkAdminSession() {
+      const isAdminLogged = sessionStorage.getItem('goturu_admin_logged') === 'true';
 
-      if (activeUser) {
-        setUserState(activeUser);
-        document.getElementById('auth-overlay').style.display = 'none';
-      } else {
-        document.getElementById('auth-overlay').style.display = 'flex';
-      }
-      renderNotifications();
-    }
-
-    // 3. TABS
-    function switchTab(tabType) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-
-      if (tabType === 'login') {
-        document.getElementById('tab-login').classList.add('active');
-        document.getElementById('form-login').classList.add('active');
-      } else if (tabType === 'signup') {
-        document.getElementById('tab-signup').classList.add('active');
-        document.getElementById('form-signup').classList.add('active');
-      } else {
-        document.getElementById('tab-admin').classList.add('active');
-        document.getElementById('form-admin').classList.add('active');
-      }
-    }
-
-    // 4. SIGNUP
-    function signupUser(e) {
-      e.preventDefault();
-      const name = document.getElementById('signup-name').value.trim();
-      const username = document.getElementById('signup-user').value.trim().toLowerCase();
-      const pass = document.getElementById('signup-pass').value;
-
-      let users = getStoredData('users_list');
-      if (users.some(u => u.username === username)) {
-        alert('Username already exists! Choose another username.');
-        return;
-      }
-
-      users.push({ name, username, pass });
-      setStoredData('users_list', users);
-
-      alert('Account created successfully! Please login now.');
-      document.getElementById('signup-name').value = '';
-      document.getElementById('signup-user').value = '';
-      document.getElementById('signup-pass').value = '';
-      switchTab('login');
-    }
-
-    // 5. LOGIN
-    function loginUser(e) {
-      e.preventDefault();
-      const u = document.getElementById('login-user').value.trim().toLowerCase();
-      const p = document.getElementById('login-pass').value;
-
-      let users = getStoredData('users_list');
-      const found = users.find(user => user.username === u && user.pass === p);
-
-      if (found) {
-        const userObj = { name: found.name, username: found.username, isAdmin: false };
-        sessionStorage.setItem('goturu_active_user', JSON.stringify(userObj));
-        setUserState(userObj);
-        document.getElementById('auth-overlay').style.display = 'none';
-      } else {
-        alert('Invalid Username or Password!');
-      }
-    }
-
-    // 6. ADMIN LOGIN
-    function loginAdmin(e) {
-      e.preventDefault();
-      const id = document.getElementById('admin-id').value.trim();
-      const key = document.getElementById('admin-key').value;
-
-      if (id === 'admin' && key === 'admin123') {
-        const adminObj = { name: 'Goturu Admin', username: 'admin', isAdmin: true };
-        sessionStorage.setItem('goturu_active_user', JSON.stringify(adminObj));
-        setUserState(adminObj);
-        document.getElementById('auth-overlay').style.display = 'none';
-      } else {
-        alert('Access Denied: Invalid Master Admin Key!');
-      }
-    }
-
-    // 7. SET USER STATE
-    function setUserState(user) {
-      document.getElementById('profile-area').style.display = 'block';
-      document.getElementById('header-username').textContent = user.username;
-      document.getElementById('user-avatar').textContent = user.name.charAt(0).toUpperCase();
-      document.getElementById('dropdown-fullname').textContent = user.name;
-      document.getElementById('dropdown-role').textContent = user.isAdmin ? 'Role: Secret Admin' : 'Role: Member';
-      document.getElementById('dash-user').textContent = user.name;
-
-      if (user.isAdmin) {
+      if (isAdminLogged) {
+        document.getElementById('admin-header-btn').style.display = 'none';
+        document.getElementById('admin-logged-area').style.display = 'flex';
         document.getElementById('admin-panel').style.display = 'block';
         document.getElementById('admin-add-notif-btn').style.display = 'inline-block';
         loadAdminPanelData();
       } else {
+        document.getElementById('admin-header-btn').style.display = 'block';
+        document.getElementById('admin-logged-area').style.display = 'none';
         document.getElementById('admin-panel').style.display = 'none';
         document.getElementById('admin-add-notif-btn').style.display = 'none';
       }
       renderNotifications();
     }
 
-    // 8. ADMIN PANEL DATA
-    function loadAdminPanelData() {
-      const users = getStoredData('users_list');
-      const suggestions = getStoredData('goturu_suggestions');
+    // 3. ADMIN LOGIN
+    function openAdminAuth() {
+      document.getElementById('admin-auth-modal').style.display = 'flex';
+    }
 
-      document.getElementById('stat-active-users').textContent = users.length;
+    function loginAdmin(e) {
+      e.preventDefault();
+      const id = document.getElementById('admin-id').value.trim();
+      const key = document.getElementById('admin-key').value;
+
+      if (id === 'admin' && key === 'admin123') {
+        sessionStorage.setItem('goturu_admin_logged', 'true');
+        closeModal('admin-auth-modal');
+        document.getElementById('admin-id').value = '';
+        document.getElementById('admin-key').value = '';
+        checkAdminSession();
+        alert('Welcome Master Admin!');
+      } else {
+        alert('Access Denied: Invalid Admin ID or Secret Key!');
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('goturu_admin_logged');
+      checkAdminSession();
+    }
+
+    // 4. ADMIN PANEL DATA
+    function loadAdminPanelData() {
+      const suggestions = getStoredData('goturu_suggestions');
       document.getElementById('stat-total-suggestions').textContent = suggestions.length;
 
-      // Render Suggestions
       const suggTbody = document.getElementById('admin-suggestions-rows');
       suggTbody.innerHTML = '';
       if (suggestions.length === 0) {
         suggTbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">No suggestions received yet.</td></tr>';
       } else {
         suggestions.slice().reverse().forEach(s => {
-          suggTbody.innerHTML += `<tr><td><strong>${s.user}</strong> (@${s.username})</td><td>${s.comment}</td><td>${s.time}</td></tr>`;
-        });
-      }
-
-      // Render Users
-      const userTbody = document.getElementById('admin-user-rows');
-      userTbody.innerHTML = '';
-      if (users.length === 0) {
-        userTbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">No registered users yet.</td></tr>';
-      } else {
-        users.forEach((u, i) => {
-          userTbody.innerHTML += `<tr><td>${i+1}</td><td>${u.name}</td><td>@${u.username}</td></tr>`;
+          suggTbody.innerHTML += `<tr><td><strong>${s.user}</strong></td><td>${s.comment}</td><td>${s.time}</td></tr>`;
         });
       }
     }
 
-    // 9. NOTIFICATIONS SYSTEM
+    // 5. SUBMIT SUGGESTION (DIRECTORY TO ADMIN PORTAL)
+    function submitSuggestion() {
+      const name = document.getElementById('sugg-name').value.trim() || 'Visitor Guest';
+      const text = document.getElementById('suggestion-text').value.trim();
+      
+      if (!text) {
+        alert('Please write your suggestion comment first!');
+        return;
+      }
+
+      let suggestions = getStoredData('goturu_suggestions');
+      suggestions.push({
+        user: name,
+        comment: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " (" + new Date().toLocaleDateString() + ")"
+      });
+
+      setStoredData('goturu_suggestions', suggestions);
+      
+      document.getElementById('sugg-name').value = '';
+      document.getElementById('suggestion-text').value = '';
+      closeModal('modal-suggestion');
+
+      alert('Meeru pampina suggestion direct ga Admin portal ku cherindhi! Thank you.');
+
+      if (sessionStorage.getItem('goturu_admin_logged') === 'true') {
+        loadAdminPanelData();
+      }
+    }
+
+    // 6. NOTIFICATIONS SYSTEM
     function renderNotifications() {
       const notifs = getStoredData('goturu_notifications');
       const container = document.getElementById('notifications-list');
-      
-      let activeUser = null;
-      try { activeUser = JSON.parse(sessionStorage.getItem('goturu_active_user')); } catch(e){}
-      const isAdmin = activeUser && activeUser.isAdmin;
+      const isAdmin = sessionStorage.getItem('goturu_admin_logged') === 'true';
 
       container.innerHTML = '';
 
@@ -1025,35 +807,7 @@
       }
     }
 
-    // 10. SUGGESTION SUBMISSION
-    function submitSuggestion() {
-      const text = document.getElementById('suggestion-text').value.trim();
-      if (!text) {
-        alert('Please write your suggestion first!');
-        return;
-      }
-
-      let activeUser = null;
-      try { activeUser = JSON.parse(sessionStorage.getItem('goturu_active_user')); } catch(e){}
-
-      let suggestions = getStoredData('goturu_suggestions');
-      suggestions.push({
-        user: activeUser ? activeUser.name : 'Guest',
-        username: activeUser ? activeUser.username : 'guest',
-        comment: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-
-      setStoredData('goturu_suggestions', suggestions);
-      document.getElementById('suggestion-text').value = '';
-      closeModal('modal-suggestion');
-      alert('Your suggestion has been sent to Admin privately!');
-
-      if (activeUser && activeUser.isAdmin) {
-        loadAdminPanelData();
-      }
-    }
-
+    // MODAL CONTROL FUNCTIONS
     function openBioModal() { document.getElementById('modal-bio').style.display = 'flex'; }
     function openGame() { window.open('https://type-os-time.vercel.app/', '_blank'); }
     function openSuggestionModal() { document.getElementById('modal-suggestion').style.display = 'flex'; }
@@ -1065,8 +819,6 @@
       document.getElementById('modal-notif').style.display = 'flex'; 
     }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function toggleMenu() { document.getElementById('dropdown').classList.toggle('active'); }
-    function logout() { sessionStorage.removeItem('goturu_active_user'); location.reload(); }
   </script>
 </body>
 </html>
