@@ -55,6 +55,7 @@
     .dash-box:hover {
       border-color: var(--neon-cyan);
       transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(0, 243, 255, 0.15);
     }
 
     .modal-overlay {
@@ -91,6 +92,28 @@
       font-size: 0.9rem;
     }
     input:focus, textarea:focus { border-color: var(--neon-cyan); }
+
+    .notif-item {
+      background: #090d16;
+      border: 1px solid #1f2b42;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    .notif-item:hover { border-color: rgba(0, 243, 255, 0.3); }
+
+    .emoji-btn {
+      background: #151d2e;
+      border: 1px solid #273754;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .emoji-btn:hover { border-color: var(--neon-cyan); background: #1e2a42; }
   </style>
 </head>
 <body>
@@ -105,13 +128,13 @@
   </div>
 
   <!-- HEADER -->
-  <header class="bg-[#121826]/95 border-b border-cyan-500/20 px-6 py-3 flex justify-between items-center sticky top-0 z-50">
+  <header class="bg-[#121826]/95 border-b border-cyan-500/20 px-6 py-3 flex flex-wrap justify-between items-center sticky top-0 z-50 gap-3">
     <div class="font-extrabold text-lg text-white flex items-center gap-2">
       <i class="fa-solid fa-bolt text-cyan-400"></i> GOTURU <span class="text-cyan-400">PORTAL</span>
     </div>
     <div class="flex items-center gap-3">
       <button class="bg-cyan-500/15 border border-cyan-400 text-cyan-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-cyan-400 hover:text-black transition" onclick="openModal('modal-user-auth')">
-        <i class="fa-solid fa-user mr-1"></i> User Login
+        <i class="fa-solid fa-user mr-1"></i> <span id="header-username">User Login</span>
       </button>
       <button class="bg-pink-500/15 border border-pink-400 text-pink-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition" onclick="openModal('admin-auth-modal')">
         <i class="fa-solid fa-key mr-1"></i> Admin Login
@@ -119,51 +142,73 @@
     </div>
   </header>
 
-  <!-- MAIN BODY -->
-  <div class="max-w-6xl mx-auto px-4 py-6">
-    <div class="bg-[#121826] border border-cyan-500/30 rounded-2xl p-6 mb-8">
-      <h1 class="text-2xl font-bold text-white">Welcome to <span class="text-cyan-400">Goturu Interactive Portal</span></h1>
-      <p class="text-gray-400 text-sm mt-1">Direct web launcher for games, suggestions, and admin master panel.</p>
-    </div>
+  <!-- MAIN BODY GRID (Layout split for Dashboard & Right-Side Notification Panel) -->
+  <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    <!-- LEFT 2 COLS: DASHBOARD & SUGGESTIONS -->
+    <div class="lg:col-span-2 space-y-6">
+      <div class="bg-[#121826] border border-cyan-500/30 rounded-2xl p-6">
+        <h1 class="text-2xl font-bold text-white">Welcome to <span class="text-cyan-400">Goturu Interactive Portal</span></h1>
+        <p class="text-gray-400 text-sm mt-1">Direct web launcher for games, feedback, and live notification broadcast.</p>
+      </div>
 
-    <div class="dashboard-grid">
-      <div class="dash-box" onclick="openModal('modal-games-hub')">
-        <div class="w-10 h-10 rounded-lg bg-emerald-950 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-3 text-lg">
-          <i class="fa-solid fa-gamepad"></i>
+      <div class="dashboard-grid">
+        <div class="dash-box" onclick="openModal('modal-games-hub')">
+          <div class="w-10 h-10 rounded-lg bg-emerald-950 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-3 text-lg">
+            <i class="fa-solid fa-gamepad"></i>
+          </div>
+          <h3 class="font-bold text-white text-base mb-1">Games Hub</h3>
+          <p class="text-xs text-gray-400">Launch Type-OS and Retro Arcade web games instantly.</p>
         </div>
-        <h3 class="font-bold text-white text-base mb-1">Games Hub</h3>
-        <p class="text-xs text-gray-400">Launch Type-OS and Retro Arcade web games instantly.</p>
-      </div>
 
-      <div class="dash-box" onclick="openModal('modal-suggestion')">
-        <div class="w-10 h-10 rounded-lg bg-pink-950 border border-pink-500/30 text-pink-400 flex items-center justify-center mb-3 text-lg">
-          <i class="fa-solid fa-comment-dots"></i>
+        <div class="dash-box" onclick="openModal('modal-suggestion')">
+          <div class="w-10 h-10 rounded-lg bg-pink-950 border border-pink-500/30 text-pink-400 flex items-center justify-center mb-3 text-lg">
+            <i class="fa-solid fa-comment-dots"></i>
+          </div>
+          <h3 class="font-bold text-white text-base mb-1">Write Suggestion</h3>
+          <p class="text-xs text-gray-400">Send comments and feedback directly to admin panel.</p>
         </div>
-        <h3 class="font-bold text-white text-base mb-1">Write Suggestion</h3>
-        <p class="text-xs text-gray-400">Send comments and feedback directly to admin.</p>
+      </div>
+
+      <!-- ADMIN PANEL (Hidden by default) -->
+      <div id="admin-panel" class="hidden border border-pink-500/50 bg-[#181124] rounded-2xl p-6">
+        <div class="flex justify-between items-center border-b border-pink-500/30 pb-3 mb-4">
+          <h3 class="font-bold text-pink-400 text-base"><i class="fa-solid fa-user-shield mr-2"></i>Admin Master Panel</h3>
+          <button class="bg-pink-600 text-white text-xs px-3 py-1.5 rounded font-bold" onclick="logoutAdmin()">Logout</button>
+        </div>
+        <p class="text-xs text-gray-300 mb-3">Total Suggestions Received: <span id="admin-sug-count" class="font-bold text-pink-400">0</span></p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr class="bg-[#241836] text-pink-300">
+                <th class="p-2 border border-gray-700">Name</th>
+                <th class="p-2 border border-gray-700">Suggestion</th>
+                <th class="p-2 border border-gray-700">Time</th>
+              </tr>
+            </thead>
+            <tbody id="admin-sug-tbody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <!-- ADMIN PANEL (Hidden by default) -->
-    <div id="admin-panel" class="hidden border border-pink-500/50 bg-[#181124] rounded-2xl p-6 mb-8">
-      <div class="flex justify-between items-center border-b border-pink-500/30 pb-3 mb-4">
-        <h3 class="font-bold text-pink-400 text-lg"><i class="fa-solid fa-user-shield mr-2"></i>Admin Master Panel</h3>
-        <button class="bg-pink-600 text-white text-xs px-3 py-1.5 rounded font-bold" onclick="logoutAdmin()">Logout</button>
+    <!-- RIGHT 1 COL: NOTIFICATION & ANNOUNCEMENT PANEL -->
+    <div class="bg-[#121826] border border-cyan-500/30 rounded-2xl p-5 h-fit sticky top-20">
+      <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-3">
+        <h3 class="font-bold text-cyan-400 text-base flex items-center gap-2">
+          <i class="fa-solid fa-bullhorn"></i> Notifications & Feed
+        </h3>
+        <!-- Admin-only Add Notification Button -->
+        <button id="admin-add-notif-btn" class="hidden bg-cyan-400 text-black text-[11px] font-extrabold px-2.5 py-1 rounded hover:bg-cyan-300 transition" onclick="openModal('modal-add-notif')">
+          <i class="fa-solid fa-plus mr-1"></i> Post
+        </button>
       </div>
-      <p class="text-xs text-gray-300 mb-3">Total Suggestions Received: <span id="admin-sug-count" class="font-bold text-pink-400">0</span></p>
-      <div class="overflow-x-auto">
-        <table class="w-full text-xs text-left">
-          <thead>
-            <tr class="bg-[#241836] text-pink-300">
-              <th class="p-2 border border-gray-700">Name</th>
-              <th class="p-2 border border-gray-700">Suggestion</th>
-              <th class="p-2 border border-gray-700">Time</th>
-            </tr>
-          </thead>
-          <tbody id="admin-sug-tbody"></tbody>
-        </table>
+
+      <div id="notifications-container" class="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+        <!-- Dynamic Notifications Loaded Here -->
       </div>
     </div>
+
   </div>
 
   <!-- MODALS -->
@@ -221,6 +266,22 @@
     </div>
   </div>
 
+  <!-- ADMIN POST / EDIT NOTIFICATION MODAL -->
+  <div class="modal-overlay" id="modal-add-notif">
+    <div class="modal-card">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-bold text-cyan-400" id="notif-modal-title">Post Notification</h3>
+        <button class="text-gray-400 hover:text-white" onclick="closeModal('modal-add-notif')">&times;</button>
+      </div>
+      <form onsubmit="saveNotification(event)">
+        <input type="hidden" id="edit-notif-id">
+        <input type="text" id="notif-title-input" required placeholder="Announcement Title..." class="mb-3">
+        <textarea id="notif-content-input" rows="3" required placeholder="Notification content..." class="mb-3"></textarea>
+        <button type="submit" class="w-full bg-cyan-400 text-black font-bold py-2 rounded text-xs">Publish Announcement</button>
+      </form>
+    </div>
+  </div>
+
   <script>
     // Fast Loader Script
     window.addEventListener('DOMContentLoaded', () => {
@@ -232,16 +293,28 @@
         setTimeout(() => overlay.remove(), 300);
       }, 400);
 
+      // Check Saved User
+      let savedUser = localStorage.getItem('goturu_username');
+      if(savedUser) {
+        document.getElementById('header-username').innerText = savedUser;
+      }
+
+      // Check Admin State
       if(localStorage.getItem('goturu_admin_auth') === 'true') {
         showAdminPanel();
       }
+
+      renderNotifications();
     });
 
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // Suggestions Storage
+    // Data Storage
     let suggestions = JSON.parse(localStorage.getItem('goturu_suggestions')) || [];
+    let notifications = JSON.parse(localStorage.getItem('goturu_notifications')) || [
+      { id: 1, title: "🚀 Portal Launch v4.2", content: "Goturu interactive portal is now live with enhanced security and notification feed.", time: "2026-06-01", reactions: { "❤️": 5, "🔥": 3, "🚀": 8 } }
+    ];
 
     function submitSuggestion(e) {
       e.preventDefault();
@@ -277,6 +350,7 @@
 
     function showAdminPanel() {
       document.getElementById('admin-panel').classList.remove('hidden');
+      document.getElementById('admin-add-notif-btn').classList.remove('hidden');
       document.getElementById('admin-sug-count').innerText = suggestions.length;
       let tbody = document.getElementById('admin-sug-tbody');
       tbody.innerHTML = '';
@@ -287,28 +361,118 @@
       suggestions.forEach(s => {
         tbody.innerHTML += `<tr><td class="p-2 border border-gray-700 text-cyan-300 font-bold">${s.name}</td><td class="p-2 border border-gray-700">${s.text}</td><td class="p-2 border border-gray-700 text-gray-400">${s.time}</td></tr>`;
       });
+      renderNotifications();
     }
 
     function logoutAdmin() {
       localStorage.removeItem('goturu_admin_auth');
       document.getElementById('admin-panel').classList.add('hidden');
+      document.getElementById('admin-add-notif-btn').classList.add('hidden');
       alert('Admin Logged Out.');
+      renderNotifications();
     }
 
     function handleUserLogin(e) {
       e.preventDefault();
       let name = document.getElementById('user-name-input').value;
       localStorage.setItem('goturu_username', name);
+      document.getElementById('header-username').innerText = name;
       closeModal('modal-user-auth');
       alert('Welcome ' + name + '!');
     }
+
+    // Notification Render & Management (Admin Only Edit/Delete, Users can read & react)
+    function renderNotifications() {
+      let container = document.getElementById('notifications-container');
+      container.innerHTML = '';
+      let isAdmin = localStorage.getItem('goturu_admin_auth') === 'true';
+
+      if(notifications.length === 0) {
+        container.innerHTML = `<div class="text-xs text-gray-500 text-center py-4">No notifications posted yet.</div>`;
+        return;
+      }
+
+      notifications.forEach(item => {
+        let adminControls = isAdmin ? `
+          <div class="flex gap-2 mt-2 pt-2 border-t border-gray-800 text-[10px]">
+            <button class="text-cyan-400 hover:underline font-bold" onclick="editNotification(${item.id})"><i class="fa-solid fa-pen mr-1"></i>Edit</button>
+            <button class="text-pink-500 hover:underline font-bold" onclick="deleteNotification(${item.id})"><i class="fa-solid fa-trash mr-1"></i>Delete</button>
+          </div>
+        ` : '';
+
+        container.innerHTML += `
+          <div class="notif-item">
+            <div class="flex justify-between items-start gap-2 mb-1">
+              <h4 class="font-bold text-white text-xs">${item.title}</h4>
+              <span class="text-[9px] text-gray-400">${item.time}</span>
+            </div>
+            <p class="text-xs text-gray-300 leading-relaxed mb-2">${item.content}</p>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button class="emoji-btn" onclick="reactNotification(${item.id}, '❤️')">❤️ ${item.reactions['❤️'] || 0}</button>
+              <button class="emoji-btn" onclick="reactNotification(${item.id}, '🔥')">🔥 ${item.reactions['🔥'] || 0}</button>
+              <button class="emoji-btn" onclick="reactNotification(${item.id}, '🚀')">🚀 ${item.reactions['🚀'] || 0}</button>
+            </div>
+            ${adminControls}
+          </div>
+        `;
+      });
+    }
+
+    function saveNotification(e) {
+      e.preventDefault();
+      let id = document.getElementById('edit-notif-id').value;
+      let title = document.getElementById('notif-title-input').value;
+      let content = document.getElementById('notif-content-input').value;
+      let dateStr = new Date().toISOString().split('T')[0];
+
+      if(id) {
+        // Edit Existing
+        let item = notifications.find(n => n.id == id);
+        if(item) {
+          item.title = title;
+          item.content = content;
+        }
+      } else {
+        // Create New
+        notifications.unshift({ id: Date.now(), title, content, time: dateStr, reactions: { "❤️": 0, "🔥": 0, "🚀": 0 } });
+      }
+
+      localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
+      document.getElementById('notif-title-input').value = '';
+      document.getElementById('notif-content-input').value = '';
+      document.getElementById('edit-notif-id').value = '';
+      closeModal('modal-add-notif');
+      renderNotifications();
+      alert('Notification saved successfully!');
+    }
+
+    function editNotification(id) {
+      let item = notifications.find(n => n.id == id);
+      if(item) {
+        document.getElementById('edit-notif-id').value = item.id;
+        document.getElementById('notif-title-input').value = item.title;
+        document.getElementById('notif-content-input').value = item.content;
+        document.getElementById('notif-modal-title').innerText = "Edit Notification";
+        openModal('modal-add-notif');
+      }
+    }
+
+    function deleteNotification(id) {
+      if(confirm('Are you sure you want to delete this notification?')) {
+        notifications = notifications.filter(n => n.id != id);
+        localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
+        renderNotifications();
+      }
+    }
+
+    function reactNotification(id, emoji) {
+      let item = notifications.find(n => n.id == id);
+      if(item) {
+        item.reactions[emoji] = (item.reactions[emoji] || 0) + 1;
+        localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
+        renderNotifications();
+      }
+    }
   </script>
 </body>
-  </html>
-        
-
-    
-        
-        
-        
-  
+</html>
