@@ -1,4 +1,3 @@
-  ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -224,7 +223,7 @@
       font-weight: 700;
     }
 
-    /* NOTIFICATION & FEED */
+    /* SECTION CARD */
     .section-card {
       background: var(--card-bg);
       border: 1px solid #1f2b42;
@@ -436,13 +435,13 @@
         </span>
       </div>
 
-      <!-- BOX 2: CYBER GAMES HUB WITH 2 URL LAUNCH TYPES -->
+      <!-- BOX 2: CYBER GAMES HUB -->
       <div class="dash-box" onclick="openModal('modal-games-hub')">
         <div class="icon-badge bg-emerald-950 text-emerald-400 border border-emerald-500/30">
           <i class="fa-solid fa-gamepad"></i>
         </div>
         <h3>INTERACTIVE GAMES HUB</h3>
-        <p>Tap to play 2 types of direct URL web games or launch built-in cyber mini-games.</p>
+        <p>Tap to play direct URL web games or launch cyber mini-games.</p>
         <div class="flex flex-wrap gap-2 mt-3" onclick="event.stopPropagation()">
           <button class="bg-emerald-500/20 hover:bg-emerald-500 border border-emerald-400 text-emerald-300 hover:text-black font-bold text-[11px] px-2.5 py-1 rounded-lg transition flex items-center gap-1" onclick="launchGameUrl(1)">
             <i class="fa-solid fa-bolt"></i> Game 1 (Type-OS)
@@ -474,7 +473,7 @@
           <i class="fa-solid fa-id-card"></i>
         </div>
         <h3>USER PROFILE & ACCOUNT</h3>
-        <p>Create account, log in, manage display name, status bio, and view activity achievements.</p>
+        <p>Create account, log in, manage display name, status bio, and view activity.</p>
         <span class="tap-hint" style="color: var(--neon-purple);">
           <i class="fa-solid fa-user-gear"></i> Tap to Open Account
         </span>
@@ -499,7 +498,7 @@
         <h3 class="text-xl font-bold text-cyan-400 flex items-center gap-2">
           <i class="fa-solid fa-bell"></i> 📢 Portal Announcements & Feed
         </h3>
-        <button id="admin-add-notif-btn" class="hidden bg-cyan-400 hover:bg-cyan-300 text-black font-bold text-xs px-3 py-1.5 rounded-lg transition" onclick="openAddNotifModal()">
+        <button id="admin-add-notif-btn" class="hidden bg-cyan-400 hover:bg-cyan-300 text-black font-bold text-xs px-3 py-1.5 rounded-lg transition" onclick="openModal('modal-add-notif')">
           <i class="fa-solid fa-plus mr-1"></i> Post Announcement
         </button>
       </div>
@@ -553,772 +552,56 @@
 
   <!-- MODALS SECTION -->
 
-  <!-- 1. GAMES HUB MODAL (WITH 2 DIFFERENT DIRECT GAME URL TYPES) -->
+  <!-- 1. GAMES HUB MODAL -->
   <div class="modal-overlay" id="modal-games-hub">
     <div class="modal-card max-w-lg">
       <span class="close-modal" onclick="closeModal('modal-games-hub')">&times;</span>
       <h3 class="text-xl font-bold text-emerald-400 mb-1 flex items-center gap-2">
         <i class="fa-solid fa-gamepad"></i> Interactive Games Launch Hub
       </h3>
-      <p class="text-xs text-gray-400 mb-4">Tap any game button to directly open web URLs or play built-in mini games.</p>
+      <p class="text-xs text-gray-400 mb-4">Tap any game button to directly open web URLs.</p>
 
       <div class="space-y-3">
-        <!-- GAME URL TYPE 1: TYPE-OS-TIME -->
         <div class="bg-[#090d16] border border-cyan-500/40 rounded-xl p-3.5 flex justify-between items-center gap-3">
           <div>
             <div class="flex items-center gap-2">
               <span class="bg-cyan-500/20 text-cyan-300 font-bold text-[10px] px-2 py-0.5 rounded border border-cyan-500/40">GAME TYPE 1</span>
               <h4 class="font-bold text-white text-sm">⌨️ Type-OS-Time (Speed Typer Web)</h4>
             </div>
-            <p class="text-xs text-gray-400 mt-1">Full speed typing web application. Tap to launch direct URL.</p>
+            <p class="text-xs text-gray-400 mt-1">Full speed typing web application.</p>
             <div class="text-[10px] text-cyan-400/80 font-mono mt-0.5">https://type-os-time.vercel.app/</div>
           </div>
-          <button class="bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs px-3.5 py-2 rounded-lg transition whitespace-nowrap shadow-[0_0_10px_rgba(0,243,255,0.3)]" onclick="launchGameUrl(1)">
+          <button class="bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs px-3.5 py-2 rounded-lg transition whitespace-nowrap" onclick="launchGameUrl(1)">
             <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Open Web
           </button>
         </div>
 
-        <!-- GAME URL TYPE 2: PACMAN LIVE ARCADE -->
         <div class="bg-[#090d16] border border-purple-500/40 rounded-xl p-3.5 flex justify-between items-center gap-3">
           <div>
             <div class="flex items-center gap-2">
               <span class="bg-purple-500/20 text-purple-300 font-bold text-[10px] px-2 py-0.5 rounded border border-purple-500/40">GAME TYPE 2</span>
               <h4 class="font-bold text-white text-sm">🕹️ Retro Cyber Arcade (Pacman Live)</h4>
             </div>
-            <p class="text-xs text-gray-400 mt-1">Direct retro arcade web game. Tap to launch direct URL.</p>
+            <p class="text-xs text-gray-400 mt-1">Direct retro arcade web game.</p>
             <div class="text-[10px] text-purple-400/80 font-mono mt-0.5">https://pacman.live/</div>
           </div>
-          <button class="bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs px-3.5 py-2 rounded-lg transition whitespace-nowrap shadow-[0_0_10px_rgba(157,78,221,0.3)]" onclick="launchGameUrl(2)">
+          <button class="bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs px-3.5 py-2 rounded-lg transition whitespace-nowrap" onclick="launchGameUrl(2)">
             <i class="fa-solid fa-gamepad mr-1"></i> Open Web
           </button>
         </div>
-
-        <!-- BUILT-IN MINI GAME 1 -->
-        <div class="bg-[#090d16] border border-emerald-500/30 rounded-xl p-3 flex justify-between items-center">
-          <div>
-            <h4 class="font-bold text-white text-sm">⚡ Built-in Cyber Typer Mini</h4>
-            <p class="text-xs text-gray-400">Play quick typing challenge inside portal.</p>
-          </div>
-          <button class="bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-bold px-3 py-1.5 rounded-lg transition" onclick="launchTyperGame()">
-            Play Inside
-          </button>
-        </div>
-
-        <!-- BUILT-IN MINI GAME 2 -->
-        <div class="bg-[#090d16] border border-amber-500/30 rounded-xl p-3 flex justify-between items-center">
-          <div>
-            <h4 class="font-bold text-white text-sm">🧠 Memory Matrix Mini</h4>
-            <p class="text-xs text-gray-400">Test pattern recollection speed.</p>
-          </div>
-          <button class="bg-amber-400 hover:bg-amber-300 text-black text-xs font-bold px-3 py-1.5 rounded-lg transition" onclick="launchMemoryGame()">
-            Play Inside
-          </button>
-        </div>
-      </div>
-
-      <!-- IN-MODAL PLAYABLE GAME CANVAS/CONTAINER -->
-      <div id="mini-game-arena" class="hidden mt-4 pt-4 border-t border-gray-800"></div>
-    </div>
-  </div>
-
-  <!-- 2. ADMIN AUTH MODAL -->
-  <div class="modal-overlay" id="admin-auth-modal">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('admin-auth-modal')">&times;</span>
-      <h3 class="text-xl font-bold text-pink-400 mb-2 flex items-center gap-2">
-        <i class="fa-solid fa-lock"></i> Admin Portal Login
-      </h3>
-      <p class="text-xs text-gray-400 mb-4">Credentials: ID: <code class="text-pink-300">admin</code> | Key: <code class="text-pink-300">admin123</code></p>
-      
-      <form onsubmit="loginAdmin(event)" class="space-y-3">
-        <div>
-          <label class="text-xs text-gray-400">Admin ID</label>
-          <input type="text" id="admin-id" placeholder="Enter Admin ID" required class="mt-1">
-        </div>
-        <div>
-          <label class="text-xs text-gray-400">Secret Key</label>
-          <input type="password" id="admin-key" placeholder="Enter Secret Key" required class="mt-1">
-        </div>
-        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2.5 rounded-lg mt-2 transition">
-          Unlock Master Admin Panel
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- 3. USER AUTH & PROFILE MODAL -->
-  <div class="modal-overlay" id="modal-user-auth">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('modal-user-auth')">&times;</span>
-      
-      <!-- LOGGED OUT VIEW -->
-      <div id="user-auth-form-view">
-        <div class="flex border-b border-gray-700 mb-4">
-          <button id="tab-login" class="flex-1 pb-2 text-sm font-bold text-cyan-400 border-b-2 border-cyan-400" onclick="switchAuthTab('login')">Login</button>
-          <button id="tab-signup" class="flex-1 pb-2 text-sm font-bold text-gray-400 border-b-2 border-transparent" onclick="switchAuthTab('signup')">Sign Up</button>
-        </div>
-
-        <!-- LOGIN FORM -->
-        <form id="form-user-login" onsubmit="handleUserLogin(event)" class="space-y-3">
-          <div>
-            <label class="text-xs text-gray-400">Username</label>
-            <input type="text" id="login-username" placeholder="Enter your username" required class="mt-1">
-          </div>
-          <div>
-            <label class="text-xs text-gray-400">Password</label>
-            <input type="password" id="login-password" placeholder="Enter password" required class="mt-1">
-          </div>
-          <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2.5 rounded-lg mt-2 transition">
-            Login to Account
-          </button>
-        </form>
-
-        <!-- SIGNUP FORM -->
-        <form id="form-user-signup" onsubmit="handleUserSignup(event)" class="space-y-3 hidden">
-          <div>
-            <label class="text-xs text-gray-400">Choose Username</label>
-            <input type="text" id="signup-username" placeholder="Unique username" required class="mt-1">
-          </div>
-          <div>
-            <label class="text-xs text-gray-400">Display Name</label>
-            <input type="text" id="signup-fullname" placeholder="e.g. Goturu Resident" required class="mt-1">
-          </div>
-          <div>
-            <label class="text-xs text-gray-400">Password</label>
-            <input type="password" id="signup-password" placeholder="Choose a secure password" required class="mt-1">
-          </div>
-          <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-2.5 rounded-lg mt-2 transition">
-            Create Account
-          </button>
-        </form>
-      </div>
-
-      <!-- LOGGED IN PROFILE VIEW -->
-      <div id="user-profile-view" class="hidden">
-        <h3 class="text-xl font-bold text-purple-400 mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-id-badge"></i> User Account Profile
-        </h3>
-        <div class="bg-[#090d16] border border-gray-800 rounded-xl p-4 mb-4">
-          <div class="text-lg font-bold text-white" id="profile-display-name">Guest User</div>
-          <div class="text-xs text-cyan-400 mb-2" id="profile-handle">@username</div>
-          <div class="text-xs text-gray-400" id="profile-bio">Portal Community Member</div>
-        </div>
-
-        <form onsubmit="updateProfileBio(event)" class="space-y-3 mb-4">
-          <div>
-            <label class="text-xs text-gray-400">Update Status / Bio</label>
-            <input type="text" id="profile-bio-input" placeholder="What's on your mind?" class="mt-1">
-          </div>
-          <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 rounded-lg text-xs transition">
-            Save Profile Bio
-          </button>
-        </form>
-
-        <button class="w-full border border-pink-500/50 text-pink-400 hover:bg-pink-950 font-bold py-2 rounded-lg text-xs transition" onclick="logoutUser()">
-          <i class="fa-solid fa-sign-out-alt mr-1"></i> Log Out Account
-        </button>
       </div>
     </div>
   </div>
 
-  <!-- 4. BIO DATA MODAL -->
+  <!-- 2. BIO DATA MODAL -->
   <div class="modal-overlay" id="modal-bio">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-bio')">&times;</span>
-      <h3 class="text-xl font-bold text-cyan-400 mb-3 flex items-center gap-2">
-        <i class="fa-solid fa-circle-info"></i> GOTURU INTERACTIVE PORTAL
+      <h3 class="text-xl font-bold text-cyan-400 mb-2 flex items-center gap-2">
+        <i class="fa-solid fa-globe"></i> Goturu Interactive Specs
       </h3>
-      <div class="space-y-2 text-sm text-gray-300 leading-relaxed">
-        <p>📌 <strong>Status:</strong> Live Cyber Portal Active</p>
-        <p>📅 <strong>Portal Launch:</strong> Started on 22/Sep/2026</p>
-        <p>⚡ <strong>System Architecture:</strong> Direct Client & Admin Interactive Hub</p>
-        <p>🛡️ <strong>Security:</strong> Custom Auth & Secure Feedback Pipeline</p>
-      </div>
-    </div>
-  </div>
+      <div class="space-y-3 text-xs tex
+      
 
-  <!-- 5. SUGGESTION MODAL -->
-  <div class="modal-overlay" id="modal-suggestion">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('modal-suggestion')">&times;</span>
-      <h3 class="text-xl font-bold text-pink-400 mb-1 flex items-center gap-2">
-        <i class="fa-solid fa-paper-plane"></i> Write Your Suggestion
-      </h3>
-      <p class="text-xs text-gray-400 mb-3">Send feedback or comments directly to Admin.</p>
-
-      <div class="space-y-3">
-        <input type="text" id="sugg-name" placeholder="Your Name (Optional)">
-        <textarea id="suggestion-text" placeholder="Type your detailed suggestion or feedback here..." rows="4"></textarea>
-        <button class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2.5 rounded-lg transition" onclick="submitSuggestion()">
-          Send Suggestion
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 6. NOTIFICATION POST/EDIT MODAL -->
-  <div class="modal-overlay" id="modal-notif">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('modal-notif')">&times;</span>
-      <h3 id="notif-modal-heading" class="text-xl font-bold text-cyan-400 mb-3">Post Announcement</h3>
-      <input type="hidden" id="edit-notif-id">
-      <div class="space-y-3">
-        <input type="text" id="notif-title-input" placeholder="Announcement Title">
-        <textarea id="notif-content-input" placeholder="Announcement Body Text..." rows="3"></textarea>
-        <button class="w-full bg-cyan-400 hover:bg-cyan-300 text-black font-bold py-2.5 rounded-lg transition" onclick="saveNotification()">
-          Publish Announcement
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 7. CONFIRMATION DIALOG MODAL -->
-  <div class="modal-overlay" id="modal-confirm">
-    <div class="modal-card max-w-sm text-center">
-      <h3 id="confirm-title" class="text-lg font-bold text-white mb-2">Are you sure?</h3>
-      <p id="confirm-msg" class="text-xs text-gray-400 mb-4">This action cannot be undone.</p>
-      <div class="flex gap-2 justify-center">
-        <button id="confirm-yes-btn" class="bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs px-4 py-2 rounded-lg">Yes, Proceed</button>
-        <button onclick="closeModal('modal-confirm')" class="bg-gray-700 hover:bg-gray-600 text-white font-bold text-xs px-4 py-2 rounded-lg">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TOAST CONTAINER -->
-  <div id="toast-container"></div>
-
-  <script>
+      
     
-    // GAME URL DEFINITIONS (2 DIFFERENT TYPES)
-    const GAME_URL_1 = "https://type-os-time.vercel.app/";
-    const GAME_URL_2 = "https://pacman.live/";
-
-    // DIRECT GAME LAUNCH FUNCTION
-    function launchGameUrl(type) {
-      let targetUrl = GAME_URL_1;
-      let gameName = "Type-OS-Time";
-
-      if (type === 2) {
-        targetUrl = GAME_URL_2;
-        gameName = "Pacman Live Arcade";
-      }
-
-      showToast(`Opening ${gameName}... Launching Web URL!`, 'success');
-      
-      // Open game URL in new browser window/tab directly
-      setTimeout(() => {
-        window.open(targetUrl, '_blank');
-      }, 300);
-    }
-
-    // TOAST SYSTEM (Replaces alert)
-    function showToast(message, type = 'info') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      
-      let icon = 'fa-info-circle';
-      if (type === 'success') icon = 'fa-circle-check text-green-400';
-      if (type === 'error') icon = 'fa-circle-exclamation text-pink-500';
-      
-      toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span class="text-xs font-semibold">${message}</span>`;
-      container.appendChild(toast);
-
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(100%)';
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-    }
-
-    let pendingConfirmAction = null;
-    function showConfirmModal(title, msg, onConfirm) {
-      document.getElementById('confirm-title').textContent = title;
-      document.getElementById('confirm-msg').textContent = msg;
-      pendingConfirmAction = onConfirm;
-      openModal('modal-confirm');
-    }
-
-    document.getElementById('confirm-yes-btn').addEventListener('click', () => {
-      if (pendingConfirmAction) pendingConfirmAction();
-      closeModal('modal-confirm');
-    });
-
-    // STORAGE HELPERS
-    function getStoredData(key) {
-      try {
-        return JSON.parse(localStorage.getItem(key)) || [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function setStoredData(key, data) {
-      try {
-        localStorage.setItem(key, JSON.stringify(data));
-      } catch (e) {}
-    }
-
-    // INITIAL SEED DATA
-    if (getStoredData('goturu_notifications').length === 0) {
-      setStoredData('goturu_notifications', [{
-        id: 101,
-        title: "Welcome to Goturu Interactive Portal!",
-        content: "Portal official system activated! Check out 2 direct URL web games, community feedback, and user accounts.",
-        date: "22/09/2026",
-        reactions: { '👍': 12, '❤️': 15, '🔥': 9, '😊': 8 }
-      }]);
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      let percent = 0;
-      const circle = document.getElementById('progress-circle');
-      const text = document.getElementById('loader-text');
-      const overlay = document.getElementById('loader-overlay');
-
-      const interval = setInterval(() => {
-        percent += 5;
-        const offset = 339.29 - (percent / 100) * 339.29;
-        circle.style.strokeDashoffset = offset;
-        text.textContent = `${percent}%`;
-
-        if (percent >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            overlay.style.opacity = '0';
-            overlay.style.visibility = 'hidden';
-            checkAdminSession();
-            checkUserSession();
-          }, 200);
-        }
-      }, 15);
-    });
-
-    function switchAuthTab(tab) {
-      const loginForm = document.getElementById('form-user-login');
-      const signupForm = document.getElementById('form-user-signup');
-      const tabLogin = document.getElementById('tab-login');
-      const tabSignup = document.getElementById('tab-signup');
-
-      if (tab === 'login') {
-        loginForm.classList.remove('hidden');
-        signupForm.classList.add('hidden');
-        tabLogin.className = "flex-1 pb-2 text-sm font-bold text-cyan-400 border-b-2 border-cyan-400";
-        tabSignup.className = "flex-1 pb-2 text-sm font-bold text-gray-400 border-b-2 border-transparent";
-      } else {
-        loginForm.classList.add('hidden');
-        signupForm.classList.remove('hidden');
-        tabSignup.className = "flex-1 pb-2 text-sm font-bold text-purple-400 border-b-2 border-purple-400";
-        tabLogin.className = "flex-1 pb-2 text-sm font-bold text-gray-400 border-b-2 border-transparent";
-      }
-    }
-
-    function handleUserSignup(e) {
-      e.preventDefault();
-      const username = document.getElementById('signup-username').value.trim().toLowerCase();
-      const fullname = document.getElementById('signup-fullname').value.trim();
-      const password = document.getElementById('signup-password').value;
-
-      let users = getStoredData('goturu_users');
-      if (users.some(u => u.username === username)) {
-        showToast('Username already taken! Try another.', 'error');
-        return;
-      }
-
-      const newUser = { username, fullname, password, bio: 'Portal Resident' };
-      users.push(newUser);
-      setStoredData('goturu_users', users);
-
-      sessionStorage.setItem('goturu_active_user', JSON.stringify(newUser));
-      checkUserSession();
-      closeModal('modal-user-auth');
-      showToast('Account created successfully! Welcome ' + fullname, 'success');
-      loadAdminPanelData();
-    }
-
-    function handleUserLogin(e) {
-      e.preventDefault();
-      const username = document.getElementById('login-username').value.trim().toLowerCase();
-      const password = document.getElementById('login-password').value;
-
-      let users = getStoredData('goturu_users');
-      const user = users.find(u => u.username === username && u.password === password);
-
-      if (user) {
-        sessionStorage.setItem('goturu_active_user', JSON.stringify(user));
-        checkUserSession();
-        closeModal('modal-user-auth');
-        showToast('Welcome back, ' + user.fullname + '!', 'success');
-      } else {
-        showToast('Invalid username or password!', 'error');
-      }
-    }
-
-    function checkUserSession() {
-      const activeUserStr = sessionStorage.getItem('goturu_active_user');
-      const badge = document.getElementById('active-user-badge');
-      const authHeaderArea = document.getElementById('user-header-area');
-
-      if (activeUserStr) {
-        const user = JSON.parse(activeUserStr);
-        document.getElementById('badge-username').textContent = user.fullname;
-        document.getElementById('badge-status').textContent = '@' + user.username;
-        badge.classList.remove('hidden');
-
-        authHeaderArea.innerHTML = `
-          <button class="nav-btn-cyan" onclick="openModal('modal-user-auth')">
-            <i class="fa-solid fa-user-gear mr-1"></i> ${user.fullname}
-          </button>
-        `;
-
-        document.getElementById('user-auth-form-view').classList.add('hidden');
-        document.getElementById('user-profile-view').classList.remove('hidden');
-        document.getElementById('profile-display-name').textContent = user.fullname;
-        document.getElementById('profile-handle').textContent = '@' + user.username;
-        document.getElementById('profile-bio').textContent = user.bio || 'Portal Member';
-        document.getElementById('profile-bio-input').value = user.bio || '';
-      } else {
-        badge.classList.add('hidden');
-        authHeaderArea.innerHTML = `
-          <button class="nav-btn-cyan" onclick="openModal('modal-user-auth')">
-            <i class="fa-solid fa-user-check mr-1"></i> User Login / Sign Up
-          </button>
-        `;
-        document.getElementById('user-auth-form-view').classList.remove('hidden');
-        document.getElementById('user-profile-view').classList.add('hidden');
-      }
-    }
-
-    function updateProfileBio(e) {
-      e.preventDefault();
-      const bioText = document.getElementById('profile-bio-input').value.trim();
-      const activeUserStr = sessionStorage.getItem('goturu_active_user');
-      if (!activeUserStr) return;
-
-      let activeUser = JSON.parse(activeUserStr);
-      activeUser.bio = bioText;
-      sessionStorage.setItem('goturu_active_user', JSON.stringify(activeUser));
-
-      let users = getStoredData('goturu_users');
-      const idx = users.findIndex(u => u.username === activeUser.username);
-      if (idx !== -1) {
-        users[idx].bio = bioText;
-        setStoredData('goturu_users', users);
-      }
-
-      checkUserSession();
-      showToast('Profile status updated!', 'success');
-    }
-
-    function logoutUser() {
-      sessionStorage.removeItem('goturu_active_user');
-      checkUserSession();
-      closeModal('modal-user-auth');
-      showToast('Logged out of account.', 'info');
-    }
-
-    function handleProfileTap() {
-      openModal('modal-user-auth');
-    }
-
-    function loginAdmin(e) {
-      e.preventDefault();
-      const id = document.getElementById('admin-id').value.trim();
-      const key = document.getElementById('admin-key').value;
-
-      if (id === 'admin' && key === 'admin123') {
-        sessionStorage.setItem('goturu_admin_logged', 'true');
-        closeModal('admin-auth-modal');
-        document.getElementById('admin-id').value = '';
-        document.getElementById('admin-key').value = '';
-        checkAdminSession();
-        showToast('Admin Portal Unlocked!', 'success');
-      } else {
-        showToast('Access Denied: Invalid Admin ID or Secret Key!', 'error');
-      }
-    }
-
-    function checkAdminSession() {
-      const isAdminLogged = sessionStorage.getItem('goturu_admin_logged') === 'true';
-
-      if (isAdminLogged) {
-        document.getElementById('admin-header-area').style.display = 'none';
-        document.getElementById('admin-panel').classList.remove('hidden');
-        document.getElementById('admin-add-notif-btn').classList.remove('hidden');
-        loadAdminPanelData();
-      } else {
-        document.getElementById('admin-header-area').style.display = 'block';
-        document.getElementById('admin-panel').classList.add('hidden');
-        document.getElementById('admin-add-notif-btn').classList.add('hidden');
-      }
-      renderNotifications();
-    }
-
-    function logoutAdmin() {
-      sessionStorage.removeItem('goturu_admin_logged');
-      checkAdminSession();
-      showToast('Admin logged out.', 'info');
-    }
-
-    function loadAdminPanelData() {
-      const suggestions = getStoredData('goturu_suggestions');
-      const users = getStoredData('goturu_users');
-      const notifs = getStoredData('goturu_notifications');
-
-      document.getElementById('stat-total-suggestions').textContent = suggestions.length;
-      document.getElementById('stat-total-users').textContent = users.length;
-      document.getElementById('stat-total-notifs').textContent = notifs.length;
-
-      const suggTbody = document.getElementById('admin-suggestions-rows');
-      suggTbody.innerHTML = '';
-
-      if (suggestions.length === 0) {
-        suggTbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-500">No user suggestions received yet.</td></tr>';
-      } else {
-        suggestions.slice().reverse().forEach((s, idx) => {
-          suggTbody.innerHTML += `
-            <tr>
-              <td class="p-3 border border-[#3d275a] font-bold text-pink-300">${s.user}</td>
-              <td class="p-3 border border-[#3d275a]">${s.comment}</td>
-              <td class="p-3 border border-[#3d275a] text-gray-400">${s.time}</td>
-              <td class="p-3 border border-[#3d275a]">
-                <button class="bg-red-600 hover:bg-red-500 text-white font-bold px-2 py-1 rounded text-[10px]" onclick="deleteSuggestion(${s.id || idx})">Delete</button>
-              </td>
-            </tr>
-          `;
-        });
-      }
-    }
-
-    function deleteSuggestion(id) {
-      showConfirmModal('Delete Suggestion?', 'Are you sure you want to remove this feedback item?', () => {
-        let suggestions = getStoredData('goturu_suggestions');
-        suggestions = suggestions.filter((s, idx) => (s.id ? s.id !== id : idx !== id));
-        setStoredData('goturu_suggestions', suggestions);
-        loadAdminPanelData();
-        showToast('Suggestion removed.', 'info');
-      });
-    }
-
-    function submitSuggestion() {
-      const activeUserStr = sessionStorage.getItem('goturu_active_user');
-      let defaultName = 'Visitor Guest';
-      if (activeUserStr) {
-        defaultName = JSON.parse(activeUserStr).fullname;
-      }
-
-      const name = document.getElementById('sugg-name').value.trim() || defaultName;
-      const text = document.getElementById('suggestion-text').value.trim();
-
-      if (!text) {
-        showToast('Please enter your suggestion before submitting!', 'warning');
-        return;
-      }
-
-      let suggestions = getStoredData('goturu_suggestions');
-      suggestions.push({
-        id: Date.now(),
-        user: name,
-        comment: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " (" + new Date().toLocaleDateString() + ")"
-      });
-
-      setStoredData('goturu_suggestions', suggestions);
-
-      document.getElementById('sugg-name').value = '';
-      document.getElementById('suggestion-text').value = '';
-      closeModal('modal-suggestion');
-
-      showToast('Meeru pampina suggestion direct ga Admin portal ku cherindhi! Thank you.', 'success');
-
-      if (sessionStorage.getItem('goturu_admin_logged') === 'true') {
-        loadAdminPanelData();
-      }
-    }
-
-    function renderNotifications() {
-      const notifs = getStoredData('goturu_notifications');
-      const container = document.getElementById('notifications-list');
-      const isAdmin = sessionStorage.getItem('goturu_admin_logged') === 'true';
-
-      container.innerHTML = '';
-
-      if (notifs.length === 0) {
-        container.innerHTML = '<p class="text-xs text-gray-500">No active announcements posted.</p>';
-        return;
-      }
-
-      notifs.forEach(n => {
-        const div = document.createElement('div');
-        div.className = 'notif-item';
-
-        let adminBtns = isAdmin ? `
-          <div class="flex gap-2 mt-3 pt-2 border-t border-gray-800">
-            <button class="bg-amber-500 hover:bg-amber-400 text-black font-bold text-[10px] px-2.5 py-1 rounded" onclick="editNotif(${n.id})">Edit</button>
-            <button class="bg-pink-600 hover:bg-pink-500 text-white font-bold text-[10px] px-2.5 py-1 rounded" onclick="deleteNotif(${n.id})">Delete</button>
-          </div>
-        ` : '';
-
-        const reactions = n.reactions || { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 };
-
-        div.innerHTML = `
-          <div class="font-bold text-white text-base">${n.title}</div>
-          <div class="text-[11px] text-gray-500 mb-2">${n.date}</div>
-          <div class="text-sm text-gray-300 leading-relaxed">${n.content}</div>
-          <div class="flex gap-2 items-center mt-3">
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '👍')">👍 ${reactions['👍'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '❤️')">❤️ ${reactions['❤️'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '🔥')">🔥 ${reactions['🔥'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '😊')">😊 ${reactions['😊'] || 0}</button>
-          </div>
-          ${adminBtns}
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function reactEmoji(id, emoji) {
-      let notifs = getStoredData('goturu_notifications');
-      const item = notifs.find(n => n.id === id);
-      if (item) {
-        if (!item.reactions) item.reactions = {};
-        item.reactions[emoji] = (item.reactions[emoji] || 0) + 1;
-        setStoredData('goturu_notifications', notifs);
-        renderNotifications();
-      }
-    }
-
-    function saveNotification() {
-      const editId = document.getElementById('edit-notif-id').value;
-      const title = document.getElementById('notif-title-input').value.trim();
-      const content = document.getElementById('notif-content-input').value.trim();
-
-      if (!title || !content) {
-        showToast('Please fill out both title and content!', 'warning');
-        return;
-      }
-
-      let notifs = getStoredData('goturu_notifications');
-
-      if (editId) {
-        const item = notifs.find(n => n.id == editId);
-        if (item) {
-          item.title = title;
-          item.content = content;
-        }
-      } else {
-        notifs.push({
-          id: Date.now(),
-          title, content,
-          date: new Date().toLocaleDateString(),
-          reactions: { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 }
-        });
-      }
-
-      setStoredData('goturu_notifications', notifs);
-      closeModal('modal-notif');
-      renderNotifications();
-      showToast('Announcement published successfully!', 'success');
-    }
-
-    function editNotif(id) {
-      let notifs = getStoredData('goturu_notifications');
-      const item = notifs.find(n => n.id === id);
-      if (item) {
-        document.getElementById('edit-notif-id').value = item.id;
-        document.getElementById('notif-title-input').value = item.title;
-        document.getElementById('notif-content-input').value = item.content;
-        document.getElementById('notif-modal-heading').textContent = 'Edit Announcement';
-        openModal('modal-notif');
-      }
-    }
-
-    function deleteNotif(id) {
-      showConfirmModal('Delete Announcement?', 'Are you sure you want to delete this notification?', () => {
-        let notifs = getStoredData('goturu_notifications');
-        notifs = notifs.filter(n => n.id !== id);
-        setStoredData('goturu_notifications', notifs);
-        renderNotifications();
-        showToast('Announcement deleted.', 'info');
-      });
-    }
-
-    function launchTyperGame() {
-      const arena = document.getElementById('mini-game-arena');
-      arena.classList.remove('hidden');
-      arena.innerHTML = `
-        <div class="bg-[#0b0f19] p-4 rounded-xl border border-emerald-500/40 text-center">
-          <h4 class="font-bold text-emerald-400 text-sm mb-2">⌨️ Cyber Speed Typer</h4>
-          <p id="typer-quote" class="text-sm font-mono text-cyan-300 bg-[#121826] p-2 rounded mb-3">goturu interactive portal 2026</p>
-          <input type="text" id="typer-input" placeholder="Type quote above..." class="text-center font-mono text-sm mb-2" oninput="checkTyperInput()">
-          <div id="typer-score" class="text-xs text-gray-400">Type accurately to complete!</div>
-        </div>
-      `;
-    }
-
-    function checkTyperInput() {
-      const quote = document.getElementById('typer-quote').textContent.trim();
-      const val = document.getElementById('typer-input').value.trim();
-      const score = document.getElementById('typer-score');
-
-      if (val === quote) {
-        score.innerHTML = `<span class="text-emerald-400 font-bold">🎉 Excellent! Perfect Speed Typing!</span>`;
-      } else {
-        score.textContent = `Matching characters: ${val.length} / ${quote.length}`;
-      }
-    }
-
-    function launchMemoryGame() {
-      const arena = document.getElementById('mini-game-arena');
-      arena.classList.remove('hidden');
-      let target = Math.floor(Math.random() * 9);
-      arena.innerHTML = `
-        <div class="bg-[#0b0f19] p-4 rounded-xl border border-cyan-500/40 text-center">
-          <h4 class="font-bold text-cyan-400 text-sm mb-2">🧠 Memory Matrix</h4>
-          <p class="text-xs text-gray-400 mb-3">Tap the highlighted Cyber Tile!</p>
-          <div id="grid-matrix" class="grid grid-cols-3 gap-2 w-48 mx-auto mb-2">
-            ${[0,1,2,3,4,5,6,7,8].map(i => `
-              <div id="tile-${i}" class="h-12 rounded-lg bg-[#121826] border border-gray-700 flex items-center justify-center cursor-pointer transition ${i===target?'bg-cyan-500 shadow-[0_0_10px_#00f3ff]':''}" onclick="checkTile(${i}, ${target})">
-                <i class="fa-solid fa-cube text-xs ${i===target?'text-black':'text-gray-600'}"></i>
-              </div>
-            `).join('')}
-          </div>
-          <div id="matrix-status" class="text-xs text-gray-400">Find target tile!</div>
-        </div>
-      `;
-    }
-
-    function checkTile(chosen, target) {
-      const status = document.getElementById('matrix-status');
-      if (chosen === target) {
-        status.innerHTML = `<span class="text-cyan-400 font-bold">⚡ Success! Matrix Synchronized!</span>`;
-      } else {
-        status.innerHTML = `<span class="text-pink-400">Try again! Look closely.</span>`;
-      }
-    }
-
-    function openModal(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('active');
-    }
-
-    function closeModal(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('active');
-    }
-
-    function openAddNotifModal() {
-      document.getElementById('edit-notif-id').value = '';
-      document.getElementById('notif-title-input').value = '';
-      document.getElementById('notif-content-input').value = '';
-      document.getElementById('notif-modal-heading').textContent = 'Post Announcement';
-      openModal('modal-notif');
-    }
-
-    function scrollToSection(id) {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-    }
-  </script>
-</body>
-</html>
-```
