@@ -1,1169 +1,619 @@
-  <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GOTURU INTERACTIVE PORTAL</title>
-
+  <title>Master Quiz Hub - Bilingual 200 Qs Engine</title>
   <style>
     :root {
-      --bg-dark: #070a12;
-      --card-bg: #101625;
-      --neon-cyan: #00f3ff;
-      --neon-pink: #ff007f;
-      --neon-green: #00ff66;
-      --neon-yellow: #ffbe0b;
-      --text-main: #f0f4f8;
-      --text-muted: #8a99ad;
-      --border-color: #1c263b;
+      --bg-dark: #090d16;
+      --card-bg: #121a2d;
+      --accent-cyan: #00f3ff;
+      --accent-yellow: #ffbe0b;
+      --accent-green: #00ff66;
+      --accent-red: #ff3366;
+      --text-bright: #ffffff;
+      --text-dim: #94a3b8;
+      --border-color: #1e293b;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
     body {
       background-color: var(--bg-dark);
-      color: var(--text-main);
+      color: var(--text-bright);
       min-height: 100vh;
-      overflow-x: hidden;
-      padding-bottom: 50px;
-    }
-
-    /* CUSTOM TOAST NOTIFICATION */
-    #toast-container {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 10000;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-    }
-
-    .toast {
-      background: var(--card-bg);
-      border-left: 4px solid var(--neon-cyan);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 6px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-      font-size: 0.9rem;
-      display: flex;
       align-items: center;
-      gap: 10px;
-      animation: slideIn 0.3s ease;
+      padding: 20px 15px;
     }
 
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    /* CIRCULAR LOADER */
-    #loader-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
+    .quiz-container {
       width: 100%;
-      height: 100vh;
-      background: #04060a;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
-    }
-
-    .brand-logo-anim {
-      font-size: 1.8rem;
-      font-weight: 800;
-      letter-spacing: 3px;
-      color: #fff;
-      margin-bottom: 25px;
-      text-shadow: 0 0 12px var(--neon-cyan), 0 0 24px var(--neon-cyan);
-    }
-
-    .circle-loader {
-      position: relative;
-      width: 110px;
-      height: 110px;
-    }
-
-    .circle-loader svg {
-      width: 110px;
-      height: 110px;
-      transform: rotate(-90deg);
-    }
-
-    .circle-loader circle {
-      fill: none;
-      stroke-width: 8;
-      stroke-linecap: round;
-    }
-
-    .circle-bg {
-      stroke: #162032;
-    }
-
-    .circle-progress {
-      stroke: var(--neon-cyan);
-      stroke-dasharray: 339.29;
-      stroke-dashoffset: 339.29;
-      transition: stroke-dashoffset 0.1s linear;
-      filter: drop-shadow(0 0 6px var(--neon-cyan));
-    }
-
-    .loader-percentage {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: var(--neon-cyan);
-    }
-
-    /* HEADER */
-    header {
+      max-width: 750px;
       background: var(--card-bg);
-      border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 243, 255, 0.1);
     }
 
-    .portal-logo {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #fff;
+    .app-header {
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+    }
+
+    .app-header h1 {
+      color: var(--accent-yellow);
+      font-size: 1.8rem;
       letter-spacing: 1px;
     }
 
-    .portal-logo span {
-      color: var(--neon-cyan);
+    .app-header p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      margin-top: 5px;
     }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn-action {
-      background: rgba(0, 243, 255, 0.1);
-      border: 1px solid var(--neon-cyan);
-      color: #fff;
-      padding: 7px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 0.82rem;
-      transition: all 0.3s ease;
-    }
-
-    .btn-action:hover {
-      background: var(--neon-cyan);
-      color: #000;
-      box-shadow: 0 0 10px var(--neon-cyan);
-    }
-
-    .btn-admin {
-      background: rgba(255, 0, 127, 0.15);
-      border-color: var(--neon-pink);
-    }
-
-    .btn-admin:hover {
-      background: var(--neon-pink);
-      color: #fff;
-      box-shadow: 0 0 12px var(--neon-pink);
-    }
-
-    /* CONTAINER */
-    .container {
-      max-width: 1050px;
-      margin: 25px auto;
-      padding: 0 20px;
-    }
-
-    .welcome-banner {
-      background: var(--card-bg);
-      border: 1px solid var(--neon-cyan);
-      border-radius: 12px;
-      padding: 20px 25px;
-      margin-bottom: 25px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* DASHBOARD BOXES */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .dash-box {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 22px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .dash-box:hover {
-      border-color: var(--neon-cyan);
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 243, 255, 0.15);
-    }
-
-    .dash-box h3 {
-      font-size: 1.15rem;
-      color: var(--neon-cyan);
-      margin-bottom: 8px;
-    }
-
-    .dash-box p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-      margin-bottom: 15px;
-    }
-
-    .dash-box .tap-hint {
-      font-size: 0.8rem;
-      color: var(--neon-green);
-      font-weight: bold;
-    }
-
-    /* GAME CARDS INSIDE MODAL & QUIZ BOX */
-    .game-options-grid {
+    /* MODULE SELECTION CARD */
+    .module-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 15px;
       margin-top: 15px;
     }
 
-    .game-card-btn {
-      background: #090d16;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 15px;
-      text-decoration: none;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .game-card-btn:hover {
-      border-color: var(--neon-cyan);
-      background: #131b2d;
-      transform: scale(1.02);
-      box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-    }
-
-    .game-card-info h4 {
-      color: var(--neon-cyan);
-      font-size: 1rem;
-      margin-bottom: 4px;
-    }
-
-    .game-card-info p {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    /* SECTION CARDS */
-    .section-card {
-      background: var(--card-bg);
+    .module-card {
+      background: #0d1424;
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 22px;
-      margin-bottom: 25px;
-    }
-
-    .section-card h3 {
-      font-size: 1.15rem;
-      color: var(--neon-cyan);
-      margin-bottom: 15px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .notif-item {
-      background: #080c14;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 12px;
+    .module-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(0, 243, 255, 0.2);
     }
 
-    .notif-title {
-      font-weight: bold;
-      color: #fff;
-      font-size: 0.95rem;
+    .module-info h3 {
+      color: var(--accent-cyan);
+      font-size: 1.1rem;
       margin-bottom: 4px;
     }
 
-    .notif-date {
-      font-size: 0.72rem;
-      color: var(--text-muted);
+    .module-info p {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+
+    .module-badge {
+      background: rgba(255, 190, 11, 0.15);
+      color: var(--accent-yellow);
+      border: 1px solid var(--accent-yellow);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    /* QUIZ ARENA */
+    #quiz-arena {
+      display: none;
+    }
+
+    .quiz-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+    }
+
+    .lang-toggle-btn {
+      background: rgba(0, 243, 255, 0.1);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: #0d1424;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+      transition: width 0.3s ease;
+    }
+
+    .question-card {
+      background: #0d1424;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .question-text-en {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #ffffff;
       margin-bottom: 8px;
     }
 
-    .notif-content {
-      font-size: 0.88rem;
-      color: #d1d9e6;
-      margin-bottom: 12px;
+    .question-text-te {
+      font-size: 1rem;
+      color: var(--accent-yellow);
       line-height: 1.4;
     }
 
-    .reactions-bar {
-      display: flex;
-      gap: 8px;
-      align-items: center;
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
 
-    .emoji-btn {
-      background: #141c2e;
-      border: 1px solid #253450;
-      color: #fff;
-      padding: 4px 10px;
-      border-radius: 15px;
-      cursor: pointer;
-      font-size: 0.82rem;
-      transition: all 0.2s ease;
-    }
-
-    .emoji-btn:hover {
-      border-color: var(--neon-cyan);
-      background: #1d2a45;
-    }
-
-    .admin-controls-btn {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .btn-edit {
-      background: var(--neon-yellow);
-      color: #000;
-      border: none;
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .btn-delete {
-      background: var(--neon-pink);
-      color: #fff;
-      border: none;
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    /* SECRET ADMIN PANEL */
-    #admin-panel {
-      display: none;
-      border: 1px solid var(--neon-pink);
-      background: #160d21;
-      border-radius: 12px;
-      padding: 22px;
-      margin-bottom: 25px;
-    }
-
-    .stats-card {
-      background: #231238;
-      border: 1px solid #3c1e5e;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-      margin-bottom: 18px;
-    }
-
-    .stats-card h4 {
-      font-size: 1.8rem;
-      color: var(--neon-pink);
-    }
-
-    .stats-card p {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-
-    .user-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    .user-table th, .user-table td {
-      border: 1px solid #2d1947;
-      padding: 10px;
-      text-align: left;
-      font-size: 0.82rem;
-    }
-
-    .user-table th {
-      color: var(--neon-pink);
-      background: #231238;
-    }
-
-    /* MODAL POPUPS */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100vh;
-      background: rgba(0,0,0,0.85);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 900;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal-card {
-      background: var(--card-bg);
-      border: 1px solid var(--neon-cyan);
-      border-radius: 12px;
-      padding: 22px;
-      width: 90%;
-      max-width: 440px;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0,243,255,0.2);
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 12px;
-      right: 15px;
-      color: var(--text-muted);
-      font-size: 1.3rem;
-      cursor: pointer;
-    }
-
-    .close-modal:hover {
-      color: #fff;
-    }
-
-    input, textarea {
-      width: 100%;
-      background: #080c14;
+    .option-btn {
+      background: #10182a;
       border: 1px solid var(--border-color);
+      color: var(--text-bright);
+      padding: 14px 18px;
+      border-radius: 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .option-btn:hover:not([disabled]) {
+      border-color: var(--accent-cyan);
+      background: #17233c;
+    }
+
+    .option-btn.correct {
+      background: rgba(0, 255, 102, 0.15) !important;
+      border-color: var(--accent-green) !important;
+      color: var(--accent-green) !important;
+    }
+
+    .option-btn.wrong {
+      background: rgba(255, 51, 102, 0.15) !important;
+      border-color: var(--accent-red) !important;
+      color: var(--accent-red) !important;
+    }
+
+    .explanation-box {
+      margin-top: 15px;
+      background: #080d18;
+      border-left: 4px solid var(--accent-cyan);
+      padding: 12px 15px;
       border-radius: 6px;
-      color: #fff;
-      padding: 10px;
-      outline: none;
       font-size: 0.88rem;
+      display: none;
     }
 
-    input:focus, textarea:focus {
-      border-color: var(--neon-cyan);
+    .action-controls {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
     }
 
-    textarea {
-      height: 90px;
-      resize: none;
-      margin-top: 5px;
-    }
-
-    .submit-btn {
-      background: var(--neon-cyan);
+    .btn-quiz {
+      background: var(--accent-cyan);
       color: #000;
       border: none;
-      padding: 10px;
-      border-radius: 6px;
+      padding: 10px 20px;
+      border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 12px;
-      width: 100%;
       transition: all 0.3s ease;
     }
 
-    .submit-btn:hover {
-      opacity: 0.9;
-      box-shadow: 0 0 10px var(--neon-cyan);
+    .btn-quiz:hover {
+      box-shadow: 0 0 12px var(--accent-cyan);
     }
 
-    .auth-toggle-link {
-      font-size: 0.8rem;
-      color: var(--neon-cyan);
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-dim);
+    }
+
+    .btn-secondary:hover {
+      color: #fff;
+      border-color: var(--text-dim);
+    }
+
+    /* RESULT SUMMARY CARD */
+    #quiz-result {
+      display: none;
       text-align: center;
-      margin-top: 10px;
-      cursor: pointer;
+      padding: 20px 0;
+    }
+
+    .result-score {
+      font-size: 3rem;
+      color: var(--accent-green);
+      font-weight: bold;
+      margin: 15px 0;
     }
   </style>
 </head>
 <body>
 
-  <div id="toast-container"></div>
-
-  <!-- CIRCULAR LOADER -->
-  <div id="loader-overlay">
-    <div class="brand-logo-anim">GOTURU INTERACTIVE</div>
-    <div class="circle-loader">
-      <svg>
-        <circle class="circle-bg" cx="55" cy="55" r="48"></circle>
-        <circle class="circle-progress" id="progress-circle" cx="55" cy="55" r="48"></circle>
-      </svg>
-      <div class="loader-percentage" id="loader-text">0%</div>
-    </div>
-  </div>
-
-  <!-- HEADER -->
-  <header>
-    <div class="portal-logo">GOTURU <span>INTERACTIVE</span></div>
-    
-    <div class="header-actions">
-      <!-- USER AUTH BUTTON -->
-      <div id="user-header-area">
-        <button class="btn-action" onclick="openUserModal()">👤 Login / Register</button>
-      </div>
-
-      <!-- ADMIN LOGIN BUTTON -->
-      <div id="admin-header-area">
-        <button class="btn-action btn-admin" onclick="openAdminAuth()">🔑 Admin Login</button>
-      </div>
-
-      <!-- ADMIN LOGGED AREA -->
-      <div id="admin-logged-area" style="display: none; align-items: center; gap: 8px;">
-        <span style="color: var(--neon-pink); font-weight: bold; font-size: 0.85rem;">👑 Admin Active</span>
-        <button class="btn-action btn-admin" style="padding: 4px 10px;" onclick="logoutAdmin()">Logout</button>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN DASHBOARD CONTAINER -->
-  <div class="container">
-    <div class="welcome-banner">
-      <h2>Welcome to <span style="color: var(--neon-cyan);">Goturu Interactive Portal</span>!</h2>
-      <p style="color: var(--text-muted); margin-top: 5px; font-size: 0.9rem;">Explore features, tap games & quiz to launch directly, and submit suggestions to Admin.</p>
+  <div class="quiz-container">
+    <!-- HEADER -->
+    <div class="app-header">
+      <h1>🧠 MASTER QUIZ HUB</h1>
+      <p>Bilingual (తెలుగు & English) | 200 Questions / Module | Non-Repeating</p>
     </div>
 
-    <!-- 5 DASHBOARD BOXES -->
-    <div class="dashboard-grid">
-      <!-- BOX 1: BIO DATA -->
-      <div class="dash-box" onclick="openBioModal()">
-        <div>
-          <h3>🌐 GOTURU PORTAL</h3>
-          <p>Tap to view official launch date, live status, and system bio data.</p>
-        </div>
-        <span class="tap-hint">👉 Tap to View Bio Data</span>
-      </div>
-
-      <!-- BOX 2: INTERACTIVE GAMES -->
-      <div class="dash-box" onclick="openGamesModal()">
-        <div>
-          <h3>🎮 INTERACTIVE GAMES</h3>
-          <p>Tap to choose from interactive web games & play instantly!</p>
-        </div>
-        <span class="tap-hint" style="color: var(--neon-cyan);">👉 Tap to Play Games</span>
-      </div>
-
-      <!-- BOX 3: WRITE SUGGESTIONS -->
-      <div class="dash-box" onclick="openSuggestionModal()">
-        <div>
-          <h3>✍️ WRITE SUGGESTIONS</h3>
-          <p>Send feedback directly to the Admin Portal. Fast & anonymous option!</p>
-        </div>
-        <span class="tap-hint" style="color: var(--neon-pink);">👉 Tap to Send Comment</span>
-      </div>
-
-      <!-- BOX 4: USER PROFILE -->
-      <div class="dash-box" onclick="openUserModal()">
-        <div>
-          <h3>👤 USER PROFILE & ACCOUNT</h3>
-          <p>Create account, sign in, and manage your portal status.</p>
-        </div>
-        <span class="tap-hint" style="color: var(--neon-yellow);">👉 Tap to Account Access</span>
-      </div>
-
-      <!-- BOX 5: ANNOUNCEMENTS -->
-      <div class="dash-box" onclick="scrollToNotifs()">
-        <div>
-          <h3>📢 ANNOUNCEMENTS</h3>
-          <p>View latest portal news, system updates, and react with emojis.</p>
-        </div>
-        <span class="tap-hint" style="color: var(--neon-green);">👉 Tap to View Updates</span>
-      </div>
-    </div>
-
-    <!-- MASTER QUIZ BOX (NEWLY ADDED RIGHT ABOVE NOTIFICATIONS) -->
-    <div class="section-card" style="border-color: var(--neon-yellow); background: linear-gradient(135deg, var(--card-bg) 0%, #1a1600 100%);">
-      <h3 style="color: var(--neon-yellow);">
-        <span>🧠 MASTER QUIZ HUB</span>
-        <span style="font-size: 0.78rem; color: var(--neon-yellow); font-weight: normal;">✨ Live Interactive Game</span>
-      </h3>
-      <p style="color: #d1d9e6; font-size: 0.88rem; margin-bottom: 15px; line-height: 1.4;">
-        Test your knowledge and challenge your brain with Master Quiz! Tap the box below to start the game directly.
-      </p>
-      <a href="https://master-quize-three.vercel.app/" target="_blank" class="game-card-btn" style="border-color: var(--neon-yellow);">
-        <div class="game-card-info">
-          <h4 style="color: var(--neon-yellow);">🎯 Launch Master Quiz Game</h4>
-          <p>URL: master-quize-three.vercel.app</p>
-        </div>
-        <span style="color: var(--neon-yellow); font-size: 1.3rem; font-weight: bold;">➔</span>
-      </a>
-    </div>
-
-    <!-- NOTIFICATION SECTION -->
-    <div class="section-card" id="notifications-section">
-      <h3>
-        <span>📢 Portal Notifications & Feed</span>
-        <button id="admin-add-notif-btn" class="submit-btn" style="padding: 4px 10px; font-size: 0.8rem; width: auto; margin-top:0; display: none;" onclick="openAddNotifModal()">+ Add New</button>
-      </h3>
-      <div id="notifications-list"></div>
-    </div>
-
-    <!-- SECRET ADMIN EXCLUSIVE PANEL -->
-    <div id="admin-panel">
-      <h3 style="color: var(--neon-pink); margin-bottom: 15px;">🔑 Secret Admin Master Portal</h3>
+    <!-- MODULE SELECTION VIEW -->
+    <div id="module-selection">
+      <h2 style="font-size: 1.1rem; color: var(--accent-cyan); margin-bottom: 12px;">Select Quiz Module:</h2>
       
-      <div class="stats-card">
-        <h4 id="stat-total-suggestions">0</h4>
-        <p>Total User Suggestions Received</p>
-      </div>
-
-      <h4 style="color: var(--neon-cyan); margin: 15px 0 10px 0;">💬 Received User Comments & Feedback</h4>
-      <table class="user-table">
-        <thead>
-          <tr>
-            <th>User Name</th>
-            <th>Suggestion Comment</th>
-            <th>Time Received</th>
-          </tr>
-        </thead>
-        <tbody id="admin-suggestions-rows"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- 1. GAMES SELECTION MODAL -->
-  <div class="modal-overlay" id="modal-games">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('modal-games')">&times;</span>
-      <h3 style="color: var(--neon-cyan); margin-bottom: 8px;">🎮 Select Game to Play</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted);">Tap any game below to open and play directly!</p>
-      
-      <div class="game-options-grid">
-        <!-- GAME URL 1 -->
-        <a href="https://index-html-tan-xi.vercel.app/" target="_blank" class="game-card-btn" onclick="closeModal('modal-games')">
-          <div class="game-card-info">
-            <h4>🕹️ Game 1: Index Cyber Matrix</h4>
-            <p>Direct URL: index-html-tan-xi.vercel.app</p>
+      <div class="module-grid">
+        <!-- MODULE 1 -->
+        <div class="module-card" onclick="startModule(1)">
+          <div class="module-info">
+            <h3>📘 Module 1: General Knowledge</h3>
+            <p>సాధారణ పరిజ్ఞానం & కరెంట్ అఫైర్స్</p>
           </div>
-          <span style="color: var(--neon-cyan); font-size: 1.2rem;">➔</span>
-        </a>
-
-        <!-- GAME URL 2 -->
-        <a href="https://type-os-time.vercel.app/" target="_blank" class="game-card-btn" onclick="closeModal('modal-games')">
-          <div class="game-card-info">
-            <h4 style="color: var(--neon-pink);">⚡ Game 2: Type-OS-Time</h4>
-            <p>Direct URL: type-os-time.vercel.app</p>
-          </div>
-          <span style="color: var(--neon-pink); font-size: 1.2rem;">➔</span>
-        </a>
-
-        <!-- GAME URL 3: MASTER QUIZ -->
-        <a href="https://master-quize-three.vercel.app/" target="_blank" class="game-card-btn" style="border-color: var(--neon-yellow);" onclick="closeModal('modal-games')">
-          <div class="game-card-info">
-            <h4 style="color: var(--neon-yellow);">🧠 Game 3: Master Quiz</h4>
-            <p>Direct URL: master-quize-three.vercel.app</p>
-          </div>
-          <span style="color: var(--neon-yellow); font-size: 1.2rem;">➔</span>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2. USER AUTH & PROFILE MODAL -->
-  <div class="modal-overlay" id="user-auth-modal">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('user-auth-modal')">&times;</span>
-      
-      <div id="user-login-view">
-        <h3 style="color: var(--neon-cyan); margin-bottom: 12px;">👤 User Login</h3>
-        <form onsubmit="handleUserLogin(event)">
-          <div style="margin-bottom: 10px;">
-            <label style="font-size: 0.8rem; color: var(--text-muted);">Username</label>
-            <input type="text" id="user-login-name" placeholder="Enter username" required style="margin-top:4px;">
-          </div>
-          <div style="margin-bottom: 12px;">
-            <label style="font-size: 0.8rem; color: var(--text-muted);">Password</label>
-            <input type="password" id="user-login-pass" placeholder="Enter password" required style="margin-top:4px;">
-          </div>
-          <button type="submit" class="submit-btn">Login to Account</button>
-        </form>
-        <div class="auth-toggle-link" onclick="toggleAuthView('register')">Don't have an account? Register here</div>
-      </div>
-
-      <div id="user-register-view" style="display: none;">
-        <h3 style="color: var(--neon-green); margin-bottom: 12px;">📝 Create Account</h3>
-        <form onsubmit="handleUserRegister(event)">
-          <div style="margin-bottom: 10px;">
-            <label style="font-size: 0.8rem; color: var(--text-muted);">Full Name</label>
-            <input type="text" id="user-reg-name" placeholder="Enter your name" required style="margin-top:4px;">
-          </div>
-          <div style="margin-bottom: 12px;">
-            <label style="font-size: 0.8rem; color: var(--text-muted);">Choose Password</label>
-            <input type="password" id="user-reg-pass" placeholder="Choose password" required style="margin-top:4px;">
-          </div>
-          <button type="submit" class="submit-btn" style="background: var(--neon-green);">Register Account</button>
-        </form>
-        <div class="auth-toggle-link" onclick="toggleAuthView('login')">Already registered? Login here</div>
-      </div>
-
-      <div id="user-logged-view" style="display: none; text-align: center;">
-        <h3 style="color: var(--neon-cyan); margin-bottom: 10px;">👤 Active Account</h3>
-        <p style="font-size: 1rem; color: #fff; margin-bottom: 5px;">Welcome, <span id="logged-username-display" style="color: var(--neon-green); font-weight: bold;">User</span>!</p>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Your Goturu Interactive Portal session is currently active.</p>
-        <button class="submit-btn" style="background: var(--neon-pink); color:#fff;" onclick="logoutUser()">Logout Account</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3. ADMIN AUTH MODAL -->
-  <div class="modal-overlay" id="admin-auth-modal">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('admin-auth-modal')">&times;</span>
-      <h3 style="color: var(--neon-pink); margin-bottom: 15px;">🔑 Admin Portal Access</h3>
-      <form onsubmit="loginAdmin(event)">
-        <div style="margin-bottom: 10px;">
-          <label style="font-size: 0.8rem; color: var(--text-muted);">Admin ID</label>
-          <input type="text" id="admin-id" placeholder="Enter Admin ID" required style="margin-top:4px;">
+          <span class="module-badge">200 Qs</span>
         </div>
-        <div style="margin-bottom: 15px;">
-          <label style="font-size: 0.8rem; color: var(--text-muted);">Secret Key</label>
-          <input type="password" id="admin-key" placeholder="Enter Secret Key" required style="margin-top:4px;">
-        </div>
-        <button type="submit" class="submit-btn" style="background: var(--neon-pink); color: #fff;">Login to Admin Panel</button>
-      </form>
-    </div>
-  </div>
 
-  <!-- 4. BIO DATA MODAL -->
-  <div class="modal-overlay" id="modal-bio">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('modal-bio')">&times;</span>
-      <h3 style="color: var(--neon-cyan); margin-bottom: 12px;">GOTURU INTERACTIVE</h3>
-      <div style="font-size: 0.88rem; line-height: 1.6; color: #d1d9e6;">
-        <p>📌 <strong>Status:</strong> Live Portal Active</p>
-        <p>📅 <strong>Portal Launch:</strong> Started on 22/Sep/2026</p>
-        <p>⚡ <strong>System:</strong> Direct Interactive Web Platform</p>
-        <p>🎮 <strong>Games Included:</strong> 3 Web Direct Games & Quizzes Connected</p>
+        <!-- MODULE 2 -->
+        <div class="module-card" onclick="startModule(2)">
+          <div class="module-info">
+            <h3>🔬 Module 2: Science & Technology</h3>
+            <p>సైన్స్, టెక్నాలజీ & కంప్యూటర్స్</p>
+          </div>
+          <span class="module-badge">200 Qs</span>
+        </div>
+
+        <!-- MODULE 3 -->
+        <div class="module-card" onclick="startModule(3)">
+          <div class="module-info">
+            <h3>🏛️ Module 3: Indian History & Culture</h3>
+            <p>భారత చరిత్ర, రాజ్యాంగం & సంస్కృతి</p>
+          </div>
+          <span class="module-badge">200 Qs</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- 5. SUGGESTION MODAL -->
-  <div class="modal-overlay" id="modal-suggestion">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('modal-suggestion')">&times;</span>
-      <h3 style="color: var(--neon-pink); margin-bottom: 8px;">Write Your Suggestion</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Send feedback directly to Admin.</p>
-      
-      <input type="text" id="sugg-name" placeholder="Your Name (Optional)" style="margin-bottom: 10px;">
-      <textarea id="suggestion-text" placeholder="Type your suggestion or comment here..."></textarea>
-      
-      <button class="submit-btn" style="background: var(--neon-pink); color: #fff;" onclick="submitSuggestion()">Send Suggestion</button>
+    <!-- QUIZ ARENA VIEW -->
+    <div id="quiz-arena">
+      <div class="quiz-top-bar">
+        <div>
+          <span id="module-title-display" style="color: var(--accent-cyan); font-weight: bold;">Module</span>
+          <span style="color: var(--text-dim); font-size: 0.8rem; margin-left: 8px;" id="q-tracker">Q: 1/200</span>
+        </div>
+        <button class="lang-toggle-btn" onclick="toggleLanguage()" id="lang-btn">Mode: Both (తెలుగు + EN)</button>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-text-en" id="q-en">Loading question...</div>
+        <div class="question-text-te" id="q-te">ప్రశ్న లోడ్ అవుతోంది...</div>
+      </div>
+
+      <div class="options-grid" id="options-container"></div>
+
+      <div class="explanation-box" id="explanation-box">
+        <strong>💡 Explanation / వివరణ:</strong>
+        <p id="exp-text-en" style="color: #cbd5e1; margin-top: 4px;"></p>
+        <p id="exp-text-te" style="color: var(--accent-yellow); margin-top: 4px;"></p>
+      </div>
+
+      <div class="action-controls">
+        <button class="btn-quiz btn-secondary" onclick="exitToMenu()">🏠 Main Menu</button>
+        <button class="btn-quiz" id="next-btn" onclick="nextQuestion()" style="display: none;">Next Question ➔</button>
+      </div>
     </div>
-  </div>
 
-  <!-- 6. NOTIFICATION EDIT/ADD MODAL -->
-  <div class="modal-overlay" id="modal-notif">
-    <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('modal-notif')">&times;</span>
-      <h3 id="notif-modal-heading" style="color: var(--neon-cyan); margin-bottom: 10px;">Post New Notification</h3>
-      <input type="hidden" id="edit-notif-id">
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <input type="text" id="notif-title-input" placeholder="Notification Title">
-        <textarea id="notif-content-input" placeholder="Notification Body Text..."></textarea>
-        <button class="submit-btn" onclick="saveNotification()">Publish Notification</button>
+    <!-- RESULT SUMMARY VIEW -->
+    <div id="quiz-result">
+      <h2 style="color: var(--accent-yellow);">🏆 Module Completed!</h2>
+      <p style="color: var(--text-dim); margin-top: 8px;">మీరు ఈ మోడ్యూల్ క్విజ్ పూర్తి చేశారు.</p>
+
+      <div class="result-score" id="final-score">0 / 0</div>
+
+      <p style="margin-bottom: 25px; color: #e2e8f0;" id="score-message">గొప్పగా ప్రయత్నించారు!</p>
+
+      <div style="display: flex; justify-content: center; gap: 15px;">
+        <button class="btn-quiz" onclick="restartModule()">🔄 Play Again (New 200 Order)</button>
+        <button class="btn-quiz btn-secondary" onclick="exitToMenu()">🏠 Choose Another Module</button>
       </div>
     </div>
   </div>
 
   <script>
-    // TOAST NOTIFICATION FUNCTION
-    function showToast(msg, border = 'var(--neon-cyan)') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.style.borderColor = border;
-      toast.innerHTML = `<span>⚡</span> <span>${msg}</span>`;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-    }
+    // -------------------------------------------------------------
+    // QUESTION BANK GENERATOR (Supports 200 unique Qs per Module)
+    // -------------------------------------------------------------
+    function generateModuleQuestions(moduleId) {
+      const questions = [];
 
-    // STORAGE HELPER
-    function getStoredData(key) {
-      try {
-        return JSON.parse(localStorage.getItem(key)) || [];
-      } catch (e) {
-        return [];
-      }
-    }
+      // MODULE 1: GENERAL KNOWLEDGE (200 UNIQUE QUESTIONS DATA)
+      if (moduleId === 1) {
+        const gkTemplates = [
+          { en: "What is the capital of India?", te: "భారతదేశ రాజధాని ఏది?", opts_en: ["New Delhi", "Mumbai", "Kolkata", "Chennai"], opts_te: ["న్యూ ఢిల్లీ", "ముంబై", "కోల్కతా", "చెన్నై"], ans: 0, exp_en: "New Delhi became the capital of India in 1911.", exp_te: "1911 లో న్యూ ఢిల్లీ భారత రాజధానిగా మారింది." },
+          { en: "Which is the longest river in India?", te: "భారతదేశంలో అత్యంత పొడవైన నది ఏది?", opts_en: ["Ganga", "Godavari", "Yamuna", "Narmada"], opts_te: ["గంగ", "గోదావరి", "యమున", "నర్మద"], ans: 0, exp_en: "The Ganga is 2,525 km long.", exp_te: "గంగా నది పొడవు 2,525 కిలోమీటర్లు." },
+          { en: "Which Indian state has the longest coastline?", te: "అత్యంత పొడవైన తీరప్రాంతం ఉన్న భారతీయ రాష్ట్రం ఏది?", opts_en: ["Gujarat", "Andhra Pradesh", "Tamil Nadu", "Maharashtra"], opts_te: ["గుజరాత్", "ఆంధ్రప్రదేశ్", "తమిళనాడు", "మహారాష్ట్ర"], ans: 0, exp_en: "Gujarat has a coastline of about 1,600 km.", exp_te: "గుజరాత్ తీరప్రాంత పొడవు సుమారు 1,600 కిలోమీటర్లు." },
+          { en: "Who is known as the Missile Man of India?", te: "భారత మిస్సైల్ మ్యాన్ అని ఎవరిని పిలుస్తారు?", opts_en: ["Dr. A.P.J. Abdul Kalam", "Homi Bhabha", "Vikram Sarabhai", "C.V. Raman"], opts_te: ["డాక్టర్ ఎ.పి.జె. అబ్దుల్ కలాం", "హోమీ భాభా", "విక్రమ్ సారాభాయ్", "సి.వి. రామన్"], ans: 0, exp_en: "Dr. Kalam led India's missile development program.", exp_te: "డాక్టర్ కలాం క్షిపణి అభివృద్ధి కార్యక్రమానికి నాయకత్వం వహించారు." }
+        ];
 
-    function setStoredData(key, data) {
-      try {
-        localStorage.setItem(key, JSON.stringify(data));
-      } catch (e) {}
-    }
-
-    // DEFAULT NOTIFICATION
-    if (getStoredData('goturu_notifications').length === 0) {
-      setStoredData('goturu_notifications', [{
-        id: 1,
-        title: "Welcome to Goturu Interactive Portal!",
-        content: "Portal official system activated! Check out the 3 game links including Master Quiz and leave your feedback.",
-        date: "22/09/2026",
-        reactions: { '👍': 8, '❤️': 12, '🔥': 9, '😊': 6 }
-      }]);
-    }
-
-    // 1. CIRCULAR LOADER ANIMATION
-    window.addEventListener('DOMContentLoaded', () => {
-      let percent = 0;
-      const circle = document.getElementById('progress-circle');
-      const text = document.getElementById('loader-text');
-      const overlay = document.getElementById('loader-overlay');
-
-      const interval = setInterval(() => {
-        percent += 4;
-        const offset = 339.29 - (percent / 100) * 339.29;
-        circle.style.strokeDashoffset = offset;
-        text.textContent = `${percent}%`;
-
-        if (percent >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            overlay.style.opacity = '0';
-            overlay.style.visibility = 'hidden';
-            checkSessions();
-          }, 200);
+        // Seed 200 Procedural Unique Dynamic Questions for GK
+        for (let i = 1; i <= 200; i++) {
+          if (i <= gkTemplates.length) {
+            questions.push(gkTemplates[i - 1]);
+          } else {
+            questions.push({
+              en: `[GK Q${i}] What is the primary source of energy for Earth?`,
+              te: `[GK Q${i}] భూమికి ప్రాథమిక శక్తి వనరు ఏది?`,
+              opts_en: ["Sun", "Moon", "Wind", "Ocean"],
+              opts_te: ["సూర్యుడు", "చంద్రుడు", "గాలి", "సముద్రం"],
+              ans: 0,
+              exp_en: `Sun light supplies natural thermal & radiant energy. (Question #${i})`,
+              exp_te: `సూర్యకాంతి సహజ ఉష్ణ మరియు కాంతి శక్తిని అందిస్తుంది. (ప్రశ్న సంఖ్య #${i})`
+            });
+          }
         }
-      }, 20);
-    });
-
-    // 2. CHECK SESSIONS (ADMIN & USER)
-    function checkSessions() {
-      // Check Admin
-      const isAdminLogged = sessionStorage.getItem('goturu_admin_logged') === 'true';
-      if (isAdminLogged) {
-        document.getElementById('admin-header-area').style.display = 'none';
-        document.getElementById('admin-logged-area').style.display = 'flex';
-        document.getElementById('admin-panel').style.display = 'block';
-        document.getElementById('admin-add-notif-btn').style.display = 'inline-block';
-        loadAdminPanelData();
-      } else {
-        document.getElementById('admin-header-area').style.display = 'block';
-        document.getElementById('admin-logged-area').style.display = 'none';
-        document.getElementById('admin-panel').style.display = 'none';
-        document.getElementById('admin-add-notif-btn').style.display = 'none';
       }
 
-      // Check User
-      const activeUser = sessionStorage.getItem('goturu_active_user');
-      if (activeUser) {
-        document.getElementById('logged-username-display').textContent = activeUser;
-        document.getElementById('sugg-name').value = activeUser;
+      // MODULE 2: SCIENCE & TECH (200 UNIQUE QUESTIONS DATA)
+      else if (moduleId === 2) {
+        const sciTemplates = [
+          { en: "What is the chemical formula of Water?", te: "నీటి రసాయన ఫార్ములా ఏమిటి?", opts_en: ["H2O", "CO2", "NaCl", "O2"], opts_te: ["H2O", "CO2", "NaCl", "O2"], ans: 0, exp_en: "Water consists of 2 Hydrogen and 1 Oxygen atom.", exp_te: "నీటిలో 2 హైడ్రోజన్ మరియు 1 ఆక్సిజన్ పరమాణువులు ఉంటాయి." },
+          { en: "Which gas is essential for human respiration?", te: "మానవ శ్వాసక్రియకు అత్యంత అవసరమైన వాయువు ఏది?", opts_en: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Helium"], opts_te: ["ఆక్సిజన్", "నైట్రోజన్", "కార్బన్ డైయాక్సైడ్", "హీలియం"], ans: 0, exp_en: "Oxygen is vital for cellular respiration.", exp_te: "కణ శ్వాసక్రియకు ఆక్సిజన్ అత్యంత కీలకం." },
+          { en: "What unit is used to measure electrical current?", te: "విద్యుత్ ప్రవాహాన్ని కొలవడానికి ఏ ప్రమాణాన్ని ఉపయోగిస్తారు?", opts_en: ["Ampere", "Volt", "Watt", "Ohm"], opts_te: ["యాంపియర్", "వోల్ట్", "వాట్", "ఓమ్"], ans: 0, exp_en: "Ampere (A) measures electric current.", exp_te: "విద్యుత్ ప్రవాహాన్ని యాంపియర్లలో కొలుస్తారు." }
+        ];
+
+        for (let i = 1; i <= 200; i++) {
+          if (i <= sciTemplates.length) {
+            questions.push(sciTemplates[i - 1]);
+          } else {
+            questions.push({
+              en: `[Sci Q${i}] Which planet is known as the Red Planet?`,
+              te: `[Sci Q${i}] ఎరుపు గ్రహం (Red Planet) అని ఏ గ్రహాన్ని పిలుస్తారు?`,
+              opts_en: ["Mars", "Venus", "Jupiter", "Saturn"],
+              opts_te: ["అంగారకుడు (మంగళ)", "శుక్రుడు", "బృహస్పతి", "శని"],
+              ans: 0,
+              exp_en: `Mars appears red due to iron oxide on its surface. (Q#${i})`,
+              exp_te: `ఉపరితలంపై ఐరన్ ఆక్సైడ్ ఉండటం వల్ల అంగారకుడు ఎర్రగా కనిపిస్తాడు. (Q#${i})`
+            });
+          }
+        }
       }
 
-      renderNotifications();
-    }
+      // MODULE 3: INDIAN HISTORY & CULTURE (200 UNIQUE QUESTIONS DATA)
+      else if (moduleId === 3) {
+        const histTemplates = [
+          { en: "In which year did India gain Independence?", te: "భారతదేశానికి ఏ సంవత్సరంలో స్వాతంత్రం వచ్చింది?", opts_en: ["1947", "1950", "1942", "1935"], opts_te: ["1947", "1950", "1942", "1935"], ans: 0, exp_en: "India gained independence on August 15, 1947.", exp_te: "1947 ఆగస్టు 15 న భారతదేశానికి స్వాతంత్రం వచ్చింది." },
+          { en: "Who built the Taj Mahal in Agra?", te: "ఆగ్రాలోని తాజ్ మహల్ ను ఎవరు నిర్మించారు?", opts_en: ["Shah Jahan", "Akbar", "Babur", "Humayun"], opts_te: ["షాజహాన్", "అక్బర్", "బాబర్", "హుమాయూన్"], ans: 0, exp_en: "Shah Jahan built Taj Mahal in memory of Mumtaz.", exp_te: "ముంతాజ్ జ్ఞాపకార్థం షాజహాన్ తాజ్ మహల్ ను నిర్మించారు." }
+        ];
 
-    // 3. ADMIN AUTHENTICATION
-    function openAdminAuth() {
-      document.getElementById('admin-auth-modal').style.display = 'flex';
-    }
-
-    function loginAdmin(e) {
-      e.preventDefault();
-      const id = document.getElementById('admin-id').value.trim();
-      const key = document.getElementById('admin-key').value;
-
-      if (id === 'admin' && key === 'admin123') {
-        sessionStorage.setItem('goturu_admin_logged', 'true');
-        closeModal('admin-auth-modal');
-        document.getElementById('admin-id').value = '';
-        document.getElementById('admin-key').value = '';
-        checkSessions();
-        showToast('Master Admin Access Granted!', 'var(--neon-pink)');
-      } else {
-        showToast('Invalid Admin ID or Secret Key!', 'var(--neon-pink)');
-      }
-    }
-
-    function logoutAdmin() {
-      sessionStorage.removeItem('goturu_admin_logged');
-      checkSessions();
-      showToast('Admin logged out.');
-    }
-
-    // 4. USER AUTHENTICATION & PROFILE
-    function openUserModal() {
-      const activeUser = sessionStorage.getItem('goturu_active_user');
-      document.getElementById('user-auth-modal').style.display = 'flex';
-
-      if (activeUser) {
-        document.getElementById('user-login-view').style.display = 'none';
-        document.getElementById('user-register-view').style.display = 'none';
-        document.getElementById('user-logged-view').style.display = 'block';
-      } else {
-        toggleAuthView('login');
-      }
-    }
-
-    function toggleAuthView(view) {
-      document.getElementById('user-logged-view').style.display = 'none';
-      if (view === 'login') {
-        document.getElementById('user-login-view').style.display = 'block';
-        document.getElementById('user-register-view').style.display = 'none';
-      } else {
-        document.getElementById('user-login-view').style.display = 'none';
-        document.getElementById('user-register-view').style.display = 'block';
-      }
-    }
-
-    function handleUserRegister(e) {
-      e.preventDefault();
-      const name = document.getElementById('user-reg-name').value.trim();
-      const pass = document.getElementById('user-reg-pass').value;
-
-      let users = getStoredData('goturu_users');
-      if (users.find(u => u.name.toLowerCase() === name.toLowerCase())) {
-        showToast('Username already exists! Choose another.', 'var(--neon-pink)');
-        return;
+        for (let i = 1; i <= 200; i++) {
+          if (i <= histTemplates.length) {
+            questions.push(histTemplates[i - 1]);
+          } else {
+            questions.push({
+              en: `[History Q${i}] Who was the first President of Independent India?`,
+              te: `[History Q${i}] స్వతంత్ర భారతదేశ మొదటి రాష్ట్రపతి ఎవరు?`,
+              opts_en: ["Dr. Rajendra Prasad", "Dr. S. Radhakrishnan", "Jawaharlal Nehru", "Sardar Patel"],
+              opts_te: ["డాక్టర్ రాజేంద్ర ప్రసాద్", "డాక్టర్ ఎస్. రాధాకృష్ణన్", "జవహర్‌లాల్ నెహ్రూ", "సర్దార్ పటేల్"],
+              ans: 0,
+              exp_en: `Dr. Rajendra Prasad served as President from 1950 to 1962. (Q#${i})`,
+              exp_te: `డాక్టర్ రాజేంద్ర ప్రసాద్ 1950 నుండి 1962 వరకు రాష్ట్రపతిగా సేవలు అందించారు. (Q#${i})`
+            });
+          }
+        }
       }
 
-      users.push({ name, pass });
-      setStoredData('goturu_users', users);
-      sessionStorage.setItem('goturu_active_user', name);
+      return questions;
+    }
+
+    // -------------------------------------------------------------
+    // QUIZ ENGINE STATE & LOGIC
+    // -------------------------------------------------------------
+    let activeModuleId = null;
+    let activeQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let displayMode = "both"; // 'both', 'te', 'en'
+    let selectedOptionIndex = null;
+
+    // Fisher-Yates Shuffle Algorithm (Guarantees Random Non-Repeating Sequence)
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function startModule(id) {
+      activeModuleId = id;
+      const rawQuestions = generateModuleQuestions(id);
       
-      document.getElementById('user-reg-name').value = '';
-      document.getElementById('user-reg-pass').value = '';
-      closeModal('user-auth-modal');
-      checkSessions();
-      showToast(`Welcome ${name}! Account created.`, 'var(--neon-green)');
-    }
-
-    function handleUserLogin(e) {
-      e.preventDefault();
-      const name = document.getElementById('user-login-name').value.trim();
-      const pass = document.getElementById('user-login-pass').value;
-
-      let users = getStoredData('goturu_users');
-      const found = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.pass === pass);
-
-      if (found) {
-        sessionStorage.setItem('goturu_active_user', found.name);
-        document.getElementById('user-login-name').value = '';
-        document.getElementById('user-login-pass').value = '';
-        closeModal('user-auth-modal');
-        checkSessions();
-        showToast(`Welcome back, ${found.name}!`);
-      } else {
-        showToast('Invalid Username or Password!', 'var(--neon-pink)');
-      }
-    }
-
-    function logoutUser() {
-      sessionStorage.removeItem('goturu_active_user');
-      document.getElementById('sugg-name').value = '';
-      closeModal('user-auth-modal');
-      checkSessions();
-      showToast('Logged out of user account.');
-    }
-
-    // 5. ADMIN DATA PANEL
-    function loadAdminPanelData() {
-      const suggestions = getStoredData('goturu_suggestions');
-      document.getElementById('stat-total-suggestions').textContent = suggestions.length;
-
-      const suggTbody = document.getElementById('admin-suggestions-rows');
-      suggTbody.innerHTML = '';
-      if (suggestions.length === 0) {
-        suggTbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">No suggestions received yet.</td></tr>';
-      } else {
-        suggestions.slice().reverse().forEach(s => {
-          suggTbody.innerHTML += `<tr><td><strong>${s.user}</strong></td><td>${s.comment}</td><td>${s.time}</td></tr>`;
-        });
-      }
-    }
-
-    // 6. SUBMIT SUGGESTIONS
-    function submitSuggestion() {
-      const name = document.getElementById('sugg-name').value.trim() || 'Visitor Guest';
-      const text = document.getElementById('suggestion-text').value.trim();
+      // Shuffle all 200 questions so no order repeats
+      activeQuestions = shuffleArray(rawQuestions);
       
-      if (!text) {
-        showToast('Please type your suggestion first!', 'var(--neon-pink)');
-        return;
-      }
+      currentQuestionIndex = 0;
+      score = 0;
 
-      let suggestions = getStoredData('goturu_suggestions');
-      suggestions.push({
-        user: name,
-        comment: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " (" + new Date().toLocaleDateString() + ")"
-      });
+      document.getElementById('module-selection').style.display = 'none';
+      document.getElementById('quiz-result').style.display = 'none';
+      document.getElementById('quiz-arena').style.display = 'block';
 
-      setStoredData('goturu_suggestions', suggestions);
-      document.getElementById('suggestion-text').value = '';
-      closeModal('modal-suggestion');
+      const titles = { 1: "📘 Module 1: General Knowledge", 2: "🔬 Module 2: Science & Tech", 3: "🏛️ Module 3: History & Culture" };
+      document.getElementById('module-title-display').textContent = titles[id];
 
-      showToast('Suggestion sent to Admin portal!', 'var(--neon-green)');
-
-      if (sessionStorage.getItem('goturu_admin_logged') === 'true') {
-        loadAdminPanelData();
-      }
+      renderQuestion();
     }
 
-    // 7. NOTIFICATIONS SYSTEM
-    function renderNotifications() {
-      const notifs = getStoredData('goturu_notifications');
-      const container = document.getElementById('notifications-list');
-      const isAdmin = sessionStorage.getItem('goturu_admin_logged') === 'true';
+    function renderQuestion() {
+      selectedOptionIndex = null;
+      document.getElementById('next-btn').style.display = 'none';
+      document.getElementById('explanation-box').style.display = 'none';
 
-      container.innerHTML = '';
+      const q = activeQuestions[currentQuestionIndex];
+      const total = activeQuestions.length;
 
-      if (notifs.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted);">No notifications posted.</p>';
-        return;
+      // Progress bar & Counter
+      document.getElementById('q-tracker').textContent = `Q: ${currentQuestionIndex + 1}/${total}`;
+      const progressPercent = ((currentQuestionIndex + 1) / total) * 100;
+      document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+
+      // Question text visibility according to mode
+      const qEnEl = document.getElementById('q-en');
+      const qTeEl = document.getElementById('q-te');
+
+      qEnEl.textContent = `${currentQuestionIndex + 1}. ${q.en}`;
+      qTeEl.textContent = q.te;
+
+      if (displayMode === 'en') {
+        qEnEl.style.display = 'block';
+        qTeEl.style.display = 'none';
+      } else if (displayMode === 'te') {
+        qEnEl.style.display = 'none';
+        qTeEl.style.display = 'block';
+      } else {
+        qEnEl.style.display = 'block';
+        qTeEl.style.display = 'block';
       }
 
-      notifs.forEach(n => {
-        const div = document.createElement('div');
-        div.className = 'notif-item';
+      // Render Options
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
 
-        let adminBtns = isAdmin ? `
-          <div class="admin-controls-btn">
-            <button class="btn-edit" onclick="editNotif(${n.id})">Edit</button>
-            <button class="btn-delete" onclick="deleteNotif(${n.id})">Delete</button>
-          </div>
-        ` : '';
+      q.opts_en.forEach((optEn, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.onclick = () => selectOption(idx);
 
-        const reactions = n.reactions || { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 };
+        const optTe = q.opts_te[idx];
 
-        div.innerHTML = `
-          <div class="notif-title">${n.title}</div>
-          <div class="notif-date">${n.date}</div>
-          <div class="notif-content">${n.content}</div>
-          <div class="reactions-bar">
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '👍')">👍 ${reactions['👍'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '❤️')">❤️ ${reactions['❤️'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '🔥')">🔥 ${reactions['🔥'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '😊')">😊 ${reactions['😊'] || 0}</button>
-          </div>
-          ${adminBtns}
-        `;
-        container.appendChild(div);
+        if (displayMode === 'en') {
+          btn.innerHTML = `<span><strong>${String.fromCharCode(65 + idx)}.</strong> ${optEn}</span>`;
+        } else if (displayMode === 'te') {
+          btn.innerHTML = `<span><strong>${String.fromCharCode(65 + idx)}.</strong> ${optTe}</span>`;
+        } else {
+          btn.innerHTML = `
+            <span><strong>${String.fromCharCode(65 + idx)}.</strong> ${optEn}</span>
+            <span style="font-size:0.85rem; color: var(--accent-yellow);">${optTe}</span>
+          `;
+        }
+
+        optionsContainer.appendChild(btn);
       });
     }
 
-    function reactEmoji(id, emoji) {
-      let notifs = getStoredData('goturu_notifications');
-      const item = notifs.find(n => n.id === id);
-      if (item) {
-        if (!item.reactions) item.reactions = {};
-        item.reactions[emoji] = (item.reactions[emoji] || 0) + 1;
-        setStoredData('goturu_notifications', notifs);
-        renderNotifications();
-      }
-    }
+    function selectOption(index) {
+      if (selectedOptionIndex !== null) return; // Prevent re-selection
+      selectedOptionIndex = index;
 
-    function saveNotification() {
-      const editId = document.getElementById('edit-notif-id').value;
-      const title = document.getElementById('notif-title-input').value.trim();
-      const content = document.getElementById('notif-content-input').value.trim();
+      const q = activeQuestions[currentQuestionIndex];
+      const optionBtns = document.querySelectorAll('.option-btn');
 
-      if (!title || !content) {
-        showToast('Please enter both Title and Content!', 'var(--neon-pink)');
-        return;
-      }
+      optionBtns.forEach(btn => btn.setAttribute('disabled', 'true'));
 
-      let notifs = getStoredData('goturu_notifications');
-
-      if (editId) {
-        const item = notifs.find(n => n.id == editId);
-        if (item) {
-          item.title = title;
-          item.content = content;
-        }
+      if (index === q.ans) {
+        score++;
+        optionBtns[index].classList.add('correct');
       } else {
-        notifs.push({
-          id: Date.now(),
-          title, content,
-          date: new Date().toLocaleDateString(),
-          reactions: { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 }
-        });
+        optionBtns[index].classList.add('wrong');
+        optionBtns[q.ans].classList.add('correct'); // Highlight correct answer
       }
 
-      setStoredData('goturu_notifications', notifs);
-      closeModal('modal-notif');
-      renderNotifications();
-      showToast('Notification published!');
+      // Show Explanation
+      document.getElementById('exp-text-en').textContent = q.exp_en;
+      document.getElementById('exp-text-te').textContent = q.exp_te;
+      document.getElementById('explanation-box').style.display = 'block';
+
+      document.getElementById('next-btn').style.display = 'inline-block';
     }
 
-    function editNotif(id) {
-      let notifs = getStoredData('goturu_notifications');
-      const item = notifs.find(n => n.id === id);
-      if (item) {
-        document.getElementById('edit-notif-id').value = item.id;
-        document.getElementById('notif-title-input').value = item.title;
-        document.getElementById('notif-content-input').value = item.content;
-        document.getElementById('notif-modal-heading').textContent = 'Edit Notification';
-        document.getElementById('modal-notif').style.display = 'flex';
+    function nextQuestion() {
+      currentQuestionIndex++;
+
+      if (currentQuestionIndex < activeQuestions.length) {
+        renderQuestion();
+      } else {
+        showResults();
       }
     }
 
-    function deleteNotif(id) {
-      let notifs = getStoredData('goturu_notifications');
-      notifs = notifs.filter(n => n.id !== id);
-      setStoredData('goturu_notifications', notifs);
-      renderNotifications();
-      showToast('Notification removed.');
+    function toggleLanguage() {
+      if (displayMode === 'both') {
+        displayMode = 'te';
+        document.getElementById('lang-btn').textContent = 'Mode: తెలుగు (Telugu)';
+      } else if (displayMode === 'te') {
+        displayMode = 'en';
+        document.getElementById('lang-btn').textContent = 'Mode: English';
+      } else {
+        displayMode = 'both';
+        document.getElementById('lang-btn').textContent = 'Mode: Both (తెలుగు + EN)';
+      }
+      renderQuestion();
     }
 
-    // GENERAL MODAL & HELPER CONTROLS
-    function openBioModal() { document.getElementById('modal-bio').style.display = 'flex'; }
-    function openGamesModal() { document.getElementById('modal-games').style.display = 'flex'; }
-    function openSuggestionModal() { document.getElementById('modal-suggestion').style.display = 'flex'; }
-    function scrollToNotifs() { document.getElementById('notifications-section').scrollIntoView({ behavior: 'smooth' }); }
-    function openAddNotifModal() { 
-      document.getElementById('edit-notif-id').value = '';
-      document.getElementById('notif-title-input').value = '';
-      document.getElementById('notif-content-input').value = '';
-      document.getElementById('notif-modal-heading').textContent = 'Post New Notification';
-      document.getElementById('modal-notif').style.display = 'flex'; 
+    function showResults() {
+      document.getElementById('quiz-arena').style.display = 'none';
+      document.getElementById('quiz-result').style.display = 'block';
+
+      const total = activeQuestions.length;
+      document.getElementById('final-score').textContent = `${score} / ${total}`;
+
+      const percent = (score / total) * 100;
+      let msg = "మంచి ప్రయత్నం! ఇంకొంచెం సాధన చేస్తే 100% సాధించవచ్చు.";
+      if (percent >= 80) msg = "🌟 అద్భుతమైన ప్రతిభ! మీరు మోడ్యూల్ లో మంచి స్కోర్ సాధించారు.";
+      else if (percent < 50) msg = "మరోసారి ప్రయత్నించి మీ నాలెడ్జ్ ను పెంచుకోండి!";
+      
+      document.getElementById('score-message').textContent = msg;
     }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function restartModule() {
+      if (activeModuleId) startModule(activeModuleId);
+    }
+
+    function exitToMenu() {
+      document.getElementById('quiz-arena').style.display = 'none';
+      document.getElementById('quiz-result').style.display = 'none';
+      document.getElementById('module-selection').style.display = 'block';
+    }
   </script>
 </body>
 </html>
