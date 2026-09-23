@@ -33,7 +33,7 @@
       overflow-x: hidden;
     }
 
-    /* 1. CIRCULAR LOADER - PURE CSS AUTO HIDE (NO STUCK GUARANTEE) */
+    /* 1. CIRCULAR LOADER - PURE CSS AUTO HIDE */
     #loader-overlay {
       position: fixed;
       top: 0;
@@ -47,7 +47,6 @@
       align-items: center;
       z-index: 9999;
       pointer-events: none;
-      /* Pure CSS Animation: 1 second lo automatic ga maayam aipothundhi */
       animation: autoHideLoader 0.4s ease 1s forwards;
     }
 
@@ -84,9 +83,7 @@
       stroke-linecap: round;
     }
 
-    .circle-bg {
-      stroke: #1b2438;
-    }
+    .circle-bg { stroke: #1b2438; }
 
     .circle-progress {
       stroke: var(--neon-cyan);
@@ -131,9 +128,7 @@
       letter-spacing: 1px;
     }
 
-    .portal-logo span {
-      color: var(--neon-cyan);
-    }
+    .portal-logo span { color: var(--neon-cyan); }
 
     .admin-nav-btn {
       background: rgba(255, 0, 127, 0.15);
@@ -190,6 +185,7 @@
       margin-bottom: 30px;
     }
 
+    /* CARD LINK STYLES (NO POPUP BLOCKER ISSUE) */
     .dash-box {
       background: var(--card-bg);
       border: 1px solid #1f2b42;
@@ -199,6 +195,9 @@
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      display: block;
+      text-decoration: none;
+      color: inherit;
     }
 
     .dash-box:hover {
@@ -448,7 +447,7 @@
 </head>
 <body>
 
-  <!-- LOADER OVERLAY (AUTO-HIDES VIA CSS IN 1 SECOND) -->
+  <!-- LOADER OVERLAY -->
   <div id="loader-overlay">
     <div class="brand-logo-anim">GOTURU INTERACTIVE</div>
     <div class="circle-loader">
@@ -481,7 +480,7 @@
       <p style="color: var(--text-muted); margin-top: 5px;">Explore features, interactive games, and share your suggestions directly with Admin.</p>
     </div>
 
-    <!-- 5 DASHBOARD BOXES -->
+    <!-- 5 DASHBOARD BOXES (DIRECT HTML ANCHOR LINKS TO PREVENT POPUP BLOCKS) -->
     <div class="dashboard-grid">
 
       <!-- BOX 1: BIO DATA -->
@@ -491,12 +490,12 @@
         <span class="tap-hint">👉 Tap to View Bio Data</span>
       </div>
 
-      <!-- BOX 2: SPEED TYPING GAME -->
-      <div class="dash-box" onclick="openGame()">
+      <!-- BOX 2: SPEED TYPING GAME (DIRECT LINK) -->
+      <a href="https://type-os-time.vercel.app/" target="_blank" rel="noopener noreferrer" class="dash-box">
         <h3>🎮 TYPE-OS-TIME GAME</h3>
         <p>Play speed-typing interactive game directly on Type-OS-Time engine.</p>
         <span class="tap-hint" style="color: var(--neon-cyan);">👉 Tap to Start Typing Game ⌨️</span>
-      </div>
+      </a>
 
       <!-- BOX 3: WRITE SUGGESTIONS -->
       <div class="dash-box" onclick="openSuggestionModal()">
@@ -512,13 +511,13 @@
         <span class="tap-hint" style="color: #00f3ff;">👉 Tap to View Status</span>
       </div>
 
-      <!-- BOX 5: MASTER QUIZ (200 QUESTIONS) -->
-      <div class="dash-box dash-box-highlight" onclick="openMasterQuiz()">
+      <!-- BOX 5: MASTER QUIZ (DIRECT LINK) -->
+      <a href="https://master-quize-three.vercel.app/" target="_blank" rel="noopener noreferrer" class="dash-box dash-box-highlight">
         <span class="badge-tag">HOT GAME</span>
         <h3 style="color: var(--neon-pink);">🧠 MASTER QUIZ (200 Qs)</h3>
         <p>Play 200 Unique Telugu & English Questions across Movies, GK & UPSC, and Politics.</p>
         <span class="tap-hint" style="color: var(--neon-pink);">👉 Tap to Open Master Quiz Game 🚀</span>
-      </div>
+      </a>
 
     </div>
 
@@ -611,11 +610,6 @@
 
   <!-- JAVASCRIPT ENGINE -->
   <script>
-    const MASTER_QUIZ_URL = "https://master-quize-three.vercel.app/";
-    const TYPING_GAME_URL = "https://type-os-time.vercel.app/";
-
-    function openMasterQuiz() { window.open(MASTER_QUIZ_URL, '_blank'); }
-    function openGame() { window.open(TYPING_GAME_URL, '_blank'); }
     function openBioModal() { document.getElementById('modal-bio').style.display = 'flex'; }
     function openSuggestionModal() { document.getElementById('modal-suggestion').style.display = 'flex'; }
     function openStatusInfo() { alert("Goturu Interactive Portal Status: ALL SYSTEMS OPERATIONAL ⚡"); }
@@ -671,4 +665,7 @@
       if (id === 'admin' && key === 'admin123') {
         try { sessionStorage.setItem('goturu_admin_logged', 'true'); } catch(e){}
         closeModal('admin-auth-modal');
-        document.getEl
+        document.getElementById('admin-id').value = '';
+        document.getElementById('admin-key').value = '';
+        checkAdminSession();
+     
