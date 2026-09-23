@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,20 +7,22 @@
 
   <style>
     :root {
-      --bg-dark: #0b0f19;
-      --card-bg: #121826;
+      --bg-dark: #070a12;
+      --card-bg: #101625;
       --neon-cyan: #00f3ff;
       --neon-pink: #ff007f;
       --neon-green: #00ff66;
+      --neon-yellow: #ffbe0b;
       --text-main: #f0f4f8;
       --text-muted: #8a99ad;
+      --border-color: #1c263b;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     body {
@@ -28,26 +30,57 @@
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
+      padding-bottom: 50px;
     }
 
-    /* 1. CIRCULAR LOADER */
+    /* CUSTOM TOAST NOTIFICATION */
+    #toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--card-bg);
+      border-left: 4px solid var(--neon-cyan);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 6px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* CIRCULAR LOADER */
     #loader-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100vh;
-      background: #07090f;
+      background: #04060a;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
 
     .brand-logo-anim {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 800;
       letter-spacing: 3px;
       color: #fff;
@@ -57,13 +90,13 @@
 
     .circle-loader {
       position: relative;
-      width: 120px;
-      height: 120px;
+      width: 110px;
+      height: 110px;
     }
 
     .circle-loader svg {
-      width: 120px;
-      height: 120px;
+      width: 110px;
+      height: 110px;
       transform: rotate(-90deg);
     }
 
@@ -74,7 +107,7 @@
     }
 
     .circle-bg {
-      stroke: #1b2438;
+      stroke: #162032;
     }
 
     .circle-progress {
@@ -95,7 +128,7 @@
       color: var(--neon-cyan);
     }
 
-    /* 2. HEADER & ADMIN CORNER */
+    /* HEADER */
     header {
       background: var(--card-bg);
       border-bottom: 1px solid rgba(0, 243, 255, 0.2);
@@ -119,43 +152,45 @@
       color: var(--neon-cyan);
     }
 
-    .admin-nav-btn {
-      background: rgba(255, 0, 127, 0.15);
-      border: 1px solid var(--neon-pink);
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      background: rgba(0, 243, 255, 0.1);
+      border: 1px solid var(--neon-cyan);
       color: #fff;
-      padding: 8px 16px;
+      padding: 7px 14px;
       border-radius: 20px;
       cursor: pointer;
       font-weight: bold;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       transition: all 0.3s ease;
     }
 
-    .admin-nav-btn:hover {
+    .btn-action:hover {
+      background: var(--neon-cyan);
+      color: #000;
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    .btn-admin {
+      background: rgba(255, 0, 127, 0.15);
+      border-color: var(--neon-pink);
+    }
+
+    .btn-admin:hover {
       background: var(--neon-pink);
+      color: #fff;
       box-shadow: 0 0 12px var(--neon-pink);
     }
 
-    .logout-btn {
-      background: transparent;
-      border: 1px solid var(--neon-pink);
-      color: var(--neon-pink);
-      padding: 5px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-left: 10px;
-    }
-
-    .logout-btn:hover {
-      background: var(--neon-pink);
-      color: #fff;
-    }
-
-    /* 3. DASHBOARD CONTAINER */
+    /* CONTAINER */
     .container {
-      max-width: 1000px;
-      margin: 30px auto;
+      max-width: 1050px;
+      margin: 25px auto;
       padding: 0 20px;
     }
 
@@ -163,11 +198,13 @@
       background: var(--card-bg);
       border: 1px solid var(--neon-cyan);
       border-radius: 12px;
-      padding: 20px;
+      padding: 20px 25px;
       margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* 3 DASHBOARD BOXES */
+    /* 5 DASHBOARD BOXES */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -177,50 +214,93 @@
 
     .dash-box {
       background: var(--card-bg);
-      border: 1px solid #1f2b42;
+      border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 25px;
+      padding: 22px;
       cursor: pointer;
       transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .dash-box:hover {
       border-color: var(--neon-cyan);
       transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 243, 255, 0.2);
+      box-shadow: 0 8px 25px rgba(0, 243, 255, 0.15);
     }
 
     .dash-box h3 {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: var(--neon-cyan);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .dash-box p {
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
       line-height: 1.4;
+      margin-bottom: 15px;
     }
 
     .dash-box .tap-hint {
-      display: inline-block;
-      margin-top: 15px;
       font-size: 0.8rem;
       color: var(--neon-green);
       font-weight: bold;
     }
 
-    /* NOTIFICATION SECTION */
+    /* GAME CARDS INSIDE MODAL */
+    .game-options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .game-card-btn {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 15px;
+      text-decoration: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .game-card-btn:hover {
+      border-color: var(--neon-cyan);
+      background: #131b2d;
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+    }
+
+    .game-card-info h4 {
+      color: var(--neon-cyan);
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .game-card-info p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* SECTION CARDS */
     .section-card {
       background: var(--card-bg);
-      border: 1px solid #1f2b42;
+      border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 30px;
+      padding: 22px;
+      margin-bottom: 25px;
     }
 
     .section-card h3 {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: var(--neon-cyan);
       margin-bottom: 15px;
       display: flex;
@@ -229,28 +309,28 @@
     }
 
     .notif-item {
-      background: #090d16;
-      border: 1px solid #1f2b42;
+      background: #080c14;
+      border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 15px;
+      padding: 14px;
       margin-bottom: 12px;
     }
 
     .notif-title {
       font-weight: bold;
       color: #fff;
-      font-size: 1rem;
-      margin-bottom: 5px;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
     }
 
     .notif-date {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
       margin-bottom: 8px;
     }
 
     .notif-content {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: #d1d9e6;
       margin-bottom: 12px;
       line-height: 1.4;
@@ -258,23 +338,24 @@
 
     .reactions-bar {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
     }
 
     .emoji-btn {
-      background: #151d2e;
-      border: 1px solid #273754;
+      background: #141c2e;
+      border: 1px solid #253450;
       color: #fff;
       padding: 4px 10px;
       border-radius: 15px;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
+      transition: all 0.2s ease;
     }
 
     .emoji-btn:hover {
       border-color: var(--neon-cyan);
-      background: #1e2a42;
+      background: #1d2a45;
     }
 
     .admin-controls-btn {
@@ -284,7 +365,7 @@
     }
 
     .btn-edit {
-      background: #ff9900;
+      background: var(--neon-yellow);
       color: #000;
       border: none;
       padding: 4px 10px;
@@ -309,28 +390,28 @@
     #admin-panel {
       display: none;
       border: 1px solid var(--neon-pink);
-      background: #181124;
+      background: #160d21;
       border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 30px;
+      padding: 22px;
+      margin-bottom: 25px;
     }
 
     .stats-card {
-      background: #241836;
-      border: 1px solid #3d275a;
+      background: #231238;
+      border: 1px solid #3c1e5e;
       padding: 15px;
       border-radius: 8px;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .stats-card h4 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: var(--neon-pink);
     }
 
     .stats-card p {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
     }
 
@@ -341,36 +422,38 @@
     }
 
     .user-table th, .user-table td {
-      border: 1px solid #2e2240;
-      padding: 10px 12px;
+      border: 1px solid #2d1947;
+      padding: 10px;
       text-align: left;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
 
     .user-table th {
       color: var(--neon-pink);
-      background: #241836;
+      background: #231238;
     }
 
     /* MODAL POPUPS */
     .modal-overlay {
       position: fixed;
-      top:0; left:0; width:100%; height:100vh;
+      top: 0; left: 0; width: 100%; height: 100vh;
       background: rgba(0,0,0,0.85);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 900;
+      backdrop-filter: blur(4px);
     }
 
     .modal-card {
       background: var(--card-bg);
       border: 1px solid var(--neon-cyan);
       border-radius: 12px;
-      padding: 25px;
+      padding: 22px;
       width: 90%;
-      max-width: 420px;
+      max-width: 440px;
       position: relative;
+      box-shadow: 0 10px 30px rgba(0,243,255,0.2);
     }
 
     .close-modal {
@@ -378,19 +461,31 @@
       top: 12px;
       right: 15px;
       color: var(--text-muted);
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       cursor: pointer;
     }
 
-    textarea {
+    .close-modal:hover {
+      color: #fff;
+    }
+
+    input, textarea {
       width: 100%;
-      height: 100px;
-      background: #090d16;
-      border: 1px solid #273754;
-      border-radius: 8px;
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
       color: #fff;
       padding: 10px;
       outline: none;
+      font-size: 0.88rem;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--neon-cyan);
+    }
+
+    textarea {
+      height: 90px;
       resize: none;
       margin-top: 5px;
     }
@@ -403,20 +498,36 @@
       border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 12px;
       width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      opacity: 0.9;
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    .auth-toggle-link {
+      font-size: 0.8rem;
+      color: var(--neon-cyan);
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
+
+  <div id="toast-container"></div>
 
   <!-- CIRCULAR LOADER -->
   <div id="loader-overlay">
     <div class="brand-logo-anim">GOTURU INTERACTIVE</div>
     <div class="circle-loader">
       <svg>
-        <circle class="circle-bg" cx="60" cy="60" r="54"></circle>
-        <circle class="circle-progress" id="progress-circle" cx="60" cy="60" r="54"></circle>
+        <circle class="circle-bg" cx="55" cy="55" r="48"></circle>
+        <circle class="circle-progress" id="progress-circle" cx="55" cy="55" r="48"></circle>
       </svg>
       <div class="loader-percentage" id="loader-text">0%</div>
     </div>
@@ -426,51 +537,85 @@
   <header>
     <div class="portal-logo">GOTURU <span>INTERACTIVE</span></div>
     
-    <!-- ADMIN LOGIN BUTTON ONLY -->
-    <div id="admin-header-btn">
-      <button class="admin-nav-btn" onclick="openAdminAuth()">🔑 Admin Login</button>
-    </div>
+    <div class="header-actions">
+      <!-- USER AUTH BUTTON -->
+      <div id="user-header-area">
+        <button class="btn-action" onclick="openUserModal()">👤 Login / Register</button>
+      </div>
 
-    <!-- DISPLAY WHEN ADMIN LOGGED IN -->
-    <div id="admin-logged-area" style="display: none; align-items: center;">
-      <span style="color: var(--neon-pink); font-weight: bold; font-size: 0.9rem;">👑 Admin Active</span>
-      <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+      <!-- ADMIN LOGIN BUTTON -->
+      <div id="admin-header-area">
+        <button class="btn-action btn-admin" onclick="openAdminAuth()">🔑 Admin Login</button>
+      </div>
+
+      <!-- ADMIN LOGGED AREA -->
+      <div id="admin-logged-area" style="display: none; align-items: center; gap: 8px;">
+        <span style="color: var(--neon-pink); font-weight: bold; font-size: 0.85rem;">👑 Admin Active</span>
+        <button class="btn-action btn-admin" style="padding: 4px 10px;" onclick="logoutAdmin()">Logout</button>
+      </div>
     </div>
   </header>
 
-  <!-- MAIN DASHBOARD -->
+  <!-- MAIN DASHBOARD CONTAINER -->
   <div class="container">
     <div class="welcome-banner">
       <h2>Welcome to <span style="color: var(--neon-cyan);">Goturu Interactive Portal</span>!</h2>
-      <p style="color: var(--text-muted); margin-top: 5px;">Explore features, interactive games, and share your suggestions directly with Admin.</p>
+      <p style="color: var(--text-muted); margin-top: 5px; font-size: 0.9rem;">Explore features, tap games to launch directly, and submit suggestions to Admin.</p>
     </div>
 
-    <!-- 3 DASHBOARD BOXES -->
+    <!-- 5 DASHBOARD BOXES -->
     <div class="dashboard-grid">
+      <!-- BOX 1: BIO DATA -->
       <div class="dash-box" onclick="openBioModal()">
-        <h3>🌐 GOTURU INTERACTIVE</h3>
-        <p>Tap to view official portal launch date and bio data information.</p>
+        <div>
+          <h3>🌐 GOTURU PORTAL</h3>
+          <p>Tap to view official launch date, live status, and system bio data.</p>
+        </div>
         <span class="tap-hint">👉 Tap to View Bio Data</span>
       </div>
 
-      <div class="dash-box" onclick="openGame()">
-        <h3>🎮 INTERACTIVE GAMES</h3>
-        <p>Play speed-typing interactive game directly on Type-OS-Time.</p>
-        <span class="tap-hint" style="color: var(--neon-cyan);">👉 Tap to Start Game</span>
+      <!-- BOX 2: INTERACTIVE GAMES (2 GAME URLS) -->
+      <div class="dash-box" onclick="openGamesModal()">
+        <div>
+          <h3>🎮 INTERACTIVE GAMES</h3>
+          <p>Tap to choose from 2 direct web games & play instantly!</p>
+        </div>
+        <span class="tap-hint" style="color: var(--neon-cyan);">👉 Tap to Play Games</span>
       </div>
 
+      <!-- BOX 3: WRITE SUGGESTIONS -->
       <div class="dash-box" onclick="openSuggestionModal()">
-        <h3>✍️ WRITE YOUR SUGGESTIONS</h3>
-        <p>Send your feedback or comment directly to Admin. No login needed!</p>
-        <span class="tap-hint" style="color: var(--neon-pink);">👉 Tap to Write Comment</span>
+        <div>
+          <h3>✍️ WRITE SUGGESTIONS</h3>
+          <p>Send feedback directly to the Admin Portal. Fast & anonymous option!</p>
+        </div>
+        <span class="tap-hint" style="color: var(--neon-pink);">👉 Tap to Send Comment</span>
+      </div>
+
+      <!-- BOX 4: USER PROFILE -->
+      <div class="dash-box" onclick="openUserModal()">
+        <div>
+          <h3>👤 USER PROFILE & ACCOUNT</h3>
+          <p>Create account, sign in, and manage your portal status.</p>
+        </div>
+        <span class="tap-hint" style="color: var(--neon-yellow);">👉 Tap to Account Access</span>
+      </div>
+
+      <!-- BOX 5: ANNOUNCEMENTS -->
+      <div class="dash-box" onclick="scrollToNotifs()">
+        <div>
+          <h3>📢 ANNOUNCEMENTS</h3>
+          <p>View latest portal news, system updates, and react with emojis.</p>
+        </div>
+        <span class="tap-hint" style="color: var(--neon-green);">👉 Tap to View Updates</span>
       </div>
     </div>
 
     <!-- NOTIFICATION SECTION -->
-    <div class="section-card">
+    <div class="section-card" id="notifications-section">
       <h3>
-        <span>📢 Notifications</span>
-        <button id="admin-add-notif-btn" class="submit-btn" style="padding: 4px 10px; font-size: 0.8rem; width: auto; display: none;" onclick="openAddNotifModal()">+ Add New</button>
+        <span>📢 Portal Notifications & Feed</span>
+        <button id="admin-add-notif-btn" class="submit-btn" style="padding: 4px 10px; font-size: 0.8rem; width: auto; margin-top:0; display: none;" onclick="openAddNotifModal()">+ Add New</button>
       </h3>
       <div id="notifications-list"></div>
     </div>
@@ -484,13 +629,13 @@
         <p>Total User Suggestions Received</p>
       </div>
 
-      <h4 style="color: var(--neon-cyan); margin: 15px 0 10px 0;">💬 Received User Comments & Suggestions</h4>
+      <h4 style="color: var(--neon-cyan); margin: 15px 0 10px 0;">💬 Received User Comments & Feedback</h4>
       <table class="user-table">
         <thead>
           <tr>
-            <th>User / Name</th>
+            <th>User Name</th>
             <th>Suggestion Comment</th>
-            <th>Time</th>
+            <th>Time Received</th>
           </tr>
         </thead>
         <tbody id="admin-suggestions-rows"></tbody>
@@ -498,7 +643,82 @@
     </div>
   </div>
 
-  <!-- ADMIN AUTH MODAL -->
+  <!-- 1. GAMES SELECTION MODAL (2 GAME URLS) -->
+  <div class="modal-overlay" id="modal-games">
+    <div class="modal-card">
+      <span class="close-modal" onclick="closeModal('modal-games')">&times;</span>
+      <h3 style="color: var(--neon-cyan); margin-bottom: 8px;">🎮 Select Game to Play</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">Tap any game below to open and play directly!</p>
+      
+      <div class="game-options-grid">
+        <!-- GAME URL 1 -->
+        <a href="https://index-html-tan-xi.vercel.app/" target="_blank" class="game-card-btn" onclick="closeModal('modal-games')">
+          <div class="game-card-info">
+            <h4>🕹️ Game 1: Index Cyber Matrix</h4>
+            <p>Direct URL: index-html-tan-xi.vercel.app</p>
+          </div>
+          <span style="color: var(--neon-cyan); font-size: 1.2rem;">➔</span>
+        </a>
+
+        <!-- GAME URL 2 -->
+        <a href="https://type-os-time.vercel.app/" target="_blank" class="game-card-btn" onclick="closeModal('modal-games')">
+          <div class="game-card-info">
+            <h4 style="color: var(--neon-pink);">⚡ Game 2: Type-OS-Time</h4>
+            <p>Direct URL: type-os-time.vercel.app</p>
+          </div>
+          <span style="color: var(--neon-pink); font-size: 1.2rem;">➔</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. USER AUTH & PROFILE MODAL -->
+  <div class="modal-overlay" id="user-auth-modal">
+    <div class="modal-card">
+      <span class="close-modal" onclick="closeModal('user-auth-modal')">&times;</span>
+      
+      <div id="user-login-view">
+        <h3 style="color: var(--neon-cyan); margin-bottom: 12px;">👤 User Login</h3>
+        <form onsubmit="handleUserLogin(event)">
+          <div style="margin-bottom: 10px;">
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Username</label>
+            <input type="text" id="user-login-name" placeholder="Enter username" required style="margin-top:4px;">
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Password</label>
+            <input type="password" id="user-login-pass" placeholder="Enter password" required style="margin-top:4px;">
+          </div>
+          <button type="submit" class="submit-btn">Login to Account</button>
+        </form>
+        <div class="auth-toggle-link" onclick="toggleAuthView('register')">Don't have an account? Register here</div>
+      </div>
+
+      <div id="user-register-view" style="display: none;">
+        <h3 style="color: var(--neon-green); margin-bottom: 12px;">📝 Create Account</h3>
+        <form onsubmit="handleUserRegister(event)">
+          <div style="margin-bottom: 10px;">
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Full Name</label>
+            <input type="text" id="user-reg-name" placeholder="Enter your name" required style="margin-top:4px;">
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Choose Password</label>
+            <input type="password" id="user-reg-pass" placeholder="Choose password" required style="margin-top:4px;">
+          </div>
+          <button type="submit" class="submit-btn" style="background: var(--neon-green);">Register Account</button>
+        </form>
+        <div class="auth-toggle-link" onclick="toggleAuthView('login')">Already registered? Login here</div>
+      </div>
+
+      <div id="user-logged-view" style="display: none; text-align: center;">
+        <h3 style="color: var(--neon-cyan); margin-bottom: 10px;">👤 Active Account</h3>
+        <p style="font-size: 1rem; color: #fff; margin-bottom: 5px;">Welcome, <span id="logged-username-display" style="color: var(--neon-green); font-weight: bold;">User</span>!</p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Your Goturu Interactive Portal session is currently active.</p>
+        <button class="submit-btn" style="background: var(--neon-pink); color:#fff;" onclick="logoutUser()">Logout Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ADMIN AUTH MODAL -->
   <div class="modal-overlay" id="admin-auth-modal">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('admin-auth-modal')">&times;</span>
@@ -506,60 +726,75 @@
       <form onsubmit="loginAdmin(event)">
         <div style="margin-bottom: 10px;">
           <label style="font-size: 0.8rem; color: var(--text-muted);">Admin ID</label>
-          <input type="text" id="admin-id" placeholder="Enter Admin ID" required style="width: 100%; background: #090d16; border: 1px solid #273754; padding: 10px; border-radius: 6px; color: #fff; margin-top: 4px;">
+          <input type="text" id="admin-id" placeholder="Enter Admin ID" required style="margin-top:4px;">
         </div>
         <div style="margin-bottom: 15px;">
           <label style="font-size: 0.8rem; color: var(--text-muted);">Secret Key</label>
-          <input type="password" id="admin-key" placeholder="Enter Secret Key" required style="width: 100%; background: #090d16; border: 1px solid #273754; padding: 10px; border-radius: 6px; color: #fff; margin-top: 4px;">
+          <input type="password" id="admin-key" placeholder="Enter Secret Key" required style="margin-top:4px;">
         </div>
         <button type="submit" class="submit-btn" style="background: var(--neon-pink); color: #fff;">Login to Admin Panel</button>
       </form>
     </div>
   </div>
 
-  <!-- BIO DATA MODAL -->
+  <!-- 4. BIO DATA MODAL -->
   <div class="modal-overlay" id="modal-bio">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-bio')">&times;</span>
       <h3 style="color: var(--neon-cyan); margin-bottom: 12px;">GOTURU INTERACTIVE</h3>
-      <div style="font-size: 0.9rem; line-height: 1.6; color: #d1d9e6;">
+      <div style="font-size: 0.88rem; line-height: 1.6; color: #d1d9e6;">
         <p>📌 <strong>Status:</strong> Live Portal Active</p>
         <p>📅 <strong>Portal Launch:</strong> Started on 22/Sep/2026</p>
-        <p>⚡ <strong>System:</strong> Direct Interactive Dashboard</p>
+        <p>⚡ <strong>System:</strong> Direct Interactive Web Platform</p>
+        <p>🎮 <strong>Games Included:</strong> 2 Web Direct Games Connected</p>
       </div>
     </div>
   </div>
 
-  <!-- SUGGESTION MODAL -->
+  <!-- 5. SUGGESTION MODAL -->
   <div class="modal-overlay" id="modal-suggestion">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-suggestion')">&times;</span>
       <h3 style="color: var(--neon-pink); margin-bottom: 8px;">Write Your Suggestion</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Send your feedback directly to Admin.</p>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Send feedback directly to Admin.</p>
       
-      <input type="text" id="sugg-name" placeholder="Your Name (Optional)" style="width: 100%; background: #090d16; border: 1px solid #273754; color: #fff; padding: 8px; border-radius: 6px; margin-bottom: 10px;">
-      <textarea id="suggestion-text" placeholder="Type your suggestion or feedback here..."></textarea>
+      <input type="text" id="sugg-name" placeholder="Your Name (Optional)" style="margin-bottom: 10px;">
+      <textarea id="suggestion-text" placeholder="Type your suggestion or comment here..."></textarea>
       
       <button class="submit-btn" style="background: var(--neon-pink); color: #fff;" onclick="submitSuggestion()">Send Suggestion</button>
     </div>
   </div>
 
-  <!-- NOTIFICATION EDIT MODAL -->
+  <!-- 6. NOTIFICATION EDIT/ADD MODAL -->
   <div class="modal-overlay" id="modal-notif">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-notif')">&times;</span>
       <h3 id="notif-modal-heading" style="color: var(--neon-cyan); margin-bottom: 10px;">Post New Notification</h3>
       <input type="hidden" id="edit-notif-id">
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <input type="text" id="notif-title-input" placeholder="Notification Title" style="background:#090d16; border:1px solid #273754; color:#fff; padding:8px; border-radius:6px;">
-        <textarea id="notif-content-input" placeholder="Notification Body Text..." style="height: 80px;"></textarea>
+        <input type="text" id="notif-title-input" placeholder="Notification Title">
+        <textarea id="notif-content-input" placeholder="Notification Body Text..."></textarea>
         <button class="submit-btn" onclick="saveNotification()">Publish Notification</button>
       </div>
     </div>
   </div>
 
   <script>
-    // STORAGE HELPER FUNCTIONS
+    // TOAST NOTIFICATION FUNCTION
+    function showToast(msg, border = 'var(--neon-cyan)') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.style.borderColor = border;
+      toast.innerHTML = `<span>⚡</span> <span>${msg}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // STORAGE HELPER
     function getStoredData(key) {
       try {
         return JSON.parse(localStorage.getItem(key)) || [];
@@ -574,18 +809,18 @@
       } catch (e) {}
     }
 
-    // DEFAULT INITIAL NOTIFICATIONS
+    // DEFAULT NOTIFICATION
     if (getStoredData('goturu_notifications').length === 0) {
       setStoredData('goturu_notifications', [{
         id: 1,
         title: "Welcome to Goturu Interactive Portal!",
-        content: "Portal official system activated! Check out interactive games and leave your suggestions.",
+        content: "Portal official system activated! Check out the 2 game links and leave your feedback.",
         date: "22/09/2026",
-        reactions: { '👍': 5, '❤️': 8, '🔥': 4, '😊': 6 }
+        reactions: { '👍': 8, '❤️': 12, '🔥': 9, '😊': 6 }
       }]);
     }
 
-    // 1. LOADER ANIMATION
+    // 1. CIRCULAR LOADER ANIMATION
     window.addEventListener('DOMContentLoaded', () => {
       let percent = 0;
       const circle = document.getElementById('progress-circle');
@@ -603,32 +838,40 @@
           setTimeout(() => {
             overlay.style.opacity = '0';
             overlay.style.visibility = 'hidden';
-            checkAdminSession();
+            checkSessions();
           }, 200);
         }
       }, 20);
     });
 
-    // 2. CHECK ADMIN SESSION
-    function checkAdminSession() {
+    // 2. CHECK SESSIONS (ADMIN & USER)
+    function checkSessions() {
+      // Check Admin
       const isAdminLogged = sessionStorage.getItem('goturu_admin_logged') === 'true';
-
       if (isAdminLogged) {
-        document.getElementById('admin-header-btn').style.display = 'none';
+        document.getElementById('admin-header-area').style.display = 'none';
         document.getElementById('admin-logged-area').style.display = 'flex';
         document.getElementById('admin-panel').style.display = 'block';
         document.getElementById('admin-add-notif-btn').style.display = 'inline-block';
         loadAdminPanelData();
       } else {
-        document.getElementById('admin-header-btn').style.display = 'block';
+        document.getElementById('admin-header-area').style.display = 'block';
         document.getElementById('admin-logged-area').style.display = 'none';
         document.getElementById('admin-panel').style.display = 'none';
         document.getElementById('admin-add-notif-btn').style.display = 'none';
       }
+
+      // Check User
+      const activeUser = sessionStorage.getItem('goturu_active_user');
+      if (activeUser) {
+        document.getElementById('logged-username-display').textContent = activeUser;
+        document.getElementById('sugg-name').value = activeUser;
+      }
+
       renderNotifications();
     }
 
-    // 3. ADMIN LOGIN
+    // 3. ADMIN AUTHENTICATION
     function openAdminAuth() {
       document.getElementById('admin-auth-modal').style.display = 'flex';
     }
@@ -643,19 +886,95 @@
         closeModal('admin-auth-modal');
         document.getElementById('admin-id').value = '';
         document.getElementById('admin-key').value = '';
-        checkAdminSession();
-        alert('Welcome Master Admin!');
+        checkSessions();
+        showToast('Master Admin Access Granted!', 'var(--neon-pink)');
       } else {
-        alert('Access Denied: Invalid Admin ID or Secret Key!');
+        showToast('Invalid Admin ID or Secret Key!', 'var(--neon-pink)');
       }
     }
 
     function logoutAdmin() {
       sessionStorage.removeItem('goturu_admin_logged');
-      checkAdminSession();
+      checkSessions();
+      showToast('Admin logged out.');
     }
 
-    // 4. ADMIN PANEL DATA
+    // 4. USER AUTHENTICATION & PROFILE
+    function openUserModal() {
+      const activeUser = sessionStorage.getItem('goturu_active_user');
+      document.getElementById('user-auth-modal').style.display = 'flex';
+
+      if (activeUser) {
+        document.getElementById('user-login-view').style.display = 'none';
+        document.getElementById('user-register-view').style.display = 'none';
+        document.getElementById('user-logged-view').style.display = 'block';
+      } else {
+        toggleAuthView('login');
+      }
+    }
+
+    function toggleAuthView(view) {
+      document.getElementById('user-logged-view').style.display = 'none';
+      if (view === 'login') {
+        document.getElementById('user-login-view').style.display = 'block';
+        document.getElementById('user-register-view').style.display = 'none';
+      } else {
+        document.getElementById('user-login-view').style.display = 'none';
+        document.getElementById('user-register-view').style.display = 'block';
+      }
+    }
+
+    function handleUserRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('user-reg-name').value.trim();
+      const pass = document.getElementById('user-reg-pass').value;
+
+      let users = getStoredData('goturu_users');
+      if (users.find(u => u.name.toLowerCase() === name.toLowerCase())) {
+        showToast('Username already exists! Choose another.', 'var(--neon-pink)');
+        return;
+      }
+
+      users.push({ name, pass });
+      setStoredData('goturu_users', users);
+      sessionStorage.setItem('goturu_active_user', name);
+      
+      document.getElementById('user-reg-name').value = '';
+      document.getElementById('user-reg-pass').value = '';
+      closeModal('user-auth-modal');
+      checkSessions();
+      showToast(`Welcome ${name}! Account created.`, 'var(--neon-green)');
+    }
+
+    function handleUserLogin(e) {
+      e.preventDefault();
+      const name = document.getElementById('user-login-name').value.trim();
+      const pass = document.getElementById('user-login-pass').value;
+
+      let users = getStoredData('goturu_users');
+      const found = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.pass === pass);
+
+      if (found) {
+        sessionStorage.setItem('goturu_active_user', found.name);
+        document.getElementById('user-login-name').value = '';
+        document.getElementById('user-login-pass').value = '';
+        closeModal('user-auth-modal');
+        checkSessions();
+        showToast(`Welcome back, ${found.name}!`);
+      } else {
+        showToast('Invalid Username or Password!', 'var(--neon-pink)');
+      }
+    }
+
+    function logoutUser() {
+      sessionStorage.removeItem('goturu_active_user');
+      document.getElementById('sugg-name').value = '';
+      closeModal('user-auth-modal');
+      checkSessions();
+      showToast('Logged out of user account.');
+    }
+
+    // 5. ADMIN DATA PANEL
     function loadAdminPanelData() {
       const suggestions = getStoredData('goturu_suggestions');
       document.getElementById('stat-total-suggestions').textContent = suggestions.length;
@@ -671,13 +990,13 @@
       }
     }
 
-    // 5. SUBMIT SUGGESTION (DIRECTORY TO ADMIN PORTAL)
+    // 6. SUBMIT SUGGESTIONS
     function submitSuggestion() {
       const name = document.getElementById('sugg-name').value.trim() || 'Visitor Guest';
       const text = document.getElementById('suggestion-text').value.trim();
       
       if (!text) {
-        alert('Please write your suggestion comment first!');
+        showToast('Please type your suggestion first!', 'var(--neon-pink)');
         return;
       }
 
@@ -689,19 +1008,17 @@
       });
 
       setStoredData('goturu_suggestions', suggestions);
-      
-      document.getElementById('sugg-name').value = '';
       document.getElementById('suggestion-text').value = '';
       closeModal('modal-suggestion');
 
-      alert('Meeru pampina suggestion direct ga Admin portal ku cherindhi! Thank you.');
+      showToast('Suggestion sent to Admin portal!', 'var(--neon-green)');
 
       if (sessionStorage.getItem('goturu_admin_logged') === 'true') {
         loadAdminPanelData();
       }
     }
 
-    // 6. NOTIFICATIONS SYSTEM
+    // 7. NOTIFICATIONS SYSTEM
     function renderNotifications() {
       const notifs = getStoredData('goturu_notifications');
       const container = document.getElementById('notifications-list');
@@ -760,7 +1077,7 @@
       const content = document.getElementById('notif-content-input').value.trim();
 
       if (!title || !content) {
-        alert('Please fill out both Title and Content!');
+        showToast('Please enter both Title and Content!', 'var(--neon-pink)');
         return;
       }
 
@@ -784,6 +1101,7 @@
       setStoredData('goturu_notifications', notifs);
       closeModal('modal-notif');
       renderNotifications();
+      showToast('Notification published!');
     }
 
     function editNotif(id) {
@@ -799,18 +1117,18 @@
     }
 
     function deleteNotif(id) {
-      if (confirm('Are you sure you want to delete this notification?')) {
-        let notifs = getStoredData('goturu_notifications');
-        notifs = notifs.filter(n => n.id !== id);
-        setStoredData('goturu_notifications', notifs);
-        renderNotifications();
-      }
+      let notifs = getStoredData('goturu_notifications');
+      notifs = notifs.filter(n => n.id !== id);
+      setStoredData('goturu_notifications', notifs);
+      renderNotifications();
+      showToast('Notification removed.');
     }
 
-    // MODAL CONTROL FUNCTIONS
+    // GENERAL MODAL & HELPER CONTROLS
     function openBioModal() { document.getElementById('modal-bio').style.display = 'flex'; }
-    function openGame() { window.open('https://type-os-time.vercel.app/', '_blank'); }
+    function openGamesModal() { document.getElementById('modal-games').style.display = 'flex'; }
     function openSuggestionModal() { document.getElementById('modal-suggestion').style.display = 'flex'; }
+    function scrollToNotifs() { document.getElementById('notifications-section').scrollIntoView({ behavior: 'smooth' }); }
     function openAddNotifModal() { 
       document.getElementById('edit-notif-id').value = '';
       document.getElementById('notif-title-input').value = '';
