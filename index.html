@@ -16,152 +16,26 @@
       --neon-cyan: #00f3ff;
       --neon-pink: #ff007f;
       --neon-green: #00ff66;
-      --neon-purple: #9d4edd;
-      --neon-amber: #ffb703;
       --text-main: #f0f4f8;
       --text-muted: #8a99ad;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; }
 
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* CIRCULAR LOADER */
+    /* LOADER OVERLAY */
     #loader-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
+      top: 0; left: 0; width: 100%; height: 100vh;
       background: #07090f;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
+      transition: opacity 0.3s ease;
     }
 
-    .brand-logo-anim {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: 3px;
-      color: #fff;
-      margin-bottom: 25px;
-      text-shadow: 0 0 12px var(--neon-cyan), 0 0 24px var(--neon-cyan);
-    }
-
-    .circle-loader {
-      position: relative;
-      width: 120px;
-      height: 120px;
-    }
-
-    .circle-loader svg {
-      width: 120px;
-      height: 120px;
-      transform: rotate(-90deg);
-    }
-
-    .circle-loader circle {
-      fill: none;
-      stroke-width: 8;
-      stroke-linecap: round;
-    }
-
-    .circle-bg {
-      stroke: #1b2438;
-    }
-
-    .circle-progress {
-      stroke: var(--neon-cyan);
-      stroke-dasharray: 339.29;
-      stroke-dashoffset: 339.29;
-      transition: stroke-dashoffset 0.1s linear;
-      filter: drop-shadow(0 0 6px var(--neon-cyan));
-    }
-
-    .loader-percentage {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: var(--neon-cyan);
-    }
-
-    /* HEADER */
-    header {
-      background: rgba(18, 24, 38, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .portal-logo {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: 1px;
-    }
-
-    .portal-logo span {
-      color: var(--neon-cyan);
-    }
-
-    .nav-btn-pink {
-      background: rgba(255, 0, 127, 0.15);
-      border: 1px solid var(--neon-pink);
-      color: #fff;
-      padding: 6px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.85rem;
-      transition: all 0.2s ease;
-    }
-
-    .nav-btn-pink:hover {
-      background: var(--neon-pink);
-      box-shadow: 0 0 12px var(--neon-pink);
-    }
-
-    .nav-btn-cyan {
-      background: rgba(0, 243, 255, 0.15);
-      border: 1px solid var(--neon-cyan);
-      color: #fff;
-      padding: 6px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.85rem;
-      transition: all 0.2s ease;
-    }
-
-    .nav-btn-cyan:hover {
-      background: var(--neon-cyan);
-      color: #000;
-      box-shadow: 0 0 12px var(--neon-cyan);
-    }
-
-    /* DASHBOARD GRID - 5 CARDS */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -175,98 +49,18 @@
       border-radius: 14px;
       padding: 22px;
       cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
     }
 
     .dash-box:hover {
       border-color: var(--neon-cyan);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 25px rgba(0, 243, 255, 0.25);
+      transform: translateY(-3px);
     }
 
-    .dash-box:active {
-      transform: scale(0.98);
-    }
-
-    .dash-box .icon-badge {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      margin-bottom: 12px;
-    }
-
-    .dash-box h3 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 8px;
-    }
-
-    .dash-box p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.45;
-    }
-
-    .dash-box .tap-hint {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 14px;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    /* SECTION CARD */
-    .section-card {
-      background: var(--card-bg);
-      border: 1px solid #1f2b42;
-      border-radius: 14px;
-      padding: 24px;
-      margin-bottom: 30px;
-    }
-
-    .notif-item {
-      background: #090d16;
-      border: 1px solid #1f2b42;
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 14px;
-      transition: border-color 0.2s;
-    }
-
-    .notif-item:hover {
-      border-color: rgba(0, 243, 255, 0.3);
-    }
-
-    .emoji-btn {
-      background: #151d2e;
-      border: 1px solid #273754;
-      color: #fff;
-      padding: 4px 10px;
-      border-radius: 15px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.2s;
-    }
-
-    .emoji-btn:hover {
-      border-color: var(--neon-cyan);
-      background: #1e2a42;
-    }
-
-    /* MODALS */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100vh;
       background: rgba(5, 7, 13, 0.85);
-      backdrop-filter: blur(6px);
       display: none;
       justify-content: center;
       align-items: center;
@@ -274,9 +68,7 @@
       padding: 16px;
     }
 
-    .modal-overlay.active {
-      display: flex;
-    }
+    .modal-overlay.active { display: flex; }
 
     .modal-card {
       background: var(--card-bg);
@@ -284,28 +76,11 @@
       border-radius: 16px;
       padding: 24px;
       width: 100%;
-      max-width: 480px;
+      max-width: 450px;
       position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      max-height: 90vh;
-      overflow-y: auto;
     }
 
-    .close-modal {
-      position: absolute;
-      top: 14px;
-      right: 18px;
-      color: var(--text-muted);
-      font-size: 1.4rem;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    .close-modal:hover {
-      color: #fff;
-    }
-
-    input, textarea, select {
+    input, textarea {
       width: 100%;
       background: #090d16;
       border: 1px solid #273754;
@@ -314,294 +89,226 @@
       padding: 10px 12px;
       outline: none;
       font-size: 0.9rem;
-      transition: border-color 0.2s;
     }
-
-    input:focus, textarea:focus, select:focus {
-      border-color: var(--neon-cyan);
-    }
-
-    /* TOAST NOTIFICATION */
-    #toast-container {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 10000;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .toast {
-      background: #121826;
-      border-left: 4px solid var(--neon-cyan);
-      color: #fff;
-      padding: 12px 18px;
-      border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 250px;
-      max-width: 350px;
-      animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    .toast.success { border-left-color: var(--neon-green); }
-    .toast.error { border-left-color: var(--neon-pink); }
-    .toast.warning { border-left-color: #ffb703; }
-
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
+    input:focus, textarea:focus { border-color: var(--neon-cyan); }
   </style>
 </head>
 <body>
 
-  <!-- CIRCULAR LOADER -->
+  <!-- LOADER -->
   <div id="loader-overlay">
-    <div class="brand-logo-anim"><i class="fa-solid fa-cube text-cyan-400 mr-2"></i>GOTURU INTERACTIVE</div>
-    <div class="circle-loader">
-      <svg>
-        <circle class="circle-bg" cx="60" cy="60" r="54"></circle>
-        <circle class="circle-progress" id="progress-circle" cx="60" cy="60" r="54"></circle>
-      </svg>
-      <div class="loader-percentage" id="loader-text">0%</div>
+    <div class="text-2xl font-extrabold text-white mb-4 tracking-widest"><i class="fa-solid fa-bolt text-cyan-400 mr-2"></i>GOTURU PORTAL</div>
+    <div class="text-cyan-400 font-bold text-lg mb-2" id="loader-text">Loading...</div>
+    <div class="w-48 h-2 bg-gray-800 rounded-full overflow-hidden">
+      <div id="loader-bar" class="h-full bg-cyan-400 w-0 transition-all duration-200"></div>
     </div>
-    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 15px;">Initializing Cyber Systems...</p>
   </div>
 
-  <!-- HEADER NAVIGATION -->
-  <header>
-    <div class="portal-logo flex items-center gap-2">
-      <i class="fa-solid fa-bolt text-cyan-400"></i>
-      GOTURU <span>INTERACTIVE</span>
+  <!-- HEADER -->
+  <header class="bg-[#121826]/95 border-b border-cyan-500/20 px-6 py-3 flex justify-between items-center sticky top-0 z-50">
+    <div class="font-extrabold text-lg text-white flex items-center gap-2">
+      <i class="fa-solid fa-bolt text-cyan-400"></i> GOTURU <span class="text-cyan-400">PORTAL</span>
     </div>
-
     <div class="flex items-center gap-3">
-      <!-- USER STATUS / AUTH BUTTON -->
-      <div id="user-header-area">
-        <button class="nav-btn-cyan" onclick="openModal('modal-user-auth')">
-          <i class="fa-solid fa-user-check mr-1"></i> User Login / Sign Up
-        </button>
-      </div>
-
-      <!-- ADMIN AUTH BUTTON -->
-      <div id="admin-header-area">
-        <button class="nav-btn-pink" onclick="openModal('admin-auth-modal')">
-          <i class="fa-solid fa-key mr-1"></i> Admin Login
-        </button>
-      </div>
+      <button class="bg-cyan-500/15 border border-cyan-400 text-cyan-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-cyan-400 hover:text-black transition" onclick="openModal('modal-user-auth')">
+        <i class="fa-solid fa-user mr-1"></i> User Login
+      </button>
+      <button class="bg-pink-500/15 border border-pink-400 text-pink-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition" onclick="openModal('admin-auth-modal')">
+        <i class="fa-solid fa-key mr-1"></i> Admin Login
+      </button>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
+  <!-- MAIN BODY -->
   <div class="max-w-6xl mx-auto px-4 py-6">
-    <!-- WELCOME BANNER -->
-    <div class="bg-[#121826] border border-[#00f3ff]/30 rounded-2xl p-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div>
-        <h1 class="text-2xl md:text-3xl font-extrabold text-white">
-          Welcome to <span style="color: var(--neon-cyan);">Goturu Interactive Portal</span>!
-        </h1>
-        <p style="color: var(--text-muted);" class="mt-1 text-sm md:text-base">
-          Direct web launcher for interactive games, community feedback, and Admin master controls.
-        </p>
-      </div>
-      <div id="active-user-badge" class="hidden bg-[#182338] border border-cyan-500/40 rounded-xl px-4 py-2 text-xs text-cyan-300 flex items-center gap-2">
-        <i class="fa-solid fa-circle-user text-lg text-cyan-400"></i>
-        <div>
-          <div class="font-bold text-white" id="badge-username">Logged User</div>
-          <div class="text-[10px] text-gray-400" id="badge-status">Member Active</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 5 DASHBOARD BOXES -->
-    <div class="text-lg font-bold text-gray-300 mb-4 flex items-center gap-2">
-      <i class="fa-solid fa-shapes text-pink-500"></i> Portal Features & Modules
+    <div class="bg-[#121826] border border-cyan-500/30 rounded-2xl p-6 mb-8">
+      <h1 class="text-2xl font-bold text-white">Welcome to <span class="text-cyan-400">Goturu Interactive Portal</span></h1>
+      <p class="text-gray-400 text-sm mt-1">Direct web launcher for games, suggestions, and admin master panel.</p>
     </div>
 
     <div class="dashboard-grid">
-      <!-- BOX 1: PORTAL BIO DATA -->
-      <div class="dash-box" onclick="openModal('modal-bio')">
-        <div class="icon-badge bg-cyan-950 text-cyan-400 border border-cyan-500/30">
-          <i class="fa-solid fa-globe"></i>
-        </div>
-        <h3>GOTURU INTERACTIVE</h3>
-        <p>View official portal launch date, system specs, and bio data information.</p>
-        <span class="tap-hint" style="color: var(--neon-cyan);">
-          <i class="fa-solid fa-arrow-right"></i> Tap to View Bio Data
-        </span>
-      </div>
-
-      <!-- BOX 2: CYBER GAMES HUB -->
       <div class="dash-box" onclick="openModal('modal-games-hub')">
-        <div class="icon-badge bg-emerald-950 text-emerald-400 border border-emerald-500/30">
+        <div class="w-10 h-10 rounded-lg bg-emerald-950 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-3 text-lg">
           <i class="fa-solid fa-gamepad"></i>
         </div>
-        <h3>INTERACTIVE GAMES HUB</h3>
-        <p>Tap to play direct URL web games or launch cyber mini-games.</p>
-        <div class="flex flex-wrap gap-2 mt-3" onclick="event.stopPropagation()">
-          <button class="bg-emerald-500/20 hover:bg-emerald-500 border border-emerald-400 text-emerald-300 hover:text-black font-bold text-[11px] px-2.5 py-1 rounded-lg transition flex items-center gap-1" onclick="launchGameUrl(1)">
-            <i class="fa-solid fa-bolt"></i> Game 1 (Type-OS)
-          </button>
-          <button class="bg-purple-500/20 hover:bg-purple-500 border border-purple-400 text-purple-300 hover:text-white font-bold text-[11px] px-2.5 py-1 rounded-lg transition flex items-center gap-1" onclick="launchGameUrl(2)">
-            <i class="fa-solid fa-rocket"></i> Game 2 (Pac Arcade)
-          </button>
-        </div>
-        <span class="tap-hint" style="color: var(--neon-green);">
-          <i class="fa-solid fa-play"></i> Tap Card to Open Games Hub
-        </span>
+        <h3 class="font-bold text-white text-base mb-1">Games Hub</h3>
+        <p class="text-xs text-gray-400">Launch Type-OS and Retro Arcade web games instantly.</p>
       </div>
 
-      <!-- BOX 3: WRITE SUGGESTIONS -->
       <div class="dash-box" onclick="openModal('modal-suggestion')">
-        <div class="icon-badge bg-pink-950 text-pink-400 border border-pink-500/30">
+        <div class="w-10 h-10 rounded-lg bg-pink-950 border border-pink-500/30 text-pink-400 flex items-center justify-center mb-3 text-lg">
           <i class="fa-solid fa-comment-dots"></i>
         </div>
-        <h3>WRITE SUGGESTIONS</h3>
-        <p>Send comments, ideas, or feedback directly to the Admin Master Panel.</p>
-        <span class="tap-hint" style="color: var(--neon-pink);">
-          <i class="fa-solid fa-pen-to-square"></i> Tap to Write Comment
-        </span>
-      </div>
-
-      <!-- BOX 4: USER ACCOUNT & PROFILE -->
-      <div class="dash-box" onclick="handleProfileTap()">
-        <div class="icon-badge bg-purple-950 text-purple-400 border border-purple-500/30">
-          <i class="fa-solid fa-id-card"></i>
-        </div>
-        <h3>USER PROFILE & ACCOUNT</h3>
-        <p>Create account, log in, manage display name, status bio, and view activity.</p>
-        <span class="tap-hint" style="color: var(--neon-purple);">
-          <i class="fa-solid fa-user-gear"></i> Tap to Open Account
-        </span>
-      </div>
-
-      <!-- BOX 5: ANNOUNCEMENTS & EVENTS -->
-      <div class="dash-box" onclick="scrollToSection('notifications-section')">
-        <div class="icon-badge bg-amber-950 text-amber-400 border border-amber-500/30">
-          <i class="fa-solid fa-bullhorn"></i>
-        </div>
-        <h3>COMMUNITY BOARD</h3>
-        <p>Check recent portal announcements, community updates, and add reactions.</p>
-        <span class="tap-hint text-amber-400">
-          <i class="fa-solid fa-list-check"></i> Tap to View Updates
-        </span>
+        <h3 class="font-bold text-white text-base mb-1">Write Suggestion</h3>
+        <p class="text-xs text-gray-400">Send comments and feedback directly to admin.</p>
       </div>
     </div>
 
-    <!-- NOTIFICATION & ANNOUNCEMENTS SECTION -->
-    <div id="notifications-section" class="section-card">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-bold text-cyan-400 flex items-center gap-2">
-          <i class="fa-solid fa-bell"></i> 📢 Portal Announcements & Feed
-        </h3>
-        <button id="admin-add-notif-btn" class="hidden bg-cyan-400 hover:bg-cyan-300 text-black font-bold text-xs px-3 py-1.5 rounded-lg transition" onclick="openModal('modal-add-notif')">
-          <i class="fa-solid fa-plus mr-1"></i> Post Announcement
-        </button>
-      </div>
-      <div id="notifications-list"></div>
-    </div>
-
-    <!-- SECRET ADMIN EXCLUSIVE PANEL -->
+    <!-- ADMIN PANEL (Hidden by default) -->
     <div id="admin-panel" class="hidden border border-pink-500/50 bg-[#181124] rounded-2xl p-6 mb-8">
-      <div class="flex justify-between items-center border-b border-pink-500/30 pb-4 mb-4">
-        <h3 class="text-xl font-bold text-pink-400 flex items-center gap-2">
-          <i class="fa-solid fa-user-shield"></i> 🔑 Secret Admin Master Portal
-        </h3>
-        <button class="bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg" onclick="logoutAdmin()">
-          <i class="fa-solid fa-right-from-bracket mr-1"></i> Admin Logout
-        </button>
+      <div class="flex justify-between items-center border-b border-pink-500/30 pb-3 mb-4">
+        <h3 class="font-bold text-pink-400 text-lg"><i class="fa-solid fa-user-shield mr-2"></i>Admin Master Panel</h3>
+        <button class="bg-pink-600 text-white text-xs px-3 py-1.5 rounded font-bold" onclick="logoutAdmin()">Logout</button>
       </div>
-
-      <!-- ADMIN STATS GRID -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div class="bg-[#241836] border border-[#3d275a] p-4 rounded-xl text-center">
-          <h4 id="stat-total-suggestions" class="text-3xl font-extrabold text-pink-400">0</h4>
-          <p class="text-xs text-gray-400 mt-1">Total Suggestions Received</p>
-        </div>
-        <div class="bg-[#241836] border border-[#3d275a] p-4 rounded-xl text-center">
-          <h4 id="stat-total-users" class="text-3xl font-extrabold text-cyan-400">0</h4>
-          <p class="text-xs text-gray-400 mt-1">Registered Portal Users</p>
-        </div>
-        <div class="bg-[#241836] border border-[#3d275a] p-4 rounded-xl text-center">
-          <h4 id="stat-total-notifs" class="text-3xl font-extrabold text-emerald-400">0</h4>
-          <p class="text-xs text-gray-400 mt-1">Active Notifications</p>
-        </div>
-      </div>
-
-      <!-- SUGGESTIONS TABLE -->
-      <h4 class="text-cyan-400 font-bold text-sm mb-3">💬 Received User Feedback & Suggestions</h4>
+      <p class="text-xs text-gray-300 mb-3">Total Suggestions Received: <span id="admin-sug-count" class="font-bold text-pink-400">0</span></p>
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs border-collapse">
+        <table class="w-full text-xs text-left">
           <thead>
             <tr class="bg-[#241836] text-pink-300">
-              <th class="p-3 border border-[#3d275a]">User / Name</th>
-              <th class="p-3 border border-[#3d275a]">Suggestion Comment</th>
-              <th class="p-3 border border-[#3d275a]">Timestamp</th>
-              <th class="p-3 border border-[#3d275a]">Action</th>
+              <th class="p-2 border border-gray-700">Name</th>
+              <th class="p-2 border border-gray-700">Suggestion</th>
+              <th class="p-2 border border-gray-700">Time</th>
             </tr>
           </thead>
-          <tbody id="admin-suggestions-rows" class="divide-y divide-[#2e2240] text-gray-200"></tbody>
+          <tbody id="admin-sug-tbody"></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- MODALS SECTION -->
-
-  <!-- 1. GAMES HUB MODAL -->
+  <!-- MODALS -->
   <div class="modal-overlay" id="modal-games-hub">
-    <div class="modal-card max-w-lg">
-      <span class="close-modal" onclick="closeModal('modal-games-hub')">&times;</span>
-      <h3 class="text-xl font-bold text-emerald-400 mb-1 flex items-center gap-2">
-        <i class="fa-solid fa-gamepad"></i> Interactive Games Launch Hub
-      </h3>
-      <p class="text-xs text-gray-400 mb-4">Tap any game button to directly open web URLs.</p>
-
+    <div class="modal-card">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-bold text-emerald-400">Games Launcher</h3>
+        <button class="text-gray-400 hover:text-white" onclick="closeModal('modal-games-hub')">&times;</button>
+      </div>
       <div class="space-y-3">
-        <div class="bg-[#090d16] border border-cyan-500/40 rounded-xl p-3.5 flex justify-between items-center gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="bg-cyan-500/20 text-cyan-300 font-bold text-[10px] px-2 py-0.5 rounded border border-cyan-500/40">GAME TYPE 1</span>
-              <h4 class="font-bold text-white text-sm">⌨️ Type-OS-Time (Speed Typer Web)</h4>
-            </div>
-            <p class="text-xs text-gray-400 mt-1">Full speed typing web application.</p>
-            <div class="text-[10px] text-cyan-400/80 font-mono mt-0.5">https://type-os-time.vercel.app/</div>
-          </div>
-          <button class="bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs px-3.5 py-2 rounded-lg transition whitespace-nowrap" onclick="launchGameUrl(1)">
-            <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Open Web
-          </button>
-        </div>
-
-        <div class="bg-[#090d16] border border-purple-500/40 rounded-xl p-3.5 flex justify-between items-center gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="bg-purple-500/20 text-purple-300 font-bold text-[10px] px-2 py-0.5 rounded border border-purple-500/40">GAME TYPE 2</span>
-              <h4 class="font-bold text-white text-sm">🕹️ Retro Cyber Arcade (Pacman Live)</h4>
-            </div>
-            <p class="text-xs text-gray-400 mt-1">Direct retro arcade web game.</p>
-            <div class="text-[10px] text-purple-400/80 font-mono mt-0.5">https://pacman.live/</div>
-          </div>
-          <button class="bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs px-3.5 py-2 rounded-lg transition whitespace-nowrap" onclick="launchGameUrl(2)">
-            <i class="fa-solid fa-gamepad mr-1"></i> Open Web
-          </button>
-        </div>
+        <button class="w-full bg-cyan-500 text-black font-bold py-2.5 rounded-lg text-xs" onclick="window.open('https://type-os-time.vercel.app/', '_blank')">Launch Type-OS Game</button>
+        <button class="w-full bg-purple-600 text-white font-bold py-2.5 rounded-lg text-xs" onclick="window.open('https://pacman.live/', '_blank')">Launch Pacman Arcade</button>
       </div>
     </div>
   </div>
 
-  <!-- 2. BIO DATA MODAL -->
-  <div class="modal-overlay" id="modal-bio">
+  <div class="modal-overlay" id="modal-suggestion">
     <div class="modal-card">
-      <span class="close-modal" onclick="closeModal('modal-bio')">&times;</span>
-      <h3 class="text-xl font-bold text-cyan-400 mb-2 flex items-center gap-2">
-        <i class="fa-solid fa-globe"></i> Goturu Interactive Specs
-      </h3>
-      <div class="space-y-3 text-xs tex
-      
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-bold text-pink-400">Write Suggestion</h3>
+        <button class="text-gray-400 hover:text-white" onclick="closeModal('modal-suggestion')">&times;</button>
+      </div>
+      <form onsubmit="submitSuggestion(event)">
+        <input type="text" id="sug-name" required placeholder="Your Name..." class="mb-3">
+        <textarea id="sug-text" rows="3" required placeholder="Your Suggestion..." class="mb-3"></textarea>
+        <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded text-xs">Send Suggestion</button>
+      </form>
+    </div>
+  </div>
 
+  <div class="modal-overlay" id="admin-auth-modal">
+    <div class="modal-card max-w-sm">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-bold text-pink-400">Admin Login</h3>
+        <button class="text-gray-400 hover:text-white" onclick="closeModal('admin-auth-modal')">&times;</button>
+      </div>
+      <form onsubmit="handleAdminLogin(event)">
+        <input type="text" id="admin-user" required placeholder="Username" class="mb-3">
+        <input type="password" id="admin-pass" required placeholder="Password" class="mb-3">
+        <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded text-xs">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-user-auth">
+    <div class="modal-card max-w-sm">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-bold text-cyan-400">User Login</h3>
+        <button class="text-gray-400 hover:text-white" onclick="closeModal('modal-user-auth')">&times;</button>
+      </div>
+      <form onsubmit="handleUserLogin(event)">
+        <input type="text" id="user-name-input" required placeholder="Enter Username..." class="mb-3">
+        <button type="submit" class="w-full bg-cyan-400 text-black font-bold py-2 rounded text-xs">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Fast Loader Script
+    window.addEventListener('DOMContentLoaded', () => {
+      let bar = document.getElementById('loader-bar');
+      let overlay = document.getElementById('loader-overlay');
+      bar.style.width = '100%';
+      setTimeout(() => {
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.remove(), 300);
+      }, 400);
+
+      if(localStorage.getItem('goturu_admin_auth') === 'true') {
+        showAdminPanel();
+      }
+    });
+
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    // Suggestions Storage
+    let suggestions = JSON.parse(localStorage.getItem('goturu_suggestions')) || [];
+
+    function submitSuggestion(e) {
+      e.preventDefault();
+      let name = document.getElementById('sug-name').value;
+      let text = document.getElementById('sug-text').value;
+      let time = new Date().toLocaleString();
+
+      suggestions.unshift({ name, text, time });
+      localStorage.setItem('goturu_suggestions', JSON.stringify(suggestions));
       
+      document.getElementById('sug-name').value = '';
+      document.getElementById('sug-text').value = '';
+      closeModal('modal-suggestion');
+      alert('Suggestion sent successfully to Admin!');
+      if(localStorage.getItem('goturu_admin_auth') === 'true') showAdminPanel();
+    }
+
+    // Admin Login Logic
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      let u = document.getElementById('admin-user').value;
+      let p = document.getElementById('admin-pass').value;
+
+      if(u === 'GOWRISANKAR@ADMIN' && p === 'ADMIN @GOTURU..') {
+        localStorage.setItem('goturu_admin_auth', 'true');
+        closeModal('admin-auth-modal');
+        showAdminPanel();
+        alert('Admin Login Successful!');
+      } else {
+        alert('Invalid Admin Credentials!');
+      }
+    }
+
+    function showAdminPanel() {
+      document.getElementById('admin-panel').classList.remove('hidden');
+      document.getElementById('admin-sug-count').innerText = suggestions.length;
+      let tbody = document.getElementById('admin-sug-tbody');
+      tbody.innerHTML = '';
+      if(suggestions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="p-2 text-center text-gray-500">No suggestions yet.</td></tr>`;
+        return;
+      }
+      suggestions.forEach(s => {
+        tbody.innerHTML += `<tr><td class="p-2 border border-gray-700 text-cyan-300 font-bold">${s.name}</td><td class="p-2 border border-gray-700">${s.text}</td><td class="p-2 border border-gray-700 text-gray-400">${s.time}</td></tr>`;
+      });
+    }
+
+    function logoutAdmin() {
+      localStorage.removeItem('goturu_admin_auth');
+      document.getElementById('admin-panel').classList.add('hidden');
+      alert('Admin Logged Out.');
+    }
+
+    function handleUserLogin(e) {
+      e.preventDefault();
+      let name = document.getElementById('user-name-input').value;
+      localStorage.setItem('goturu_username', name);
+      closeModal('modal-user-auth');
+      alert('Welcome ' + name + '!');
+    }
+  </script>
+</body>
+  </html>
+        
+
     
+        
+        
+        
+  
