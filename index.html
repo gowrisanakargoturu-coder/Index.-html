@@ -1,9 +1,9 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GOTURU PORTAL - PLAY STORE & GAMES HUB</title>
+  <title>GOTURU INTERACTIVE PORTAL</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -64,7 +64,7 @@
       border-radius: 16px;
       padding: 24px;
       width: 100%;
-      max-width: 550px;
+      max-width: 500px;
       position: relative;
     }
 
@@ -79,9 +79,44 @@
       font-size: 0.9rem;
     }
     input:focus, textarea:focus { border-color: var(--neon-cyan); }
+
+    .notif-item {
+      background: #090d16;
+      border: 1px solid #1f2b42;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    .notif-item:hover { border-color: rgba(0, 243, 255, 0.3); }
+
+    .emoji-btn {
+      background: #151d2e;
+      border: 1px solid #273754;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .emoji-btn:hover { border-color: var(--neon-cyan); background: #1e2a42; }
+
+    #website-loader {
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
   </style>
 </head>
 <body>
+
+  <!-- WEBSITE ENTRY LOADING ANIMATION -->
+  <div id="website-loader" class="fixed inset-0 bg-[#0b0f19] z-[99999] flex flex-col items-center justify-center">
+    <div class="w-14 h-14 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mb-4 shadow-[0_0_20px_rgba(0,243,255,0.4)]"></div>
+    <h2 class="text-white font-extrabold text-xl tracking-wider flex items-center gap-2">
+      <i class="fa-solid fa-bolt text-cyan-400"></i> GOTURU <span class="text-cyan-400">PORTAL</span>
+    </h2>
+    <p class="text-cyan-400/80 text-xs mt-2 animate-pulse font-semibold">Initializing Interactive Web Experience...</p>
+  </div>
 
   <!-- HEADER -->
   <header class="bg-[#121826]/95 border-b border-cyan-500/20 px-6 py-3 flex flex-wrap justify-between items-center sticky top-0 z-50 gap-3">
@@ -98,14 +133,14 @@
     </div>
   </header>
 
-  <!-- MAIN BODY -->
+  <!-- MAIN BODY GRID -->
   <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
     
     <!-- LEFT 2 COLS -->
     <div class="lg:col-span-2 space-y-6">
       <div class="bg-[#121826] border border-cyan-500/30 rounded-2xl p-6">
-        <h1 class="text-2xl font-bold text-white">Welcome to <span class="text-cyan-400">Goturu Play Store & Games Hub</span></h1>
-        <p class="text-gray-400 text-sm mt-1">Play web games instantly in fullscreen without downloading any files.</p>
+        <h1 class="text-2xl font-bold text-white">Welcome to <span class="text-cyan-400">Goturu Interactive Portal</span></h1>
+        <p class="text-gray-400 text-sm mt-1">Direct web launcher for games, feedback, and live notification broadcast.</p>
       </div>
 
       <div class="dashboard-grid">
@@ -113,8 +148,8 @@
           <div class="w-10 h-10 rounded-lg bg-emerald-950 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-3 text-lg">
             <i class="fa-solid fa-gamepad"></i>
           </div>
-          <h3 class="font-bold text-white text-base mb-1">Play Store Hub</h3>
-          <p class="text-xs text-gray-400">Click to browse and play games linked by Admin.</p>
+          <h3 class="font-bold text-white text-base mb-1">Games Hub</h3>
+          <p class="text-xs text-gray-400">Launch HTML5 web games instantly in full screen.</p>
         </div>
 
         <div class="dash-box" onclick="openModal('modal-suggestion')">
@@ -122,54 +157,44 @@
             <i class="fa-solid fa-comment-dots"></i>
           </div>
           <h3 class="font-bold text-white text-base mb-1">Write Suggestion</h3>
-          <p class="text-xs text-gray-400">Send feedback directly to admin panel.</p>
+          <p class="text-xs text-gray-400">Send comments and feedback directly to admin panel.</p>
         </div>
       </div>
 
       <!-- ADMIN PANEL -->
-      <div id="admin-panel" class="hidden border border-pink-500/50 bg-[#181124] rounded-2xl p-6 space-y-6">
-        <div class="flex justify-between items-center border-b border-pink-500/30 pb-3">
-          <h3 class="font-bold text-pink-400 text-base"><i class="fa-solid fa-user-shield mr-2"></i>Admin Play Store Manager</h3>
+      <div id="admin-panel" class="hidden border border-pink-500/50 bg-[#181124] rounded-2xl p-6">
+        <div class="flex justify-between items-center border-b border-pink-500/30 pb-3 mb-4">
+          <h3 class="font-bold text-pink-400 text-base"><i class="fa-solid fa-user-shield mr-2"></i>Admin Master Panel</h3>
           <button class="bg-pink-600 text-white text-xs px-3 py-1.5 rounded font-bold" onclick="logoutAdmin()">Logout</button>
         </div>
-
-        <!-- UPLOAD GAME FORM -->
-        <div class="bg-[#121826] border border-pink-500/30 rounded-xl p-4">
-          <h4 class="font-bold text-emerald-400 text-sm mb-3"><i class="fa-solid fa-cloud-arrow-up mr-2"></i>Link & Publish Game to Play Store</h4>
-          <form onsubmit="handlePublishGame(event)" class="space-y-3">
-            <input type="text" id="new-game-title" required placeholder="Game Title (e.g. Tree Planter Game)">
-            <input type="text" id="new-game-desc" required placeholder="Short Description...">
-            <textarea id="new-game-code" rows="4" required placeholder="Paste full HTML code here to link it to Play Store..."></textarea>
-            <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold py-2 rounded text-xs transition">
-              Publish & Link to Play Store
-            </button>
-          </form>
-        </div>
-
-        <!-- DELETE GAMES TABLE -->
-        <div>
-          <h4 class="font-bold text-pink-300 text-sm mb-2">Manage Store Games (<span id="admin-game-count">0</span>)</h4>
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs text-left">
-              <thead>
-                <tr class="bg-[#241836] text-pink-300">
-                  <th class="p-2 border border-gray-700">Game Title</th>
-                  <th class="p-2 border border-gray-700">Action</th>
-                </tr>
-              </thead>
-              <tbody id="admin-games-tbody"></tbody>
-            </table>
-          </div>
+        <p class="text-xs text-gray-300 mb-3">Total Suggestions Received: <span id="admin-sug-count" class="font-bold text-pink-400">0</span></p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr class="bg-[#241836] text-pink-300">
+                <th class="p-2 border border-gray-700">Name</th>
+                <th class="p-2 border border-gray-700">Suggestion</th>
+                <th class="p-2 border border-gray-700">Time</th>
+              </tr>
+            </thead>
+            <tbody id="admin-sug-tbody"></tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT 1 COL -->
+    <!-- RIGHT 1 COL: NOTIFICATIONS PANEL -->
     <div class="bg-[#121826] border border-cyan-500/30 rounded-2xl p-5 h-fit sticky top-20">
-      <h3 class="font-bold text-cyan-400 text-base mb-4 border-b border-gray-800 pb-3 flex items-center gap-2">
-        <i class="fa-solid fa-bullhorn"></i> Portal Announcements
-      </h3>
-      <p class="text-xs text-gray-400 leading-relaxed">Admin can publish games directly into the Play Store. All users can play instantly without downloads.</p>
+      <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-3">
+        <h3 class="font-bold text-cyan-400 text-base flex items-center gap-2">
+          <i class="fa-solid fa-bullhorn"></i> Notifications & Feed
+        </h3>
+        <button id="admin-add-notif-btn" class="hidden bg-cyan-400 text-black text-[11px] font-extrabold px-2.5 py-1 rounded hover:bg-cyan-300 transition" onclick="openModal('modal-add-notif')">
+          <i class="fa-solid fa-plus mr-1"></i> Post
+        </button>
+      </div>
+
+      <div id="notifications-container" class="space-y-3 max-h-[500px] overflow-y-auto pr-1"></div>
     </div>
 
   </div>
@@ -179,7 +204,7 @@
     <div class="modal-card max-w-lg">
       <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-3">
         <h3 class="font-bold text-emerald-400 text-base flex items-center gap-2">
-          <i class="fa-solid fa-store"></i> Goturu Play Store Catalog
+          <i class="fa-solid fa-gamepad"></i> Games Hub Dashboard
         </h3>
         <button class="text-gray-400 hover:text-white text-lg font-bold" onclick="closeModal('modal-games-hub')">&times;</button>
       </div>
@@ -187,29 +212,46 @@
     </div>
   </div>
 
-  <!-- FULLSCREEN GAME PLAYER -->
+  <!-- TRUE FULLSCREEN BROWSER GAME PLAYER WITH GAME LOADING ANIMATION -->
   <div id="modal-active-game-player" class="fixed inset-0 w-screen h-screen bg-[#07090f] z-[9999] flex flex-col hidden">
-    <div class="bg-[#121826] border-b border-emerald-500/30 px-6 py-3 flex justify-between items-center shrink-0">
-      <h3 id="active-game-title" class="font-bold text-emerald-400 text-sm">Game Player</h3>
-      <button class="bg-red-600 hover:bg-red-500 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition" onclick="closeActiveGamePlayer()">
-        <i class="fa-solid fa-arrow-left mr-1"></i> Exit Play Store Game
-      </button>
+    <div class="bg-[#121826] border-b border-emerald-500/30 px-6 py-3 flex justify-between items-center shrink-0 shadow-xl">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-500/40 text-emerald-400 flex items-center justify-center">
+          <i class="fa-solid fa-gamepad"></i>
+        </div>
+        <h3 id="active-game-title" class="font-bold text-emerald-400 text-sm sm:text-base">Game Player</h3>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="bg-emerald-500/20 hover:bg-emerald-500 hover:text-black text-emerald-300 border border-emerald-500/40 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1" onclick="toggleGameBrowserFullscreen()">
+          <i class="fa-solid fa-expand"></i> <span class="hidden sm:inline">Fullscreen</span>
+        </button>
+        <button class="bg-red-600 hover:bg-red-500 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-lg" onclick="closeActiveGamePlayer()">
+          <i class="fa-solid fa-arrow-left"></i> <span>Back to Portal</span>
+        </button>
+      </div>
     </div>
+
+    <!-- Viewport with Game Loading Overlay -->
     <div class="flex-1 w-full h-full bg-black relative">
-      <iframe id="active-game-iframe" src="" class="w-full h-full border-0 absolute inset-0 z-10" allowfullscreen></iframe>
+      <div id="game-loader" class="absolute inset-0 bg-[#07090f] z-20 flex flex-col items-center justify-center">
+        <div class="w-12 h-12 border-4 border-emerald-400 border-t-transparent rounded-full animate-spin mb-3 shadow-[0_0_15px_rgba(16,185,129,0.4)]"></div>
+        <h4 class="text-emerald-400 font-bold text-base">Goturu Interactive Games Hub</h4>
+        <p class="text-xs text-gray-400 mt-1 animate-pulse">Loading Game, Please Wait...</p>
+      </div>
+      <iframe id="active-game-iframe" src="" class="w-full h-full border-0 absolute inset-0 z-10" onload="hideGameLoader()" allowfullscreen></iframe>
     </div>
   </div>
 
-  <!-- MODALS -->
-  <div class="modal-overlay" id="modal-user-auth">
-    <div class="modal-card max-w-sm">
+  <div class="modal-overlay" id="modal-suggestion">
+    <div class="modal-card">
       <div class="flex justify-between items-center mb-3">
-        <h3 class="font-bold text-cyan-400">User Login</h3>
-        <button class="text-gray-400 hover:text-white" onclick="closeModal('modal-user-auth')">&times;</button>
+        <h3 class="font-bold text-pink-400">Write Suggestion</h3>
+        <button class="text-gray-400 hover:text-white" onclick="closeModal('modal-suggestion')">&times;</button>
       </div>
-      <form onsubmit="handleUserLogin(event)">
-        <input type="text" id="user-name-input" required placeholder="Enter Your Name..." class="mb-3">
-        <button type="submit" class="w-full bg-cyan-400 text-black font-bold py-2 rounded text-xs">Save</button>
+      <form onsubmit="submitSuggestion(event)">
+        <input type="text" id="sug-name" required placeholder="Your Name..." class="mb-3">
+        <textarea id="sug-text" rows="3" required placeholder="Your Suggestion..." class="mb-3"></textarea>
+        <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded text-xs">Send Suggestion</button>
       </form>
     </div>
   </div>
@@ -228,214 +270,91 @@
     </div>
   </div>
 
-  <div class="modal-overlay" id="modal-suggestion">
-    <div class="modal-card">
+  <div class="modal-overlay" id="modal-user-auth">
+    <div class="modal-card max-w-sm">
       <div class="flex justify-between items-center mb-3">
-        <h3 class="font-bold text-pink-400">Write Suggestion</h3>
-        <button class="text-gray-400 hover:text-white" onclick="closeModal('modal-suggestion')">&times;</button>
+        <h3 class="font-bold text-cyan-400">User Login</h3>
+        <button class="text-gray-400 hover:text-white" onclick="closeModal('modal-user-auth')">&times;</button>
       </div>
-      <form onsubmit="submitSuggestion(event)">
-        <input type="text" id="sug-name" required placeholder="Your Name..." class="mb-3">
-        <textarea id="sug-text" rows="3" required placeholder="Suggestion..." class="mb-3"></textarea>
-        <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded text-xs">Send</button>
+      <form onsubmit="handleUserLogin(event)">
+        <input type="text" id="user-name-input" required placeholder="Enter Username..." class="mb-3">
+        <button type="submit" class="w-full bg-cyan-400 text-black font-bold py-2 rounded text-xs">Save</button>
       </form>
     </div>
   </div>
 
+  <div class="modal-overlay" id="modal-add-notif">
+    <div class="modal-card">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-bold text-cyan-400" id="notif-modal-title">Post Notification</h3>
+        <button class="text-gray-400 hover:text-white" onclick="closeModal('modal-add-notif')">&times;</button>
+      </div>
+      <form onsubmit="saveNotification(event)">
+        <input type="hidden" id="edit-notif-id">
+        <input type="text" id="notif-title-input" required placeholder="Announcement Title..." class="mb-3">
+        <textarea id="notif-content-input" rows="3" required placeholder="Notification content..." class="mb-3"></textarea>
+        <button type="submit" class="w-full bg-cyan-400 text-black font-bold py-2 rounded text-xs">Publish Announcement</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- CUSTOM MESSAGE BOX -->
   <div class="modal-overlay" id="modal-custom-alert" style="z-index: 10000;">
     <div class="modal-card max-w-sm text-center">
+      <div class="text-3xl text-cyan-400 mb-2"><i class="fa-solid fa-circle-info"></i></div>
       <h3 id="custom-alert-title" class="font-bold text-white text-base mb-2">Notice</h3>
       <p id="custom-alert-message" class="text-xs text-gray-300 mb-4"></p>
-      <button onclick="closeModal('modal-custom-alert')" class="w-full bg-cyan-400 text-black font-bold py-2 rounded text-xs">OK</button>
+      <button onclick="closeCustomAlert()" class="w-full bg-cyan-400 hover:bg-cyan-300 text-black font-bold py-2 rounded text-xs">OK</button>
     </div>
   </div>
 
   <script>
-    // DEFAULT TREE GAME HTML
-    const defaultTreeGameHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style>
-          body { background: #07090f; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
-          .init, .won { position: fixed; inset: 0; background: rgba(7,9,15,0.95); display: flex; justify-content: center; align-items: center; z-index: 10; text-align: center; padding: 20px; }
-          .hidden { display: none !important; }
-          .center1, .center { max-width: 400px; }
-          h1 { color: #00ff66; font-size: 2rem; margin-bottom: 15px; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
-          p { color: #8a99ad; font-size: 1rem; margin-bottom: 20px; line-height: 1.5; }
-          .floating { animation: float 1.5s infinite alternate ease-in-out; cursor: pointer; }
-          @keyframes float { from { transform: translateY(0); } to { transform: translateY(-8px); } }
-          .bold { font-weight: bold; color: #00f3ff; font-size: 1.2rem; background: rgba(0,243,255,0.1); border: 1px solid #00f3ff; padding: 10px 20px; border-radius: 8px; display: inline-block; }
-          .container { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-          .game { display: grid; grid-template-columns: repeat(4, 75px); gap: 12px; }
-          .cell { width: 75px; height: 75px; background: #121826; border: 2px solid #273754; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 2rem; transition: all 0.2s; }
-          .cell:hover { border-color: #00ff66; transform: scale(1.05); }
-          .cell.tree { background: rgba(0,255,102,0.15); border-color: #00ff66; }
-          .cell.factory { background: rgba(255,0,127,0.15); border-color: #ff007f; }
-          .replay { color: #ff007f !important; background: rgba(255,0,127,0.1) !important; border-color: #ff007f !important; }
-          .counter { color: #00f3ff; margin-bottom: 15px; font-size: 1.2rem; font-weight: bold; }
-        </style>
-      </head>
-      <body>
-        <div class="init" id="start-screen">
-            <div class="center1">
-                <h1>WE NEED YOU!</h1>
-                <p>Click on each square to plant a tree. You must hurry or the factories will colonize us!</p>
-                <p class="floating bold" onclick="startGame()">START GAME</p>
-            </div>
-        </div>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        let loader = document.getElementById('website-loader');
+        if(loader) {
+          loader.style.opacity = '0';
+          setTimeout(() => loader.style.display = 'none', 500);
+        }
+      }, 800);
+    });
 
-        <div class="won hidden" id="win-screen">
-            <div class="center">
-                <h1>YOU WON!</h1>
-                <p class="floating replay bold" onclick="startGame()">save the World again</p>
-            </div>
-        </div>
+    const gamesList = [
+      {
+        id: "typeos",
+        title: "Type-OS Arcade",
+        desc: "Fast-paced typing and retro arcade challenge.",
+        url: "https://type-os-time.vercel.app/"
+      },
+      {
+        id: "pacman",
+        title: "Pacman Arcade",
+        desc: "Classic arcade retro game experience.",
+        url: "https://pacman.live/"
+      }
+    ];
 
-        <div class="init hidden" id="velocity-alert"><h1 class="center">INCREASED VELOCITY!</h1></div>
-        
-        <h2 class="counter" id="level-counter">Level: 1</h2>
-        
-        <div class="container">
-            <div class="game" id="game-grid"></div>
-        </div>
-
-        <script>
-          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          function playSound(type) {
-            if(!audioCtx) return;
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            if(type === 'plant') {
-              osc.frequency.setValueAtTime(350, audioCtx.currentTime);
-              osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.15);
-              gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-              gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-              osc.start(); osc.stop(audioCtx.currentTime + 0.15);
-            } else if(type === 'factory') {
-              osc.type = 'sawtooth';
-              osc.frequency.setValueAtTime(140, audioCtx.currentTime);
-              osc.frequency.linearRampToValueAtTime(70, audioCtx.currentTime + 0.2);
-              gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-              gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-              osc.start(); osc.stop(audioCtx.currentTime + 0.2);
-            } else if(type === 'win') {
-              osc.type = 'sine';
-              osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-              osc.frequency.setValueAtTime(600, audioCtx.currentTime + 0.15);
-              osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.3);
-              gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-              gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-              osc.start(); osc.stop(audioCtx.currentTime + 0.5);
-            }
-          }
-
-          const gridEl = document.getElementById('game-grid');
-          const startScreen = document.getElementById('start-screen');
-          const winScreen = document.getElementById('win-screen');
-          const velocityAlert = document.getElementById('velocity-alert');
-          const levelCounter = document.getElementById('level-counter');
-
-          let cells = [];
-          const totalCells = 16;
-          let gameActive = false;
-          let level = 1;
-          let spawnInterval = 900;
-          let spawnTimer = null;
-
-          function createGrid() {
-            gridEl.innerHTML = '';
-            cells = [];
-            for(let i=0; i<totalCells; i++) {
-              const cell = document.createElement('div');
-              cell.classList.add('cell');
-              cell.dataset.index = i;
-              cell.addEventListener('click', () => plantTree(i));
-              gridEl.appendChild(cell);
-              cells.push({ element: cell, status: 'empty' });
-            }
-          }
-
-          function startGame() {
-            startScreen.classList.add('hidden');
-            winScreen.classList.add('hidden');
-            level = 1; spawnInterval = 900;
-            if(levelCounter) levelCounter.innerText = "Level: " + level;
-            createGrid(); gameActive = true;
-            if(spawnTimer) clearTimeout(spawnTimer);
-            spawnFactory();
-          }
-
-          function plantTree(index) {
-            if(!gameActive) return;
-            if(cells[index].status === 'empty') {
-              cells[index].status = 'tree';
-              cells[index].element.classList.add('tree');
-              cells[index].element.innerHTML = '🌳';
-              playSound('plant');
-              checkWin();
-            }
-          }
-
-          function spawnFactory() {
-            if(!gameActive) return;
-            let emptyCells = cells.filter(c => c.status === 'empty');
-            if(emptyCells.length > 0 && gameActive) {
-              let randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-              randomCell.status = 'factory';
-              randomCell.element.classList.add('factory');
-              randomCell.element.innerHTML = '🏭';
-              playSound('factory');
-              
-              if(emptyCells.length === 8 && level === 1) {
-                level = 2; spawnInterval = 550;
-                if(levelCounter) levelCounter.innerText = "Level: " + level;
-                velocityAlert.classList.remove('hidden');
-                setTimeout(() => velocityAlert.classList.add('hidden'), 900);
-              }
-              spawnTimer = setTimeout(spawnFactory, spawnInterval);
-            } else { checkWin(); }
-          }
-
-          function checkWin() {
-            let treeCount = cells.filter(c => c.status === 'tree').length;
-            let factoryCount = cells.filter(c => c.status === 'factory').length;
-            let emptyCount = cells.filter(c => c.status === 'empty').length;
-
-            if(treeCount >= 10 || (emptyCount === 0 && treeCount > factoryCount)) {
-              gameActive = false;
-              if(spawnTimer) clearTimeout(spawnTimer);
-              playSound('win');
-              setTimeout(() => { winScreen.classList.remove('hidden'); }, 400);
-            }
-          }
-        </script>
-      </body>
-      </html>
-    `;
-
-    // INIT PLAY STORE STORAGE
-    if(!localStorage.getItem('goturu_playstore_games')) {
-      let initialGames = [
-        { id: 1, title: "Save The World - Tree Planter", desc: "Plant trees and beat factories with audio effects!", url: "data:text/html;charset=utf-8," + encodeURIComponent(defaultTreeGameHtml) }
-      ];
-      localStorage.setItem('goturu_playstore_games', JSON.stringify(initialGames));
+    function showCustomAlert(title, message) {
+      document.getElementById('custom-alert-title').innerText = title;
+      document.getElementById('custom-alert-message').innerText = message;
+      openModal('modal-custom-alert');
     }
 
-    function showAlert(title, msg) {
-      document.getElementById('custom-alert-title').innerText = title;
-      document.getElementById('custom-alert-message').innerText = msg;
-      openModal('modal-custom-alert');
+    function closeCustomAlert() {
+      closeModal('modal-custom-alert');
     }
 
     window.addEventListener('DOMContentLoaded', () => {
       let savedUser = localStorage.getItem('goturu_username');
-      if(savedUser) document.getElementById('header-username').innerText = savedUser;
-      if(localStorage.getItem('goturu_admin_auth') === 'true') showAdminPanel();
+      if(savedUser) {
+        document.getElementById('header-username').innerText = savedUser;
+      }
+
+      if(localStorage.getItem('goturu_admin_auth') === 'true') {
+        showAdminPanel();
+      }
+
+      renderNotifications();
       renderGamesHub();
     });
 
@@ -443,115 +362,121 @@
       let container = document.getElementById('games-hub-list');
       if(!container) return;
       container.innerHTML = '';
-      let gamesList = JSON.parse(localStorage.getItem('goturu_playstore_games')) || [];
-
-      if(gamesList.length === 0) {
-        container.innerHTML = `<div class="text-xs text-gray-500 text-center py-4">No games linked right now.</div>`;
-        return;
-      }
 
       gamesList.forEach(game => {
         container.innerHTML += `
-          <div class="bg-[#090d16] border border-gray-800 rounded-xl p-4 flex items-center justify-between hover:border-emerald-500 transition gap-3">
+          <div class="bg-[#090d16] border border-gray-800 rounded-xl p-4 flex items-center justify-between hover:border-emerald-500 transition">
             <div>
               <h4 class="font-bold text-white text-sm mb-1">${game.title}</h4>
               <p class="text-xs text-gray-400">${game.desc}</p>
             </div>
-            <button class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-lg text-xs transition shrink-0" onclick="launchGame('${game.url}', '${game.title}')">
-              <i class="fa-solid fa-play mr-1"></i> Play
+            <button class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-lg text-xs transition shrink-0" onclick="launchTrueFullscreenGame('${game.url}', '${game.title}')">
+              <i class="fa-solid fa-play mr-1"></i> Play Fullscreen
             </button>
           </div>
         `;
       });
     }
 
-    function handlePublishGame(e) {
-      e.preventDefault();
-      let title = document.getElementById('new-game-title').value.trim();
-      let desc = document.getElementById('new-game-desc').value.trim();
-      let rawHtml = document.getElementById('new-game-code').value.trim();
-      let encodedUrl = "data:text/html;charset=utf-8," + encodeURIComponent(rawHtml);
-
-      let gamesList = JSON.parse(localStorage.getItem('goturu_playstore_games')) || [];
-      gamesList.unshift({ id: Date.now(), title, desc, url: encodedUrl });
-      localStorage.setItem('goturu_playstore_games', JSON.stringify(gamesList));
-
-      document.getElementById('new-game-title').value = '';
-      document.getElementById('new-game-desc').value = '';
-      document.getElementById('new-game-code').value = '';
-
-      showAdminPanel();
-      renderGamesHub();
-      showAlert('Success', 'Game successfully linked and published to Play Store!');
-    }
-
-    function deleteGameFromStore(id) {
-      let gamesList = JSON.parse(localStorage.getItem('goturu_playstore_games')) || [];
-      gamesList = gamesList.filter(g => g.id != id);
-      localStorage.setItem('goturu_playstore_games', JSON.stringify(gamesList));
-      showAdminPanel();
-      renderGamesHub();
-      showAlert('Deleted', 'Game unlinked and removed successfully!');
-    }
-
-    function launchGame(url, title) {
+    function launchTrueFullscreenGame(url, title) {
       closeModal('modal-games-hub');
+      document.getElementById('game-loader').style.display = 'flex';
       document.getElementById('active-game-title').innerText = title;
       document.getElementById('active-game-iframe').src = url;
+      
       let player = document.getElementById('modal-active-game-player');
       player.classList.remove('hidden');
-      if (player.requestFullscreen) player.requestFullscreen().catch(() => {});
+
+      if (player.requestFullscreen) {
+        player.requestFullscreen().catch(() => {});
+      }
+    }
+
+    function hideGameLoader() {
+      let gameLoader = document.getElementById('game-loader');
+      if(gameLoader) {
+        gameLoader.style.display = 'none';
+      }
     }
 
     function closeActiveGamePlayer() {
-      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
       document.getElementById('active-game-iframe').src = '';
       document.getElementById('modal-active-game-player').classList.add('hidden');
+    }
+
+    function toggleGameBrowserFullscreen() {
+      let player = document.getElementById('modal-active-game-player');
+      if (!document.fullscreenElement) {
+        player.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
     }
 
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
+    let suggestions = JSON.parse(localStorage.getItem('goturu_suggestions')) || [];
+    let notifications = JSON.parse(localStorage.getItem('goturu_notifications')) || [
+      { id: 1, title: "🚀 Portal Launch v4.3", content: "Goturu interactive portal now features smooth website entry loading and Games Hub loading animations.", time: "2026-06-01", reactions: { "❤️": 5, "🔥": 3, "🚀": 8 } }
+    ];
+
+    function submitSuggestion(e) {
+      e.preventDefault();
+      let name = document.getElementById('sug-name').value;
+      let text = document.getElementById('sug-text').value;
+      let time = new Date().toLocaleString();
+
+      suggestions.unshift({ name, text, time });
+      localStorage.setItem('goturu_suggestions', JSON.stringify(suggestions));
+      
+      document.getElementById('sug-name').value = '';
+      document.getElementById('sug-text').value = '';
+      closeModal('modal-suggestion');
+      showCustomAlert('Success', 'Suggestion sent successfully to Admin!');
+      if(localStorage.getItem('goturu_admin_auth') === 'true') showAdminPanel();
+    }
+
     function handleAdminLogin(e) {
       e.preventDefault();
       let u = document.getElementById('admin-user').value.trim();
       let p = document.getElementById('admin-pass').value.trim();
+
       if(u === 'GOWRISANKAR@ADMIN' && p === 'ADMIN @GOTURU..') {
         localStorage.setItem('goturu_admin_auth', 'true');
         closeModal('admin-auth-modal');
         showAdminPanel();
-        showAlert('Success', 'Admin Login Successful!');
+        showCustomAlert('Success', 'Admin Login Successful!');
       } else {
-        showAlert('Denied', 'Invalid Admin Credentials!');
+        showCustomAlert('Access Denied', 'Invalid Admin Credentials!');
       }
     }
 
     function showAdminPanel() {
       document.getElementById('admin-panel').classList.remove('hidden');
-      let gamesList = JSON.parse(localStorage.getItem('goturu_playstore_games')) || [];
-      document.getElementById('admin-game-count').innerText = gamesList.length;
-      let tbody = document.getElementById('admin-games-tbody');
+      document.getElementById('admin-add-notif-btn').classList.remove('hidden');
+      document.getElementById('admin-sug-count').innerText = suggestions.length;
+      let tbody = document.getElementById('admin-sug-tbody');
       tbody.innerHTML = '';
-      if(gamesList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="2" class="p-2 text-center text-gray-500">No games found.</td></tr>`;
-      } else {
-        gamesList.forEach(g => {
-          tbody.innerHTML += `
-            <tr>
-              <td class="p-2 border border-gray-700 text-emerald-300 font-bold">${g.title}</td>
-              <td class="p-2 border border-gray-700">
-                <button class="bg-red-600 hover:bg-red-500 text-white px-2.5 py-1 rounded font-bold text-[10px]" onclick="deleteGameFromStore(${g.id})">Delete / Unlink</button>
-              </td>
-            </tr>
-          `;
-        });
+      if(suggestions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="p-2 text-center text-gray-500">No suggestions yet.</td></tr>`;
+        return;
       }
+      suggestions.forEach(s => {
+        tbody.innerHTML += `<tr><td class="p-2 border border-gray-700 text-cyan-300 font-bold">${s.name}</td><td class="p-2 border border-gray-700">${s.text}</td><td class="p-2 border border-gray-700 text-gray-400">${s.time}</td></tr>`;
+      });
+      renderNotifications();
     }
 
     function logoutAdmin() {
       localStorage.removeItem('goturu_admin_auth');
       document.getElementById('admin-panel').classList.add('hidden');
-      showAlert('Logged Out', 'Admin Logged Out.');
+      document.getElementById('admin-add-notif-btn').classList.add('hidden');
+      showCustomAlert('Logged Out', 'Admin Logged Out.');
+      renderNotifications();
     }
 
     function handleUserLogin(e) {
@@ -560,13 +485,95 @@
       localStorage.setItem('goturu_username', name);
       document.getElementById('header-username').innerText = name;
       closeModal('modal-user-auth');
-      showAlert('Welcome', 'Welcome ' + name + '!');
+      showCustomAlert('Welcome', 'Welcome ' + name + '!');
     }
 
-    function submitSuggestion(e) {
+    function renderNotifications() {
+      let container = document.getElementById('notifications-container');
+      container.innerHTML = '';
+      let isAdmin = localStorage.getItem('goturu_admin_auth') === 'true';
+
+      if(notifications.length === 0) {
+        container.innerHTML = `<div class="text-xs text-gray-500 text-center py-4">No notifications posted yet.</div>`;
+        return;
+      }
+
+      notifications.forEach(item => {
+        let adminControls = isAdmin ? `
+          <div class="flex gap-2 mt-2 pt-2 border-t border-gray-800 text-[10px]">
+            <button class="text-cyan-400 hover:underline font-bold" onclick="editNotification(${item.id})"><i class="fa-solid fa-pen mr-1"></i>Edit</button>
+            <button class="text-pink-500 hover:underline font-bold" onclick="deleteNotification(${item.id})"><i class="fa-solid fa-trash mr-1"></i>Delete</button>
+          </div>
+        ` : '';
+
+        container.innerHTML += `
+          <div class="notif-item">
+            <div class="flex justify-between items-start gap-2 mb-1">
+              <h4 class="font-bold text-white text-xs">${item.title}</h4>
+              <span class="text-[9px] text-gray-400">${item.time}</span>
+            </div>
+            <p class="text-xs text-gray-300 leading-relaxed mb-2">${item.content}</p>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button class="emoji-btn" onclick="reactNotification(${item.id}, '❤️')">❤️ ${item.reactions['❤️'] || 0}</button>
+              <button class="emoji-btn" onclick="reactNotification(${item.id}, '🔥')">🔥 ${item.reactions['🔥'] || 0}</button>
+              <button class="emoji-btn" onclick="reactNotification(${item.id}, '🚀')">🚀 ${item.reactions['🚀'] || 0}</button>
+            </div>
+            ${adminControls}
+          </div>
+        `;
+      });
+    }
+
+    function saveNotification(e) {
       e.preventDefault();
-      closeModal('modal-suggestion');
-      showAlert('Sent', 'Suggestion sent to Admin!');
+      let id = document.getElementById('edit-notif-id').value;
+      let title = document.getElementById('notif-title-input').value;
+      let content = document.getElementById('notif-content-input').value;
+      let dateStr = new Date().toISOString().split('T')[0];
+
+      if(id) {
+        let item = notifications.find(n => n.id == id);
+        if(item) {
+          item.title = title;
+          item.content = content;
+        }
+      } else {
+        notifications.unshift({ id: Date.now(), title, content, time: dateStr, reactions: { "❤️": 0, "🔥": 0, "🚀": 0 } });
+      }
+
+      localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
+      document.getElementById('notif-title-input').value = '';
+      document.getElementById('notif-content-input').value = '';
+      document.getElementById('edit-notif-id').value = '';
+      closeModal('modal-add-notif');
+      renderNotifications();
+      showCustomAlert('Success', 'Notification saved successfully!');
+    }
+
+    function editNotification(id) {
+      let item = notifications.find(n => n.id == id);
+      if(item) {
+        document.getElementById('edit-notif-id').value = item.id;
+        document.getElementById('notif-title-input').value = item.title;
+        document.getElementById('notif-content-input').value = item.content;
+        document.getElementById('notif-modal-title').innerText = "Edit Notification";
+        openModal('modal-add-notif');
+      }
+    }
+
+    function deleteNotification(id) {
+      notifications = notifications.filter(n => n.id != id);
+      localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
+      renderNotifications();
+    }
+
+    function reactNotification(id, emoji) {
+      let item = notifications.find(n => n.id == id);
+      if(item) {
+        item.reactions[emoji] = (item.reactions[emoji] || 0) + 1;
+        localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
+        renderNotifications();
+      }
     }
   </script>
 </body>
