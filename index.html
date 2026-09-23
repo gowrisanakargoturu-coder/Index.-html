@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -9,11 +9,6 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Firebase SDKs (Compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
   <style>
     :root {
       --bg-dark: #0b0f19;
@@ -69,7 +64,7 @@
       border-radius: 16px;
       padding: 24px;
       width: 100%;
-      max-width: 500px;
+      max-width: 400px;
       position: relative;
     }
 
@@ -132,9 +127,15 @@
       <button class="bg-cyan-500/15 border border-cyan-400 text-cyan-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-cyan-400 hover:text-black transition" onclick="openModal('modal-user-auth')">
         <i class="fa-solid fa-user mr-1"></i> <span id="header-username">User Login</span>
       </button>
-      <!-- Admin Login Button (Will hide automatically when logged in) -->
-      <button id="header-admin-btn" class="bg-pink-500/15 border border-pink-400 text-pink-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition" onclick="openModal('admin-auth-modal')">
-        <i class="fa-solid fa-key mr-1"></i> Admin Sign In
+
+      <!-- Admin Sign-In / Setup Button (Will hide automatically once password is set) -->
+      <button id="header-admin-setup-btn" class="hidden bg-pink-500/15 border border-pink-400 text-pink-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition" onclick="openModal('admin-setup-modal')">
+        <i class="fa-solid fa-key mr-1"></i> Admin Sign In (Setup)
+      </button>
+
+      <!-- Admin Login Button (Appears only after password is created, asks ONLY for password) -->
+      <button id="header-admin-login-btn" class="hidden bg-pink-500/15 border border-pink-400 text-pink-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition" onclick="openModal('admin-login-modal')">
+        <i class="fa-solid fa-lock mr-1"></i> Admin Login
       </button>
     </div>
   </header>
@@ -171,7 +172,7 @@
       <div id="admin-panel" class="hidden border border-pink-500/50 bg-[#181124] rounded-2xl p-6">
         <div class="flex justify-between items-center border-b border-pink-500/30 pb-3 mb-4">
           <h3 class="font-bold text-pink-400 text-base"><i class="fa-solid fa-user-shield mr-2"></i>Admin Master Panel</h3>
-          <button class="bg-pink-600 text-white text-xs px-3 py-1.5 rounded font-bold" onclick="logoutAdmin()">Logout</button>
+          <button class="bg-pink-600 text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-pink-500 transition" onclick="logoutAdmin()">Logout</button>
         </div>
         <p class="text-xs text-gray-300 mb-3">Total Suggestions Received: <span id="admin-sug-count" class="font-bold text-pink-400">0</span></p>
         <div class="overflow-x-auto">
@@ -257,28 +258,42 @@
       <form onsubmit="submitSuggestion(event)">
         <input type="text" id="sug-name" required placeholder="Your Name..." class="mb-3">
         <textarea id="sug-text" rows="3" required placeholder="Your Suggestion..." class="mb-3"></textarea>
-        <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded text-xs">Send Suggestion</button>
+        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded text-xs transition">Send Suggestion</button>
       </form>
     </div>
   </div>
 
-  <!-- ADMIN SIGN IN / SETUP MODAL -->
-  <div class="modal-overlay" id="admin-auth-modal">
+  <!-- ADMIN FIRST TIME SETUP MODAL (Asks only for password, then HIDES forever) -->
+  <div class="modal-overlay" id="admin-setup-modal">
     <div class="modal-card max-w-sm">
       <div class="flex justify-between items-center mb-3">
-        <h3 class="font-bold text-pink-400">Admin Sign In & Setup</h3>
-        <button class="text-gray-400 hover:text-white" onclick="closeModal('admin-auth-modal')">&times;</button>
+        <h3 class="font-bold text-pink-400">Admin Password Setup</h3>
+        <button class="text-gray-400 hover:text-white" onclick="closeModal('admin-setup-modal')">&times;</button>
+      </div>
+      <form onsubmit="handleAdminSetup(event)">
+        <p class="text-[11px] text-gray-400 mb-3">Create your secure admin password. No username required!</p>
+        <div class="mb-3">
+          <label class="block text-[11px] text-gray-400 mb-1">New Admin Password</label>
+          <input type="password" id="admin-setup-pass" required placeholder="Enter new password...">
+        </div>
+        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded text-xs transition">Save Password & Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN LOGIN MODAL (Asks ONLY for password after setup is done) -->
+  <div class="modal-overlay" id="admin-login-modal">
+    <div class="modal-card max-w-sm">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-bold text-pink-400">Admin Login</h3>
+        <button class="text-gray-400 hover:text-white" onclick="closeModal('admin-login-modal')">&times;</button>
       </div>
       <form onsubmit="handleAdminLogin(event)">
         <div class="mb-3">
-          <label class="block text-[11px] text-gray-400 mb-1">Admin Email</label>
-          <input type="email" id="admin-email-input" required value="goturuinteractive@gmail.com" placeholder="Enter Admin Email...">
+          <label class="block text-[11px] text-gray-400 mb-1">Enter Password</label>
+          <input type="password" id="admin-login-pass" required placeholder="Enter admin password...">
         </div>
-        <div class="mb-3">
-          <label class="block text-[11px] text-gray-400 mb-1">Admin Password</label>
-          <input type="password" id="admin-pass-input" required placeholder="Enter / Generate Password...">
-        </div>
-        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded text-xs transition">Sign In / Generate Password</button>
+        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded text-xs transition">Login</button>
       </form>
     </div>
   </div>
@@ -291,7 +306,7 @@
       </div>
       <form onsubmit="handleUserLogin(event)">
         <input type="text" id="user-name-input" required placeholder="Enter Username..." class="mb-3">
-        <button type="submit" class="w-full bg-cyan-400 text-black font-bold py-2 rounded text-xs">Save</button>
+        <button type="submit" class="w-full bg-cyan-400 hover:bg-cyan-300 text-black font-bold py-2 rounded text-xs transition">Save</button>
       </form>
     </div>
   </div>
@@ -306,7 +321,7 @@
         <input type="hidden" id="edit-notif-id">
         <input type="text" id="notif-title-input" required placeholder="Announcement Title..." class="mb-3">
         <textarea id="notif-content-input" rows="3" required placeholder="Notification content..." class="mb-3"></textarea>
-        <button type="submit" class="w-full bg-cyan-400 text-black font-bold py-2 rounded text-xs">Publish Announcement</button>
+        <button type="submit" class="w-full bg-cyan-400 hover:bg-cyan-300 text-black font-bold py-2 rounded text-xs transition">Publish Announcement</button>
       </form>
     </div>
   </div>
@@ -317,30 +332,11 @@
       <div class="text-3xl text-cyan-400 mb-2"><i class="fa-solid fa-circle-info"></i></div>
       <h3 id="custom-alert-title" class="font-bold text-white text-base mb-2">Notice</h3>
       <p id="custom-alert-message" class="text-xs text-gray-300 mb-4"></p>
-      <button onclick="closeCustomAlert()" class="w-full bg-cyan-400 hover:bg-cyan-300 text-black font-bold py-2 rounded text-xs">OK</button>
+      <button onclick="closeCustomAlert()" class="w-full bg-cyan-400 hover:bg-cyan-300 text-black font-bold py-2 rounded text-xs transition">OK</button>
     </div>
   </div>
 
   <script>
-    // --- FIREBASE CONFIGURATION ---
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
-    // Keep admin session active across browser reloads
-    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.error);
-
-    const ADMIN_EMAIL = "goturuinteractive@gmail.com";
-
     window.addEventListener('load', () => {
       setTimeout(() => {
         let loader = document.getElementById('website-loader');
@@ -376,8 +372,10 @@
       closeModal('modal-custom-alert');
     }
 
-    let suggestions = [];
-    let notifications = [];
+    let suggestions = JSON.parse(localStorage.getItem('goturu_suggestions')) || [];
+    let notifications = JSON.parse(localStorage.getItem('goturu_notifications')) || [
+      { id: "1", title: "Welcome", content: "Portal is live and fully operational!", time: "2026-06-06", reactions: { "❤️": 5, "🔥": 2, "🚀": 3 } }
+    ];
 
     window.addEventListener('DOMContentLoaded', () => {
       let savedUser = localStorage.getItem('goturu_username');
@@ -386,18 +384,34 @@
       }
 
       renderGamesHub();
-      fetchSuggestions();
-      fetchNotifications();
+      renderSuggestionsTable();
+      renderNotifications();
+      checkAdminButtonsState();
 
-      // Firebase Auth State Listener
-      auth.onAuthStateChanged((user) => {
-        if (user && user.email === ADMIN_EMAIL) {
-          showAdminPanel();
-        } else {
-          hideAdminPanel();
-        }
-      });
+      // Check if admin is currently logged in via session
+      if(localStorage.getItem('goturu_admin_logged') === 'true') {
+        showAdminPanel();
+      }
     });
+
+    // Check if password setup is done
+    function checkAdminButtonsState() {
+      let storedPass = localStorage.getItem('goturu_admin_pass');
+      let setupBtn = document.getElementById('header-admin-setup-btn');
+      let loginBtn = document.getElementById('header-admin-login-btn');
+
+      if (!storedPass) {
+        // Password not set yet -> Show Setup button, Hide Login button
+        setupBtn.classList.remove('hidden');
+        loginBtn.classList.add('hidden');
+      } else {
+        // Password already set -> Hide Setup button permanently, Show Login button
+        setupBtn.classList.add('hidden');
+        if (localStorage.getItem('goturu_admin_logged') !== 'true') {
+          loginBtn.classList.remove('hidden');
+        }
+      }
+    }
 
     function renderGamesHub() {
       let container = document.getElementById('games-hub-list');
@@ -460,89 +474,27 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // --- FIREBASE SUGGESTIONS FUNCTIONS ---
+    // --- SUGGESTIONS FUNCTIONS ---
     function submitSuggestion(e) {
       e.preventDefault();
       let name = document.getElementById('sug-name').value;
       let text = document.getElementById('sug-text').value;
       let time = new Date().toLocaleString();
 
-      db.collection("suggestions").add({
-        name: name,
-        text: text,
-        time: time,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        document.getElementById('sug-name').value = '';
-        document.getElementById('sug-text').value = '';
-        closeModal('modal-suggestion');
-        showCustomAlert('Success', 'Suggestion sent successfully to Admin!');
-      }).catch((error) => {
-        showCustomAlert('Error', error.message);
-      });
+      suggestions.unshift({ name, text, time });
+      localStorage.setItem('goturu_suggestions', JSON.stringify(suggestions));
+
+      document.getElementById('sug-name').value = '';
+      document.getElementById('sug-text').value = '';
+      closeModal('modal-suggestion');
+      renderSuggestionsTable();
+      showCustomAlert('Success', 'Suggestion sent successfully to Admin!');
     }
 
-    function fetchSuggestions() {
-      db.collection("suggestions").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
-        suggestions = [];
-        snapshot.forEach((doc) => {
-          suggestions.push({ id: doc.id, ...doc.data() });
-        });
-        if(auth.currentUser && auth.currentUser.email === ADMIN_EMAIL) {
-          updateAdminSuggestionsTable();
-        }
-      });
-    }
-
-    // --- SECURE FIREBASE AUTHENTICATION (Login & Auto Setup) ---
-    function handleAdminLogin(e) {
-      e.preventDefault();
-      let email = document.getElementById('admin-email-input').value.trim();
-      let pass = document.getElementById('admin-pass-input').value.trim();
-
-      // Try signing in
-      auth.signInWithEmailAndPassword(email, pass)
-        .then((userCredential) => {
-          document.getElementById('admin-pass-input').value = '';
-          closeModal('admin-auth-modal');
-          showCustomAlert('Success', 'Admin Login Successful!');
-        })
-        .catch((error) => {
-          // If account doesn't exist yet, automatically create it (Password Generation / Setup)
-          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-email') {
-            auth.createUserWithEmailAndPassword(email, pass)
-              .then((userCredential) => {
-                document.getElementById('admin-pass-input').value = '';
-                closeModal('admin-auth-modal');
-                showCustomAlert('Success', 'Admin Account Created & Logged In Successfully!');
-              })
-              .catch((createError) => {
-                showCustomAlert('Error', createError.message);
-              });
-          } else {
-            showCustomAlert('Access Denied', error.message);
-          }
-        });
-    }
-
-    function showAdminPanel() {
-      document.getElementById('admin-panel').classList.remove('hidden');
-      document.getElementById('admin-add-notif-btn').classList.remove('hidden');
-      document.getElementById('header-admin-btn').classList.add('hidden'); // Hide Admin Sign In button once logged in
-      updateAdminSuggestionsTable();
-      renderNotifications();
-    }
-
-    function hideAdminPanel() {
-      document.getElementById('admin-panel').classList.add('hidden');
-      document.getElementById('admin-add-notif-btn').classList.add('hidden');
-      document.getElementById('header-admin-btn').classList.remove('hidden'); // Show Admin Sign In button when logged out
-      renderNotifications();
-    }
-
-    function updateAdminSuggestionsTable() {
+    function renderSuggestionsTable() {
       document.getElementById('admin-sug-count').innerText = suggestions.length;
       let tbody = document.getElementById('admin-sug-tbody');
+      if(!tbody) return;
       tbody.innerHTML = '';
       if(suggestions.length === 0) {
         tbody.innerHTML = `<tr><td colspan="3" class="p-2 text-center text-gray-500">No suggestions yet.</td></tr>`;
@@ -553,10 +505,57 @@
       });
     }
 
+    // --- ADMIN SETUP & LOGIN (Local Storage + Base64 Encoding) ---
+    function handleAdminSetup(e) {
+      e.preventDefault();
+      let pass = document.getElementById('admin-setup-pass').value.trim();
+      
+      // Store encoded password securely in local storage
+      localStorage.setItem('goturu_admin_pass', btoa(pass));
+      localStorage.setItem('goturu_admin_logged', 'true');
+      
+      document.getElementById('admin-setup-pass').value = '';
+      closeModal('admin-setup-modal');
+      
+      showAdminPanel();
+      checkAdminButtonsState();
+      showCustomAlert('Success', 'Admin Password Generated & Logged In Successfully!');
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      let pass = document.getElementById('admin-login-pass').value.trim();
+      let storedPass = localStorage.getItem('goturu_admin_pass');
+
+      if (storedPass && btoa(pass) === storedPass) {
+        localStorage.setItem('goturu_admin_logged', 'true');
+        document.getElementById('admin-login-pass').value = '';
+        closeModal('admin-login-modal');
+        
+        showAdminPanel();
+        checkAdminButtonsState();
+        showCustomAlert('Success', 'Admin Login Successful!');
+      } else {
+        showCustomAlert('Access Denied', 'Incorrect password! Please try again.');
+      }
+    }
+
+    function showAdminPanel() {
+      document.getElementById('admin-panel').classList.remove('hidden');
+      document.getElementById('admin-add-notif-btn').classList.remove('hidden');
+      document.getElementById('header-admin-setup-btn').classList.add('hidden');
+      document.getElementById('header-admin-login-btn').classList.add('hidden');
+      renderSuggestionsTable();
+      renderNotifications();
+    }
+
     function logoutAdmin() {
-      auth.signOut().then(() => {
-        showCustomAlert('Logged Out', 'Admin Logged Out Successfully.');
-      });
+      localStorage.removeItem('goturu_admin_logged');
+      document.getElementById('admin-panel').classList.add('hidden');
+      document.getElementById('admin-add-notif-btn').classList.add('hidden');
+      checkAdminButtonsState();
+      renderNotifications();
+      showCustomAlert('Logged Out', 'Admin Logged Out Successfully.');
     }
 
     function handleUserLogin(e) {
@@ -568,21 +567,12 @@
       showCustomAlert('Welcome', 'Welcome ' + name + '!');
     }
 
-    // --- FIREBASE NOTIFICATIONS FUNCTIONS ---
-    function fetchNotifications() {
-      db.collection("notifications").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
-        notifications = [];
-        snapshot.forEach((doc) => {
-          notifications.push({ id: doc.id, ...doc.data() });
-        });
-        renderNotifications();
-      });
-    }
-
+    // --- NOTIFICATIONS FUNCTIONS ---
     function renderNotifications() {
       let container = document.getElementById('notifications-container');
+      if(!container) return;
       container.innerHTML = '';
-      let isAdmin = auth.currentUser !== null && auth.currentUser.email === ADMIN_EMAIL;
+      let isAdmin = localStorage.getItem('goturu_admin_logged') === 'true';
 
       if(notifications.length === 0) {
         container.innerHTML = `<div class="text-xs text-gray-500 text-center py-4">No notifications posted yet.</div>`;
@@ -593,7 +583,6 @@
         let reactions = item.reactions || { "❤️": 0, "🔥": 0, "🚀": 0 };
         let adminControls = isAdmin ? `
           <div class="flex gap-2 mt-2 pt-2 border-t border-gray-800 text-[10px]">
-            <button class="text-cyan-400 hover:underline font-bold" onclick="editNotification('${item.id}', '${item.title}', '${item.content}')"><i class="fa-solid fa-pen mr-1"></i>Edit</button>
             <button class="text-pink-500 hover:underline font-bold" onclick="deleteNotification('${item.id}')"><i class="fa-solid fa-trash mr-1"></i>Delete</button>
           </div>
         ` : '';
@@ -618,62 +607,41 @@
 
     function saveNotification(e) {
       e.preventDefault();
-      let id = document.getElementById('edit-notif-id').value;
       let title = document.getElementById('notif-title-input').value;
       let content = document.getElementById('notif-content-input').value;
       let dateStr = new Date().toISOString().split('T')[0];
 
-      if(id) {
-        db.collection("notifications").doc(id).update({
-          title: title,
-          content: content
-        }).then(() => {
-          finishNotifSave();
-        });
-      } else {
-        db.collection("notifications").add({
-          title: title,
-          content: content,
-          time: dateStr,
-          reactions: { "❤️": 0, "🔥": 0, "🚀": 0 },
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
-          finishNotifSave();
-        });
-      }
-    }
+      notifications.unshift({
+        id: Date.now().toString(),
+        title,
+        content,
+        time: dateStr,
+        reactions: { "❤️": 0, "🔥": 0, "🚀": 0 }
+      });
 
-    function finishNotifSave() {
+      localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
+
       document.getElementById('notif-title-input').value = '';
       document.getElementById('notif-content-input').value = '';
-      document.getElementById('edit-notif-id').value = '';
       closeModal('modal-add-notif');
-      showCustomAlert('Success', 'Notification saved successfully!');
-    }
-
-    function editNotification(id, title, content) {
-      document.getElementById('edit-notif-id').value = id;
-      document.getElementById('notif-title-input').value = title;
-      document.getElementById('notif-content-input').value = content;
-      document.getElementById('notif-modal-title').innerText = "Edit Notification";
-      openModal('modal-add-notif');
+      renderNotifications();
+      showCustomAlert('Success', 'Notification published successfully!');
     }
 
     function deleteNotification(id) {
-      db.collection("notifications").doc(id).delete().then(() => {
-        showCustomAlert('Deleted', 'Notification removed successfully.');
-      });
+      notifications = notifications.filter(n => n.id !== id);
+      localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
+      renderNotifications();
+      showCustomAlert('Deleted', 'Notification removed successfully.');
     }
 
     function reactNotification(id, emoji) {
       let item = notifications.find(n => n.id == id);
       if(item) {
-        let reactions = item.reactions || { "❤️": 0, "🔥": 0, "🚀": 0 };
-        reactions[emoji] = (reactions[emoji] || 0) + 1;
-        
-        db.collection("notifications").doc(id).update({
-          reactions: reactions
-        });
+        if(!item.reactions) item.reactions = { "❤️": 0, "🔥": 0, "🚀": 0 };
+        item.reactions[emoji] = (item.reactions[emoji] || 0) + 1;
+        localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
+        renderNotifications();
       }
     }
   </script>
