@@ -1,5 +1,4 @@
-```html
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -200,9 +199,8 @@
     </div>
   </div>
 
-  <!-- TRUE FULLSCREEN BROWSER GAME PLAYER (NO SMALL WINDOWS) -->
+  <!-- TRUE FULLSCREEN BROWSER GAME PLAYER -->
   <div id="modal-active-game-player" class="fixed inset-0 w-screen h-screen bg-[#07090f] z-[9999] flex flex-col hidden">
-    <!-- Top Floating Game Control Bar -->
     <div class="bg-[#121826] border-b border-emerald-500/30 px-6 py-3 flex justify-between items-center shrink-0 shadow-xl">
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-500/40 text-emerald-400 flex items-center justify-center">
@@ -219,7 +217,6 @@
         </button>
       </div>
     </div>
-    <!-- True Fullscreen Viewport -->
     <div class="flex-1 w-full h-full bg-black relative">
       <iframe id="active-game-iframe" src="" class="w-full h-full border-0 absolute inset-0" allowfullscreen></iframe>
     </div>
@@ -281,7 +278,7 @@
     </div>
   </div>
 
-  <!-- CUSTOM MESSAGE BOX (REPLACING BROWSER ALERT) -->
+  <!-- CUSTOM MESSAGE BOX -->
   <div class="modal-overlay" id="modal-custom-alert" style="z-index: 10000;">
     <div class="modal-card max-w-sm text-center">
       <div class="text-3xl text-cyan-400 mb-2"><i class="fa-solid fa-circle-info"></i></div>
@@ -292,7 +289,7 @@
   </div>
 
   <script>
-    // Games Array - Easy to add more games here!
+    // MULTIPLE GAMES LIST - Meeru ikkada enni games aina add/update chesukovachu!
     const gamesList = [
       {
         id: "typeos",
@@ -306,6 +303,14 @@
         desc: "Classic arcade retro game experience.",
         url: "https://pacman.live/"
       }
+      /* Meeru kotha game add cheyali ante ikkada kinda comma petti ila add cheyyandi:
+      ,{
+        id: "templerun",
+        title: "Temple Run",
+        desc: "Endless arcade running adventure.",
+        url: "MEE_GAME_URL_IKKADA_IVVANDI"
+      }
+      */
     ];
 
     function showCustomAlert(title, message) {
@@ -352,7 +357,6 @@
       });
     }
 
-    // Launch Game in True Full Screen across the browser
     function launchTrueFullscreenGame(url, title) {
       closeModal('modal-games-hub');
       document.getElementById('active-game-title').innerText = title;
@@ -361,13 +365,11 @@
       let player = document.getElementById('modal-active-game-player');
       player.classList.remove('hidden');
 
-      // Request browser fullscreen API for ultimate immersion
       if (player.requestFullscreen) {
         player.requestFullscreen().catch(() => {});
       }
     }
 
-    // Close True Fullscreen Game
     function closeActiveGamePlayer() {
       if (document.fullscreenElement) {
         document.exitFullscreen().catch(() => {});
@@ -390,7 +392,7 @@
 
     let suggestions = JSON.parse(localStorage.getItem('goturu_suggestions')) || [];
     let notifications = JSON.parse(localStorage.getItem('goturu_notifications')) || [
-      { id: 1, title: "🚀 Portal Launch v4.2", content: "Goturu interactive portal is now live with high performance and full-screen games support.", time: "2026-06-01", reactions: { "❤️": 5, "🔥": 3, "🚀": 8 } }
+      { id: 1, title: "🚀 Portal Launch v4.2", content: "Goturu interactive portal is live with multi-game support and full-screen player.", time: "2026-06-01", reactions: { "❤️": 5, "🔥": 3, "🚀": 8 } }
     ];
 
     function submitSuggestion(e) {
@@ -547,4 +549,3 @@
   </script>
 </body>
 </html>
-```  
