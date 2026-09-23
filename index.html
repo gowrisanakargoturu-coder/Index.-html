@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -132,8 +132,9 @@
       <button class="bg-cyan-500/15 border border-cyan-400 text-cyan-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-cyan-400 hover:text-black transition" onclick="openModal('modal-user-auth')">
         <i class="fa-solid fa-user mr-1"></i> <span id="header-username">User Login</span>
       </button>
+      <!-- Admin Login Button (Will hide automatically when logged in) -->
       <button id="header-admin-btn" class="bg-pink-500/15 border border-pink-400 text-pink-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition" onclick="openModal('admin-auth-modal')">
-        <i class="fa-solid fa-key mr-1"></i> Admin Login
+        <i class="fa-solid fa-key mr-1"></i> Admin Sign In
       </button>
     </div>
   </header>
@@ -261,20 +262,23 @@
     </div>
   </div>
 
-  <!-- ADMIN LOGIN MODAL (Secure Firebase Authentication) -->
+  <!-- ADMIN SIGN IN / SETUP MODAL -->
   <div class="modal-overlay" id="admin-auth-modal">
     <div class="modal-card max-w-sm">
       <div class="flex justify-between items-center mb-3">
-        <h3 class="font-bold text-pink-400">Admin Login / Setup</h3>
+        <h3 class="font-bold text-pink-400">Admin Sign In & Setup</h3>
         <button class="text-gray-400 hover:text-white" onclick="closeModal('admin-auth-modal')">&times;</button>
       </div>
-      <div class="text-xs text-gray-400 mb-3 bg-[#090d16] p-2.5 rounded border border-gray-800 flex items-center gap-2">
-        <i class="fa-solid fa-envelope text-pink-400"></i>
-        <span>goturuinteractive@gmail.com</span>
-      </div>
       <form onsubmit="handleAdminLogin(event)">
-        <input type="password" id="admin-pass" required placeholder="Enter Admin Password..." class="mb-3">
-        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded text-xs transition">Authenticate / Create</button>
+        <div class="mb-3">
+          <label class="block text-[11px] text-gray-400 mb-1">Admin Email</label>
+          <input type="email" id="admin-email-input" required value="goturuinteractive@gmail.com" placeholder="Enter Admin Email...">
+        </div>
+        <div class="mb-3">
+          <label class="block text-[11px] text-gray-400 mb-1">Admin Password</label>
+          <input type="password" id="admin-pass-input" required placeholder="Enter / Generate Password...">
+        </div>
+        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded text-xs transition">Sign In / Generate Password</button>
       </form>
     </div>
   </div>
@@ -332,13 +336,9 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // Enable Local Persistence so Admin stays logged in across web sessions
-    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-      .catch((error) => {
-        console.error("Auth persistence error:", error);
-      });
+    // Keep admin session active across browser reloads
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.error);
 
-    // Fixed Admin Email
     const ADMIN_EMAIL = "goturuinteractive@gmail.com";
 
     window.addEventListener('load', () => {
@@ -494,24 +494,25 @@
       });
     }
 
-    // --- SECURE FIREBASE AUTHENTICATION (Login / Auto-Setup) ---
+    // --- SECURE FIREBASE AUTHENTICATION (Login & Auto Setup) ---
     function handleAdminLogin(e) {
       e.preventDefault();
-      let pass = document.getElementById('admin-pass').value.trim();
+      let email = document.getElementById('admin-email-input').value.trim();
+      let pass = document.getElementById('admin-pass-input').value.trim();
 
-      // Try signing in first
-      auth.signInWithEmailAndPassword(ADMIN_EMAIL, pass)
+      // Try signing in
+      auth.signInWithEmailAndPassword(email, pass)
         .then((userCredential) => {
-          document.getElementById('admin-pass').value = '';
+          document.getElementById('admin-pass-input').value = '';
           closeModal('admin-auth-modal');
           showCustomAlert('Success', 'Admin Login Successful!');
         })
         .catch((error) => {
-          // If account doesn't exist yet, automatically create it with this password (First-time setup helper)
-          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-            auth.createUserWithEmailAndPassword(ADMIN_EMAIL, pass)
+          // If account doesn't exist yet, automatically create it (Password Generation / Setup)
+          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-email') {
+            auth.createUserWithEmailAndPassword(email, pass)
               .then((userCredential) => {
-                document.getElementById('admin-pass').value = '';
+                document.getElementById('admin-pass-input').value = '';
                 closeModal('admin-auth-modal');
                 showCustomAlert('Success', 'Admin Account Created & Logged In Successfully!');
               })
@@ -519,7 +520,7 @@
                 showCustomAlert('Error', createError.message);
               });
           } else {
-            showCustomAlert('Access Denied', 'Invalid Password or Authentication Error!');
+            showCustomAlert('Access Denied', error.message);
           }
         });
     }
@@ -527,7 +528,7 @@
     function showAdminPanel() {
       document.getElementById('admin-panel').classList.remove('hidden');
       document.getElementById('admin-add-notif-btn').classList.remove('hidden');
-      document.getElementById('header-admin-btn').innerHTML = '<i class="fa-solid fa-user-shield mr-1"></i> Admin Panel Active';
+      document.getElementById('header-admin-btn').classList.add('hidden'); // Hide Admin Sign In button once logged in
       updateAdminSuggestionsTable();
       renderNotifications();
     }
@@ -535,7 +536,7 @@
     function hideAdminPanel() {
       document.getElementById('admin-panel').classList.add('hidden');
       document.getElementById('admin-add-notif-btn').classList.add('hidden');
-      document.getElementById('header-admin-btn').innerHTML = '<i class="fa-solid fa-key mr-1"></i> Admin Login';
+      document.getElementById('header-admin-btn').classList.remove('hidden'); // Show Admin Sign In button when logged out
       renderNotifications();
     }
 
