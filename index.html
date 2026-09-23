@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -9,6 +9,11 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
+  <!-- Firebase SDKs (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
   <style>
     :root {
       --bg-dark: #0b0f19;
@@ -127,7 +132,7 @@
       <button class="bg-cyan-500/15 border border-cyan-400 text-cyan-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-cyan-400 hover:text-black transition" onclick="openModal('modal-user-auth')">
         <i class="fa-solid fa-user mr-1"></i> <span id="header-username">User Login</span>
       </button>
-      <button class="bg-pink-500/15 border border-pink-400 text-pink-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition" onclick="openModal('admin-auth-modal')">
+      <button id="header-admin-btn" class="bg-pink-500/15 border border-pink-400 text-pink-300 px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition" onclick="openModal('admin-auth-modal')">
         <i class="fa-solid fa-key mr-1"></i> Admin Login
       </button>
     </div>
@@ -256,16 +261,20 @@
     </div>
   </div>
 
+  <!-- ADMIN LOGIN MODAL (Secure Firebase Authentication) -->
   <div class="modal-overlay" id="admin-auth-modal">
     <div class="modal-card max-w-sm">
       <div class="flex justify-between items-center mb-3">
-        <h3 class="font-bold text-pink-400">Admin Login</h3>
+        <h3 class="font-bold text-pink-400">Admin Login / Setup</h3>
         <button class="text-gray-400 hover:text-white" onclick="closeModal('admin-auth-modal')">&times;</button>
       </div>
+      <div class="text-xs text-gray-400 mb-3 bg-[#090d16] p-2.5 rounded border border-gray-800 flex items-center gap-2">
+        <i class="fa-solid fa-envelope text-pink-400"></i>
+        <span>goturuinteractive@gmail.com</span>
+      </div>
       <form onsubmit="handleAdminLogin(event)">
-        <input type="text" id="admin-user" required placeholder="Username" class="mb-3">
-        <input type="password" id="admin-pass" required placeholder="Password" class="mb-3">
-        <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded text-xs">Login</button>
+        <input type="password" id="admin-pass" required placeholder="Enter Admin Password..." class="mb-3">
+        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded text-xs transition">Authenticate / Create</button>
       </form>
     </div>
   </div>
@@ -309,6 +318,29 @@
   </div>
 
   <script>
+    // --- FIREBASE CONFIGURATION ---
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Enable Local Persistence so Admin stays logged in across web sessions
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .catch((error) => {
+        console.error("Auth persistence error:", error);
+      });
+
+    // Fixed Admin Email
+    const ADMIN_EMAIL = "goturuinteractive@gmail.com";
+
     window.addEventListener('load', () => {
       setTimeout(() => {
         let loader = document.getElementById('website-loader');
@@ -344,18 +376,27 @@
       closeModal('modal-custom-alert');
     }
 
+    let suggestions = [];
+    let notifications = [];
+
     window.addEventListener('DOMContentLoaded', () => {
       let savedUser = localStorage.getItem('goturu_username');
       if(savedUser) {
         document.getElementById('header-username').innerText = savedUser;
       }
 
-      if(localStorage.getItem('goturu_admin_auth') === 'true') {
-        showAdminPanel();
-      }
-
-      renderNotifications();
       renderGamesHub();
+      fetchSuggestions();
+      fetchNotifications();
+
+      // Firebase Auth State Listener
+      auth.onAuthStateChanged((user) => {
+        if (user && user.email === ADMIN_EMAIL) {
+          showAdminPanel();
+        } else {
+          hideAdminPanel();
+        }
+      });
     });
 
     function renderGamesHub() {
@@ -419,45 +460,86 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    let suggestions = JSON.parse(localStorage.getItem('goturu_suggestions')) || [];
-    let notifications = JSON.parse(localStorage.getItem('goturu_notifications')) || [
-      { id: 1, title: "🚀 Portal Launch v4.3", content: "Goturu interactive portal now features smooth website entry loading and Games Hub loading animations.", time: "2026-06-01", reactions: { "❤️": 5, "🔥": 3, "🚀": 8 } }
-    ];
-
+    // --- FIREBASE SUGGESTIONS FUNCTIONS ---
     function submitSuggestion(e) {
       e.preventDefault();
       let name = document.getElementById('sug-name').value;
       let text = document.getElementById('sug-text').value;
       let time = new Date().toLocaleString();
 
-      suggestions.unshift({ name, text, time });
-      localStorage.setItem('goturu_suggestions', JSON.stringify(suggestions));
-      
-      document.getElementById('sug-name').value = '';
-      document.getElementById('sug-text').value = '';
-      closeModal('modal-suggestion');
-      showCustomAlert('Success', 'Suggestion sent successfully to Admin!');
-      if(localStorage.getItem('goturu_admin_auth') === 'true') showAdminPanel();
+      db.collection("suggestions").add({
+        name: name,
+        text: text,
+        time: time,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        document.getElementById('sug-name').value = '';
+        document.getElementById('sug-text').value = '';
+        closeModal('modal-suggestion');
+        showCustomAlert('Success', 'Suggestion sent successfully to Admin!');
+      }).catch((error) => {
+        showCustomAlert('Error', error.message);
+      });
     }
 
+    function fetchSuggestions() {
+      db.collection("suggestions").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+        suggestions = [];
+        snapshot.forEach((doc) => {
+          suggestions.push({ id: doc.id, ...doc.data() });
+        });
+        if(auth.currentUser && auth.currentUser.email === ADMIN_EMAIL) {
+          updateAdminSuggestionsTable();
+        }
+      });
+    }
+
+    // --- SECURE FIREBASE AUTHENTICATION (Login / Auto-Setup) ---
     function handleAdminLogin(e) {
       e.preventDefault();
-      let u = document.getElementById('admin-user').value.trim();
-      let p = document.getElementById('admin-pass').value.trim();
+      let pass = document.getElementById('admin-pass').value.trim();
 
-      if(u === 'GOWRISANKAR@ADMIN' && p === 'ADMIN @GOTURU..') {
-        localStorage.setItem('goturu_admin_auth', 'true');
-        closeModal('admin-auth-modal');
-        showAdminPanel();
-        showCustomAlert('Success', 'Admin Login Successful!');
-      } else {
-        showCustomAlert('Access Denied', 'Invalid Admin Credentials!');
-      }
+      // Try signing in first
+      auth.signInWithEmailAndPassword(ADMIN_EMAIL, pass)
+        .then((userCredential) => {
+          document.getElementById('admin-pass').value = '';
+          closeModal('admin-auth-modal');
+          showCustomAlert('Success', 'Admin Login Successful!');
+        })
+        .catch((error) => {
+          // If account doesn't exist yet, automatically create it with this password (First-time setup helper)
+          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+            auth.createUserWithEmailAndPassword(ADMIN_EMAIL, pass)
+              .then((userCredential) => {
+                document.getElementById('admin-pass').value = '';
+                closeModal('admin-auth-modal');
+                showCustomAlert('Success', 'Admin Account Created & Logged In Successfully!');
+              })
+              .catch((createError) => {
+                showCustomAlert('Error', createError.message);
+              });
+          } else {
+            showCustomAlert('Access Denied', 'Invalid Password or Authentication Error!');
+          }
+        });
     }
 
     function showAdminPanel() {
       document.getElementById('admin-panel').classList.remove('hidden');
       document.getElementById('admin-add-notif-btn').classList.remove('hidden');
+      document.getElementById('header-admin-btn').innerHTML = '<i class="fa-solid fa-user-shield mr-1"></i> Admin Panel Active';
+      updateAdminSuggestionsTable();
+      renderNotifications();
+    }
+
+    function hideAdminPanel() {
+      document.getElementById('admin-panel').classList.add('hidden');
+      document.getElementById('admin-add-notif-btn').classList.add('hidden');
+      document.getElementById('header-admin-btn').innerHTML = '<i class="fa-solid fa-key mr-1"></i> Admin Login';
+      renderNotifications();
+    }
+
+    function updateAdminSuggestionsTable() {
       document.getElementById('admin-sug-count').innerText = suggestions.length;
       let tbody = document.getElementById('admin-sug-tbody');
       tbody.innerHTML = '';
@@ -468,15 +550,12 @@
       suggestions.forEach(s => {
         tbody.innerHTML += `<tr><td class="p-2 border border-gray-700 text-cyan-300 font-bold">${s.name}</td><td class="p-2 border border-gray-700">${s.text}</td><td class="p-2 border border-gray-700 text-gray-400">${s.time}</td></tr>`;
       });
-      renderNotifications();
     }
 
     function logoutAdmin() {
-      localStorage.removeItem('goturu_admin_auth');
-      document.getElementById('admin-panel').classList.add('hidden');
-      document.getElementById('admin-add-notif-btn').classList.add('hidden');
-      showCustomAlert('Logged Out', 'Admin Logged Out.');
-      renderNotifications();
+      auth.signOut().then(() => {
+        showCustomAlert('Logged Out', 'Admin Logged Out Successfully.');
+      });
     }
 
     function handleUserLogin(e) {
@@ -488,10 +567,21 @@
       showCustomAlert('Welcome', 'Welcome ' + name + '!');
     }
 
+    // --- FIREBASE NOTIFICATIONS FUNCTIONS ---
+    function fetchNotifications() {
+      db.collection("notifications").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+        notifications = [];
+        snapshot.forEach((doc) => {
+          notifications.push({ id: doc.id, ...doc.data() });
+        });
+        renderNotifications();
+      });
+    }
+
     function renderNotifications() {
       let container = document.getElementById('notifications-container');
       container.innerHTML = '';
-      let isAdmin = localStorage.getItem('goturu_admin_auth') === 'true';
+      let isAdmin = auth.currentUser !== null && auth.currentUser.email === ADMIN_EMAIL;
 
       if(notifications.length === 0) {
         container.innerHTML = `<div class="text-xs text-gray-500 text-center py-4">No notifications posted yet.</div>`;
@@ -499,10 +589,11 @@
       }
 
       notifications.forEach(item => {
+        let reactions = item.reactions || { "❤️": 0, "🔥": 0, "🚀": 0 };
         let adminControls = isAdmin ? `
           <div class="flex gap-2 mt-2 pt-2 border-t border-gray-800 text-[10px]">
-            <button class="text-cyan-400 hover:underline font-bold" onclick="editNotification(${item.id})"><i class="fa-solid fa-pen mr-1"></i>Edit</button>
-            <button class="text-pink-500 hover:underline font-bold" onclick="deleteNotification(${item.id})"><i class="fa-solid fa-trash mr-1"></i>Delete</button>
+            <button class="text-cyan-400 hover:underline font-bold" onclick="editNotification('${item.id}', '${item.title}', '${item.content}')"><i class="fa-solid fa-pen mr-1"></i>Edit</button>
+            <button class="text-pink-500 hover:underline font-bold" onclick="deleteNotification('${item.id}')"><i class="fa-solid fa-trash mr-1"></i>Delete</button>
           </div>
         ` : '';
 
@@ -514,9 +605,9 @@
             </div>
             <p class="text-xs text-gray-300 leading-relaxed mb-2">${item.content}</p>
             <div class="flex flex-wrap items-center gap-1.5">
-              <button class="emoji-btn" onclick="reactNotification(${item.id}, '❤️')">❤️ ${item.reactions['❤️'] || 0}</button>
-              <button class="emoji-btn" onclick="reactNotification(${item.id}, '🔥')">🔥 ${item.reactions['🔥'] || 0}</button>
-              <button class="emoji-btn" onclick="reactNotification(${item.id}, '🚀')">🚀 ${item.reactions['🚀'] || 0}</button>
+              <button class="emoji-btn" onclick="reactNotification('${item.id}', '❤️')">❤️ ${reactions['❤️'] || 0}</button>
+              <button class="emoji-btn" onclick="reactNotification('${item.id}', '🔥')">🔥 ${reactions['🔥'] || 0}</button>
+              <button class="emoji-btn" onclick="reactNotification('${item.id}', '🚀')">🚀 ${reactions['🚀'] || 0}</button>
             </div>
             ${adminControls}
           </div>
@@ -532,47 +623,56 @@
       let dateStr = new Date().toISOString().split('T')[0];
 
       if(id) {
-        let item = notifications.find(n => n.id == id);
-        if(item) {
-          item.title = title;
-          item.content = content;
-        }
+        db.collection("notifications").doc(id).update({
+          title: title,
+          content: content
+        }).then(() => {
+          finishNotifSave();
+        });
       } else {
-        notifications.unshift({ id: Date.now(), title, content, time: dateStr, reactions: { "❤️": 0, "🔥": 0, "🚀": 0 } });
+        db.collection("notifications").add({
+          title: title,
+          content: content,
+          time: dateStr,
+          reactions: { "❤️": 0, "🔥": 0, "🚀": 0 },
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+          finishNotifSave();
+        });
       }
+    }
 
-      localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
+    function finishNotifSave() {
       document.getElementById('notif-title-input').value = '';
       document.getElementById('notif-content-input').value = '';
       document.getElementById('edit-notif-id').value = '';
       closeModal('modal-add-notif');
-      renderNotifications();
       showCustomAlert('Success', 'Notification saved successfully!');
     }
 
-    function editNotification(id) {
-      let item = notifications.find(n => n.id == id);
-      if(item) {
-        document.getElementById('edit-notif-id').value = item.id;
-        document.getElementById('notif-title-input').value = item.title;
-        document.getElementById('notif-content-input').value = item.content;
-        document.getElementById('notif-modal-title').innerText = "Edit Notification";
-        openModal('modal-add-notif');
-      }
+    function editNotification(id, title, content) {
+      document.getElementById('edit-notif-id').value = id;
+      document.getElementById('notif-title-input').value = title;
+      document.getElementById('notif-content-input').value = content;
+      document.getElementById('notif-modal-title').innerText = "Edit Notification";
+      openModal('modal-add-notif');
     }
 
     function deleteNotification(id) {
-      notifications = notifications.filter(n => n.id != id);
-      localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
-      renderNotifications();
+      db.collection("notifications").doc(id).delete().then(() => {
+        showCustomAlert('Deleted', 'Notification removed successfully.');
+      });
     }
 
     function reactNotification(id, emoji) {
       let item = notifications.find(n => n.id == id);
       if(item) {
-        item.reactions[emoji] = (item.reactions[emoji] || 0) + 1;
-        localStorage.setItem('goturu_notifications', JSON.stringify(notifications));
-        renderNotifications();
+        let reactions = item.reactions || { "❤️": 0, "🔥": 0, "🚀": 0 };
+        reactions[emoji] = (reactions[emoji] || 0) + 1;
+        
+        db.collection("notifications").doc(id).update({
+          reactions: reactions
+        });
       }
     }
   </script>
