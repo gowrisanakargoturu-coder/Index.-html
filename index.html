@@ -1,9 +1,13 @@
-   <!DOCTYPE html>
+```html
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GOTURU INTERACTIVE PORTAL</title>
+
+  <!-- FontAwesome Icons for UI enhancement -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root {
@@ -167,7 +171,7 @@
       margin-bottom: 25px;
     }
 
-    /* 3 DASHBOARD BOXES */
+    /* DASHBOARD GRID (AUTOFIT UP TO 5 BOXES) */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -182,6 +186,8 @@
       padding: 25px;
       cursor: pointer;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
     .dash-box:hover {
@@ -190,10 +196,24 @@
       box-shadow: 0 8px 25px rgba(0, 243, 255, 0.2);
     }
 
+    /* SPECIAL GLOW FOR 5TH MASTER QUIZ BOX */
+    .dash-box-highlight {
+      border-color: rgba(255, 0, 127, 0.5);
+      background: linear-gradient(145deg, #121826, #1a1028);
+    }
+
+    .dash-box-highlight:hover {
+      border-color: var(--neon-pink);
+      box-shadow: 0 8px 25px rgba(255, 0, 127, 0.3);
+    }
+
     .dash-box h3 {
       font-size: 1.2rem;
       color: var(--neon-cyan);
       margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .dash-box p {
@@ -208,6 +228,19 @@
       font-size: 0.8rem;
       color: var(--neon-green);
       font-weight: bold;
+    }
+
+    .badge-tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--neon-pink);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
     }
 
     /* NOTIFICATION SECTION */
@@ -445,25 +478,45 @@
       <p style="color: var(--text-muted); margin-top: 5px;">Explore features, interactive games, and share your suggestions directly with Admin.</p>
     </div>
 
-    <!-- 3 DASHBOARD BOXES -->
+    <!-- 5 DASHBOARD BOXES -->
     <div class="dashboard-grid">
+
+      <!-- BOX 1: BIO DATA -->
       <div class="dash-box" onclick="openBioModal()">
         <h3>🌐 GOTURU INTERACTIVE</h3>
         <p>Tap to view official portal launch date and bio data information.</p>
         <span class="tap-hint">👉 Tap to View Bio Data</span>
       </div>
 
+      <!-- BOX 2: SPEED TYPING GAME -->
       <div class="dash-box" onclick="openGame()">
         <h3>🎮 INTERACTIVE GAMES</h3>
         <p>Play speed-typing interactive game directly on Type-OS-Time.</p>
         <span class="tap-hint" style="color: var(--neon-cyan);">👉 Tap to Start Game</span>
       </div>
 
+      <!-- BOX 3: WRITE SUGGESTIONS -->
       <div class="dash-box" onclick="openSuggestionModal()">
         <h3>✍️ WRITE YOUR SUGGESTIONS</h3>
         <p>Send your feedback or comment directly to Admin. No login needed!</p>
         <span class="tap-hint" style="color: var(--neon-pink);">👉 Tap to Write Comment</span>
       </div>
+
+      <!-- BOX 4: PORTAL STATUS & UPDATES -->
+      <div class="dash-box" onclick="openStatusInfo()">
+        <h3>⚡ PORTAL STATUS & STATS</h3>
+        <p>Check live server uptime, interactive modules, and system updates.</p>
+        <span class="tap-hint" style="color: #00f3ff;">👉 Tap to View Status</span>
+      </div>
+
+      <!-- BOX 5: MASTER QUIZ (200 QUESTIONS) -->
+      <div class="dash-box dash-box-highlight" onclick="openMasterQuiz()">
+        <span class="badge-tag">HOT GAME</span>
+        <h3 style="color: var(--neon-pink);">🧠 MASTER QUIZ (200 Qs)</h3>
+        <p>Play 200 Unique Telugu & English Questions across Movies, GK & UPSC, and Politics.</p>
+        <span class="tap-hint" style="color: var(--neon-pink);">👉 Tap to Open Master Quiz Game 🚀</span>
+      </div>
+
     </div>
 
     <!-- NOTIFICATION SECTION -->
@@ -558,7 +611,35 @@
     </div>
   </div>
 
+  <!-- SCRIPT ENGINE -->
   <script>
+    // MASTER QUIZ LINK DIRECT OPENER
+    const MASTER_QUIZ_URL = "https://master-quize-three.vercel.app/";
+
+    function openMasterQuiz() {
+      window.open(MASTER_QUIZ_URL, '_blank');
+    }
+
+    function openGame() {
+      alert("Opening Speed Typing Interactive Game...");
+    }
+
+    function openBioModal() {
+      document.getElementById('modal-bio').style.display = 'flex';
+    }
+
+    function openSuggestionModal() {
+      document.getElementById('modal-suggestion').style.display = 'flex';
+    }
+
+    function openStatusInfo() {
+      alert("Goturu Interactive Portal Status: ALL SYSTEMS OPERATIONAL ⚡");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
     // STORAGE HELPER FUNCTIONS
     function getStoredData(key) {
       try {
@@ -579,7 +660,7 @@
       setStoredData('goturu_notifications', [{
         id: 1,
         title: "Welcome to Goturu Interactive Portal!",
-        content: "Portal official system activated! Check out interactive games and leave your suggestions.",
+        content: "Portal official system activated! Check out interactive games, Master Quiz 200, and leave your suggestions.",
         date: "22/09/2026",
         reactions: { '👍': 5, '❤️': 8, '🔥': 4, '😊': 6 }
       }]);
@@ -671,7 +752,7 @@
       }
     }
 
-    // 5. SUBMIT SUGGESTION (DIRECTORY TO ADMIN PORTAL)
+    // 5. SUBMIT SUGGESTION
     function submitSuggestion() {
       const name = document.getElementById('sugg-name').value.trim() || 'Visitor Guest';
       const text = document.getElementById('suggestion-text').value.trim();
@@ -689,63 +770,61 @@
       });
 
       setStoredData('goturu_suggestions', suggestions);
-      
       document.getElementById('sugg-name').value = '';
       document.getElementById('suggestion-text').value = '';
       closeModal('modal-suggestion');
-
-      alert('Meeru pampina suggestion direct ga Admin portal ku cherindhi! Thank you.');
+      alert('Thank you! Your suggestion was sent directly to Admin.');
 
       if (sessionStorage.getItem('goturu_admin_logged') === 'true') {
         loadAdminPanelData();
       }
     }
 
-    // 6. NOTIFICATIONS SYSTEM
+    // 6. RENDER NOTIFICATIONS
     function renderNotifications() {
       const notifs = getStoredData('goturu_notifications');
       const container = document.getElementById('notifications-list');
       const isAdmin = sessionStorage.getItem('goturu_admin_logged') === 'true';
 
       container.innerHTML = '';
-
       if (notifs.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted);">No notifications posted.</p>';
+        container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">No active notifications.</p>';
         return;
       }
 
-      notifs.forEach(n => {
-        const div = document.createElement('div');
-        div.className = 'notif-item';
+      notifs.slice().reverse().forEach(n => {
+        let reactionsHtml = '';
+        if (n.reactions) {
+          for (const [emoji, count] of Object.entries(n.reactions)) {
+            reactionsHtml += `<button class="emoji-btn" onclick="addReaction(${n.id}, '${emoji}')">${emoji} ${count}</button>`;
+          }
+        }
 
-        let adminBtns = isAdmin ? `
-          <div class="admin-controls-btn">
-            <button class="btn-edit" onclick="editNotif(${n.id})">Edit</button>
-            <button class="btn-delete" onclick="deleteNotif(${n.id})">Delete</button>
+        let adminControls = '';
+        if (isAdmin) {
+          adminControls = `
+            <div class="admin-controls-btn">
+              <button class="btn-edit" onclick="openEditNotifModal(${n.id})">Edit</button>
+              <button class="btn-delete" onclick="deleteNotification(${n.id})">Delete</button>
+            </div>
+          `;
+        }
+
+        container.innerHTML += `
+          <div class="notif-item">
+            <div class="notif-title">${n.title}</div>
+            <div class="notif-date">${n.date}</div>
+            <div class="notif-content">${n.content}</div>
+            <div class="reactions-bar">${reactionsHtml}</div>
+            ${adminControls}
           </div>
-        ` : '';
-
-        const reactions = n.reactions || { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 };
-
-        div.innerHTML = `
-          <div class="notif-title">${n.title}</div>
-          <div class="notif-date">${n.date}</div>
-          <div class="notif-content">${n.content}</div>
-          <div class="reactions-bar">
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '👍')">👍 ${reactions['👍'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '❤️')">❤️ ${reactions['❤️'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '🔥')">🔥 ${reactions['🔥'] || 0}</button>
-            <button class="emoji-btn" onclick="reactEmoji(${n.id}, '😊')">😊 ${reactions['😊'] || 0}</button>
-          </div>
-          ${adminBtns}
         `;
-        container.appendChild(div);
       });
     }
 
-    function reactEmoji(id, emoji) {
+    function addReaction(notifId, emoji) {
       let notifs = getStoredData('goturu_notifications');
-      const item = notifs.find(n => n.id === id);
+      const item = notifs.find(x => x.id === notifId);
       if (item) {
         if (!item.reactions) item.reactions = {};
         item.reactions[emoji] = (item.reactions[emoji] || 0) + 1;
@@ -754,28 +833,51 @@
       }
     }
 
+    function openAddNotifModal() {
+      document.getElementById('edit-notif-id').value = '';
+      document.getElementById('notif-title-input').value = '';
+      document.getElementById('notif-content-input').value = '';
+      document.getElementById('notif-modal-heading').innerText = 'Post New Notification';
+      document.getElementById('modal-notif').style.display = 'flex';
+    }
+
+    function openEditNotifModal(id) {
+      const notifs = getStoredData('goturu_notifications');
+      const item = notifs.find(x => x.id === id);
+      if (item) {
+        document.getElementById('edit-notif-id').value = item.id;
+        document.getElementById('notif-title-input').value = item.title;
+        document.getElementById('notif-content-input').value = item.content;
+        document.getElementById('notif-modal-heading').innerText = 'Edit Notification';
+        document.getElementById('modal-notif').style.display = 'flex';
+      }
+    }
+
     function saveNotification() {
-      const editId = document.getElementById('edit-notif-id').value;
+      const id = document.getElementById('edit-notif-id').value;
       const title = document.getElementById('notif-title-input').value.trim();
       const content = document.getElementById('notif-content-input').value.trim();
 
       if (!title || !content) {
-        alert('Please fill out both Title and Content!');
+        alert('Please fill in both title and content!');
         return;
       }
 
       let notifs = getStoredData('goturu_notifications');
 
-      if (editId) {
-        const item = notifs.find(n => n.id == editId);
+      if (id) {
+        // Edit existing
+        const item = notifs.find(x => x.id == id);
         if (item) {
           item.title = title;
           item.content = content;
         }
       } else {
+        // Create new
         notifs.push({
           id: Date.now(),
-          title, content,
+          title: title,
+          content: content,
           date: new Date().toLocaleDateString(),
           reactions: { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 }
         });
@@ -786,39 +888,34 @@
       renderNotifications();
     }
 
-    function editNotif(id) {
-      let notifs = getStoredData('goturu_notifications');
-      const item = notifs.find(n => n.id === id);
-      if (item) {
-        document.getElementById('edit-notif-id').value = item.id;
-        document.getElementById('notif-title-input').value = item.title;
-        document.getElementById('notif-content-input').value = item.content;
-        document.getElementById('notif-modal-heading').textContent = 'Edit Notification';
-        document.getElementById('modal-notif').style.display = 'flex';
-      }
-    }
-
-    function deleteNotif(id) {
+    function deleteNotification(id) {
       if (confirm('Are you sure you want to delete this notification?')) {
         let notifs = getStoredData('goturu_notifications');
-        notifs = notifs.filter(n => n.id !== id);
+        notifs = notifs.filter(x => x.id !== id);
         setStoredData('goturu_notifications', notifs);
         renderNotifications();
       }
     }
-
-    // MODAL CONTROL FUNCTIONS
-    function openBioModal() { document.getElementById('modal-bio').style.display = 'flex'; }
-    function openGame() { window.open('https://type-os-time.vercel.app/', '_blank'); }
-    function openSuggestionModal() { document.getElementById('modal-suggestion').style.display = 'flex'; }
-    function openAddNotifModal() { 
-      document.getElementById('edit-notif-id').value = '';
-      document.getElementById('notif-title-input').value = '';
-      document.getElementById('notif-content-input').value = '';
-      document.getElementById('notif-modal-heading').textContent = 'Post New Notification';
-      document.getElementById('modal-notif').style.display = 'flex'; 
-    }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
   </script>
 </body>
 </html>
+```
+
+    
+    
+
+    
+
+
+    
+
+    
+    
+    
+       
+  
+       
+      
+               
+           
+       
