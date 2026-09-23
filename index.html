@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -490,9 +489,9 @@
 
       <!-- BOX 2: SPEED TYPING GAME -->
       <div class="dash-box" onclick="openGame()">
-        <h3>🎮 INTERACTIVE GAMES</h3>
-        <p>Play speed-typing interactive game directly on Type-OS-Time.</p>
-        <span class="tap-hint" style="color: var(--neon-cyan);">👉 Tap to Start Game</span>
+        <h3>🎮 TYPE-OS-TIME GAME</h3>
+        <p>Play speed-typing interactive game directly on Type-OS-Time engine.</p>
+        <span class="tap-hint" style="color: var(--neon-cyan);">👉 Tap to Start Typing Game ⌨️</span>
       </div>
 
       <!-- BOX 3: WRITE SUGGESTIONS -->
@@ -613,15 +612,16 @@
 
   <!-- SCRIPT ENGINE -->
   <script>
-    // MASTER QUIZ LINK DIRECT OPENER
+    // GAME LINKS DIRECT OPENERS
     const MASTER_QUIZ_URL = "https://master-quize-three.vercel.app/";
+    const TYPING_GAME_URL = "https://type-os-time.vercel.app/";
 
     function openMasterQuiz() {
       window.open(MASTER_QUIZ_URL, '_blank');
     }
 
     function openGame() {
-      alert("Opening Speed Typing Interactive Game...");
+      window.open(TYPING_GAME_URL, '_blank');
     }
 
     function openBioModal() {
@@ -660,7 +660,7 @@
       setStoredData('goturu_notifications', [{
         id: 1,
         title: "Welcome to Goturu Interactive Portal!",
-        content: "Portal official system activated! Check out interactive games, Master Quiz 200, and leave your suggestions.",
+        content: "Portal official system activated! Check out Type-OS-Time Speed Typing, Master Quiz 200, and leave your suggestions.",
         date: "22/09/2026",
         reactions: { '👍': 5, '❤️': 8, '🔥': 4, '😊': 6 }
       }]);
@@ -699,223 +699,4 @@
         document.getElementById('admin-logged-area').style.display = 'flex';
         document.getElementById('admin-panel').style.display = 'block';
         document.getElementById('admin-add-notif-btn').style.display = 'inline-block';
-        loadAdminPanelData();
-      } else {
-        document.getElementById('admin-header-btn').style.display = 'block';
-        document.getElementById('admin-logged-area').style.display = 'none';
-        document.getElementById('admin-panel').style.display = 'none';
-        document.getElementById('admin-add-notif-btn').style.display = 'none';
-      }
-      renderNotifications();
-    }
-
-    // 3. ADMIN LOGIN
-    function openAdminAuth() {
-      document.getElementById('admin-auth-modal').style.display = 'flex';
-    }
-
-    function loginAdmin(e) {
-      e.preventDefault();
-      const id = document.getElementById('admin-id').value.trim();
-      const key = document.getElementById('admin-key').value;
-
-      if (id === 'admin' && key === 'admin123') {
-        sessionStorage.setItem('goturu_admin_logged', 'true');
-        closeModal('admin-auth-modal');
-        document.getElementById('admin-id').value = '';
-        document.getElementById('admin-key').value = '';
-        checkAdminSession();
-        alert('Welcome Master Admin!');
-      } else {
-        alert('Access Denied: Invalid Admin ID or Secret Key!');
-      }
-    }
-
-    function logoutAdmin() {
-      sessionStorage.removeItem('goturu_admin_logged');
-      checkAdminSession();
-    }
-
-    // 4. ADMIN PANEL DATA
-    function loadAdminPanelData() {
-      const suggestions = getStoredData('goturu_suggestions');
-      document.getElementById('stat-total-suggestions').textContent = suggestions.length;
-
-      const suggTbody = document.getElementById('admin-suggestions-rows');
-      suggTbody.innerHTML = '';
-      if (suggestions.length === 0) {
-        suggTbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">No suggestions received yet.</td></tr>';
-      } else {
-        suggestions.slice().reverse().forEach(s => {
-          suggTbody.innerHTML += `<tr><td><strong>${s.user}</strong></td><td>${s.comment}</td><td>${s.time}</td></tr>`;
-        });
-      }
-    }
-
-    // 5. SUBMIT SUGGESTION
-    function submitSuggestion() {
-      const name = document.getElementById('sugg-name').value.trim() || 'Visitor Guest';
-      const text = document.getElementById('suggestion-text').value.trim();
-      
-      if (!text) {
-        alert('Please write your suggestion comment first!');
-        return;
-      }
-
-      let suggestions = getStoredData('goturu_suggestions');
-      suggestions.push({
-        user: name,
-        comment: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " (" + new Date().toLocaleDateString() + ")"
-      });
-
-      setStoredData('goturu_suggestions', suggestions);
-      document.getElementById('sugg-name').value = '';
-      document.getElementById('suggestion-text').value = '';
-      closeModal('modal-suggestion');
-      alert('Thank you! Your suggestion was sent directly to Admin.');
-
-      if (sessionStorage.getItem('goturu_admin_logged') === 'true') {
-        loadAdminPanelData();
-      }
-    }
-
-    // 6. RENDER NOTIFICATIONS
-    function renderNotifications() {
-      const notifs = getStoredData('goturu_notifications');
-      const container = document.getElementById('notifications-list');
-      const isAdmin = sessionStorage.getItem('goturu_admin_logged') === 'true';
-
-      container.innerHTML = '';
-      if (notifs.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">No active notifications.</p>';
-        return;
-      }
-
-      notifs.slice().reverse().forEach(n => {
-        let reactionsHtml = '';
-        if (n.reactions) {
-          for (const [emoji, count] of Object.entries(n.reactions)) {
-            reactionsHtml += `<button class="emoji-btn" onclick="addReaction(${n.id}, '${emoji}')">${emoji} ${count}</button>`;
-          }
-        }
-
-        let adminControls = '';
-        if (isAdmin) {
-          adminControls = `
-            <div class="admin-controls-btn">
-              <button class="btn-edit" onclick="openEditNotifModal(${n.id})">Edit</button>
-              <button class="btn-delete" onclick="deleteNotification(${n.id})">Delete</button>
-            </div>
-          `;
-        }
-
-        container.innerHTML += `
-          <div class="notif-item">
-            <div class="notif-title">${n.title}</div>
-            <div class="notif-date">${n.date}</div>
-            <div class="notif-content">${n.content}</div>
-            <div class="reactions-bar">${reactionsHtml}</div>
-            ${adminControls}
-          </div>
-        `;
-      });
-    }
-
-    function addReaction(notifId, emoji) {
-      let notifs = getStoredData('goturu_notifications');
-      const item = notifs.find(x => x.id === notifId);
-      if (item) {
-        if (!item.reactions) item.reactions = {};
-        item.reactions[emoji] = (item.reactions[emoji] || 0) + 1;
-        setStoredData('goturu_notifications', notifs);
-        renderNotifications();
-      }
-    }
-
-    function openAddNotifModal() {
-      document.getElementById('edit-notif-id').value = '';
-      document.getElementById('notif-title-input').value = '';
-      document.getElementById('notif-content-input').value = '';
-      document.getElementById('notif-modal-heading').innerText = 'Post New Notification';
-      document.getElementById('modal-notif').style.display = 'flex';
-    }
-
-    function openEditNotifModal(id) {
-      const notifs = getStoredData('goturu_notifications');
-      const item = notifs.find(x => x.id === id);
-      if (item) {
-        document.getElementById('edit-notif-id').value = item.id;
-        document.getElementById('notif-title-input').value = item.title;
-        document.getElementById('notif-content-input').value = item.content;
-        document.getElementById('notif-modal-heading').innerText = 'Edit Notification';
-        document.getElementById('modal-notif').style.display = 'flex';
-      }
-    }
-
-    function saveNotification() {
-      const id = document.getElementById('edit-notif-id').value;
-      const title = document.getElementById('notif-title-input').value.trim();
-      const content = document.getElementById('notif-content-input').value.trim();
-
-      if (!title || !content) {
-        alert('Please fill in both title and content!');
-        return;
-      }
-
-      let notifs = getStoredData('goturu_notifications');
-
-      if (id) {
-        // Edit existing
-        const item = notifs.find(x => x.id == id);
-        if (item) {
-          item.title = title;
-          item.content = content;
-        }
-      } else {
-        // Create new
-        notifs.push({
-          id: Date.now(),
-          title: title,
-          content: content,
-          date: new Date().toLocaleDateString(),
-          reactions: { '👍': 0, '❤️': 0, '🔥': 0, '😊': 0 }
-        });
-      }
-
-      setStoredData('goturu_notifications', notifs);
-      closeModal('modal-notif');
-      renderNotifications();
-    }
-
-    function deleteNotification(id) {
-      if (confirm('Are you sure you want to delete this notification?')) {
-        let notifs = getStoredData('goturu_notifications');
-        notifs = notifs.filter(x => x.id !== id);
-        setStoredData('goturu_notifications', notifs);
-        renderNotifications();
-      }
-    }
-  </script>
-</body>
-</html>
-```
-
-    
-    
-
-    
-
-
-    
-
-    
-    
-    
-       
-  
-       
-      
-               
-           
-       
+        loadAdmi
