@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -204,7 +204,7 @@
       overflow: hidden;
     }
 
-    /* 5 DASHBOARD BOXES */
+    /* DASHBOARD BOXES */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -250,7 +250,7 @@
       font-weight: bold;
     }
 
-    /* GAME CARDS INSIDE MODAL */
+    /* GAME CARDS INSIDE MODAL & QUIZ BOX */
     .game-options-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -560,7 +560,7 @@
   <div class="container">
     <div class="welcome-banner">
       <h2>Welcome to <span style="color: var(--neon-cyan);">Goturu Interactive Portal</span>!</h2>
-      <p style="color: var(--text-muted); margin-top: 5px; font-size: 0.9rem;">Explore features, tap games to launch directly, and submit suggestions to Admin.</p>
+      <p style="color: var(--text-muted); margin-top: 5px; font-size: 0.9rem;">Explore features, tap games & quiz to launch directly, and submit suggestions to Admin.</p>
     </div>
 
     <!-- 5 DASHBOARD BOXES -->
@@ -574,11 +574,11 @@
         <span class="tap-hint">👉 Tap to View Bio Data</span>
       </div>
 
-      <!-- BOX 2: INTERACTIVE GAMES (2 GAME URLS) -->
+      <!-- BOX 2: INTERACTIVE GAMES -->
       <div class="dash-box" onclick="openGamesModal()">
         <div>
           <h3>🎮 INTERACTIVE GAMES</h3>
-          <p>Tap to choose from 2 direct web games & play instantly!</p>
+          <p>Tap to choose from interactive web games & play instantly!</p>
         </div>
         <span class="tap-hint" style="color: var(--neon-cyan);">👉 Tap to Play Games</span>
       </div>
@@ -609,6 +609,24 @@
         </div>
         <span class="tap-hint" style="color: var(--neon-green);">👉 Tap to View Updates</span>
       </div>
+    </div>
+
+    <!-- MASTER QUIZ BOX (NEWLY ADDED RIGHT ABOVE NOTIFICATIONS) -->
+    <div class="section-card" style="border-color: var(--neon-yellow); background: linear-gradient(135deg, var(--card-bg) 0%, #1a1600 100%);">
+      <h3 style="color: var(--neon-yellow);">
+        <span>🧠 MASTER QUIZ HUB</span>
+        <span style="font-size: 0.78rem; color: var(--neon-yellow); font-weight: normal;">✨ Live Interactive Game</span>
+      </h3>
+      <p style="color: #d1d9e6; font-size: 0.88rem; margin-bottom: 15px; line-height: 1.4;">
+        Test your knowledge and challenge your brain with Master Quiz! Tap the box below to start the game directly.
+      </p>
+      <a href="https://master-quize-three.vercel.app/" target="_blank" class="game-card-btn" style="border-color: var(--neon-yellow);">
+        <div class="game-card-info">
+          <h4 style="color: var(--neon-yellow);">🎯 Launch Master Quiz Game</h4>
+          <p>URL: master-quize-three.vercel.app</p>
+        </div>
+        <span style="color: var(--neon-yellow); font-size: 1.3rem; font-weight: bold;">➔</span>
+      </a>
     </div>
 
     <!-- NOTIFICATION SECTION -->
@@ -643,7 +661,7 @@
     </div>
   </div>
 
-  <!-- 1. GAMES SELECTION MODAL (2 GAME URLS) -->
+  <!-- 1. GAMES SELECTION MODAL -->
   <div class="modal-overlay" id="modal-games">
     <div class="modal-card">
       <span class="close-modal" onclick="closeModal('modal-games')">&times;</span>
@@ -667,6 +685,15 @@
             <p>Direct URL: type-os-time.vercel.app</p>
           </div>
           <span style="color: var(--neon-pink); font-size: 1.2rem;">➔</span>
+        </a>
+
+        <!-- GAME URL 3: MASTER QUIZ -->
+        <a href="https://master-quize-three.vercel.app/" target="_blank" class="game-card-btn" style="border-color: var(--neon-yellow);" onclick="closeModal('modal-games')">
+          <div class="game-card-info">
+            <h4 style="color: var(--neon-yellow);">🧠 Game 3: Master Quiz</h4>
+            <p>Direct URL: master-quize-three.vercel.app</p>
+          </div>
+          <span style="color: var(--neon-yellow); font-size: 1.2rem;">➔</span>
         </a>
       </div>
     </div>
@@ -746,7 +773,7 @@
         <p>📌 <strong>Status:</strong> Live Portal Active</p>
         <p>📅 <strong>Portal Launch:</strong> Started on 22/Sep/2026</p>
         <p>⚡ <strong>System:</strong> Direct Interactive Web Platform</p>
-        <p>🎮 <strong>Games Included:</strong> 2 Web Direct Games Connected</p>
+        <p>🎮 <strong>Games Included:</strong> 3 Web Direct Games & Quizzes Connected</p>
       </div>
     </div>
   </div>
@@ -814,7 +841,7 @@
       setStoredData('goturu_notifications', [{
         id: 1,
         title: "Welcome to Goturu Interactive Portal!",
-        content: "Portal official system activated! Check out the 2 game links and leave your feedback.",
+        content: "Portal official system activated! Check out the 3 game links including Master Quiz and leave your feedback.",
         date: "22/09/2026",
         reactions: { '👍': 8, '❤️': 12, '🔥': 9, '😊': 6 }
       }]);
