@@ -142,10 +142,10 @@
     </div>
   </header>
 
-  <!-- MAIN BODY GRID (Layout split for Dashboard & Right-Side Notification Panel) -->
+  <!-- MAIN BODY GRID -->
   <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
     
-    <!-- LEFT 2 COLS: DASHBOARD & SUGGESTIONS -->
+    <!-- LEFT 2 COLS -->
     <div class="lg:col-span-2 space-y-6">
       <div class="bg-[#121826] border border-cyan-500/30 rounded-2xl p-6">
         <h1 class="text-2xl font-bold text-white">Welcome to <span class="text-cyan-400">Goturu Interactive Portal</span></h1>
@@ -170,7 +170,7 @@
         </div>
       </div>
 
-      <!-- ADMIN PANEL (Hidden by default) -->
+      <!-- ADMIN PANEL -->
       <div id="admin-panel" class="hidden border border-pink-500/50 bg-[#181124] rounded-2xl p-6">
         <div class="flex justify-between items-center border-b border-pink-500/30 pb-3 mb-4">
           <h3 class="font-bold text-pink-400 text-base"><i class="fa-solid fa-user-shield mr-2"></i>Admin Master Panel</h3>
@@ -192,21 +192,18 @@
       </div>
     </div>
 
-    <!-- RIGHT 1 COL: NOTIFICATION & ANNOUNCEMENT PANEL -->
+    <!-- RIGHT 1 COL: NOTIFICATIONS PANEL -->
     <div class="bg-[#121826] border border-cyan-500/30 rounded-2xl p-5 h-fit sticky top-20">
       <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-3">
         <h3 class="font-bold text-cyan-400 text-base flex items-center gap-2">
           <i class="fa-solid fa-bullhorn"></i> Notifications & Feed
         </h3>
-        <!-- Admin-only Add Notification Button -->
         <button id="admin-add-notif-btn" class="hidden bg-cyan-400 text-black text-[11px] font-extrabold px-2.5 py-1 rounded hover:bg-cyan-300 transition" onclick="openModal('modal-add-notif')">
           <i class="fa-solid fa-plus mr-1"></i> Post
         </button>
       </div>
 
-      <div id="notifications-container" class="space-y-3 max-h-[500px] overflow-y-auto pr-1">
-        <!-- Dynamic Notifications Loaded Here -->
-      </div>
+      <div id="notifications-container" class="space-y-3 max-h-[500px] overflow-y-auto pr-1"></div>
     </div>
 
   </div>
@@ -283,7 +280,6 @@
   </div>
 
   <script>
-    // Fast Loader Script
     window.addEventListener('DOMContentLoaded', () => {
       let bar = document.getElementById('loader-bar');
       let overlay = document.getElementById('loader-overlay');
@@ -293,13 +289,11 @@
         setTimeout(() => overlay.remove(), 300);
       }, 400);
 
-      // Check Saved User
       let savedUser = localStorage.getItem('goturu_username');
       if(savedUser) {
         document.getElementById('header-username').innerText = savedUser;
       }
 
-      // Check Admin State
       if(localStorage.getItem('goturu_admin_auth') === 'true') {
         showAdminPanel();
       }
@@ -310,7 +304,6 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // Data Storage
     let suggestions = JSON.parse(localStorage.getItem('goturu_suggestions')) || [];
     let notifications = JSON.parse(localStorage.getItem('goturu_notifications')) || [
       { id: 1, title: "🚀 Portal Launch v4.2", content: "Goturu interactive portal is now live with enhanced security and notification feed.", time: "2026-06-01", reactions: { "❤️": 5, "🔥": 3, "🚀": 8 } }
@@ -332,11 +325,11 @@
       if(localStorage.getItem('goturu_admin_auth') === 'true') showAdminPanel();
     }
 
-    // Admin Login Logic
+    // Strict Admin Login with space-trim protection
     function handleAdminLogin(e) {
       e.preventDefault();
-      let u = document.getElementById('admin-user').value;
-      let p = document.getElementById('admin-pass').value;
+      let u = document.getElementById('admin-user').value.trim();
+      let p = document.getElementById('admin-pass').value.trim();
 
       if(u === 'GOWRISANKAR@ADMIN' && p === 'ADMIN @GOTURU..') {
         localStorage.setItem('goturu_admin_auth', 'true');
@@ -381,7 +374,6 @@
       alert('Welcome ' + name + '!');
     }
 
-    // Notification Render & Management (Admin Only Edit/Delete, Users can read & react)
     function renderNotifications() {
       let container = document.getElementById('notifications-container');
       container.innerHTML = '';
@@ -426,14 +418,12 @@
       let dateStr = new Date().toISOString().split('T')[0];
 
       if(id) {
-        // Edit Existing
         let item = notifications.find(n => n.id == id);
         if(item) {
           item.title = title;
           item.content = content;
         }
       } else {
-        // Create New
         notifications.unshift({ id: Date.now(), title, content, time: dateStr, reactions: { "❤️": 0, "🔥": 0, "🚀": 0 } });
       }
 
@@ -475,4 +465,8 @@
     }
   </script>
 </body>
-</html>
+  </html>
+        
+      
+          
+  
